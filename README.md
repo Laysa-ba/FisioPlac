@@ -1,5 +1,5 @@
 # Fisio-Digital
-![Logo da empresa](app/scr/main/res/drawable/logo.png)
+![Logo da empresa](app/src/main/res/drawable/logo.png)  
 
 Aplicação web de fisioterapia para auxiliar na marcação de consultas e atualização de fichas de avaliação, criada com o objetivo de facilitar as avaliações no Centro de Práticas da Uniceplac, este site promete agilizar os atendimentos, dar um fim em fichas fisicas preenchidas manualmente e facilitar cada vez mais o trabalho dos fisioterapeutas. 
 
