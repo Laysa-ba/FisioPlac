@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "728472479781",
+    "project_id": "fisioplac-0305",
+    "storage_bucket": "fisioplac-0305.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728472479781:android:c79f500352b5a169a4f7cc",
+        "android_client_info": {
+          "package_name": "com.example.fisioplac"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYB1qRtXQedRo54JPhKv3F21zbVNtH0RU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

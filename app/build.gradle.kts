@@ -1,11 +1,16 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.example.fisioplac"
     compileSdk = 36
+
+    buildFeatures {
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId = "com.example.fisioplac"
@@ -36,7 +41,7 @@ android {
 }
 
 dependencies {
-
+    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
@@ -44,6 +49,10 @@ dependencies {
     implementation(libs.mediation.test.suite)
     implementation("com.google.android.material:material:1.13.0")
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.android.gms:play-services-base:18.4.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
