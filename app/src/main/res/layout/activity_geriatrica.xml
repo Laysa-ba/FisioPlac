@@ -23,6 +23,7 @@
             android:id="@+id/btn_back"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:paddingTop="181dp"
             android:src="@drawable/seta"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Voltar"
@@ -35,6 +36,8 @@
             android:layout_height="wrap_content"
             android:text="Geriatria"
             android:textSize="30sp"
+            android:paddingTop="26dp"
+            android:paddingBottom="10dp"
             android:textStyle="bold"
             android:textColor="@color/preto_claro"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +56,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content_div"
         android:layout_width="match_parent"
@@ -65,30 +69,33 @@
 
         <TextView
             android:id="@+id/text_instruction"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Digite o CPF e selecione o paciente:"
+            android:text="Digite o CPF do paciente para iniciar:"
             android:textSize="18sp"
             android:textColor="@color/preto_claro"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_cpf_search"
+            android:id="@+id/text_input_layout_cpf"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            android:background="@color/white"  app:hintEnabled="false"
+            android:background="@color/white"
+            app:hintEnabled="false"
             app:layout_constraintTop_toBottomOf="@id/text_instruction"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_cpf_search"
+                android:id="@+id/edit_text_cpf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Digite o cpf, somente números..."
@@ -98,8 +105,26 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/text_view_patient_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/verde"
+            android:gravity="center"
+            android:padding="16dp"
+            android:background="@drawable/borda_arredondada_branca"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout_cpf"
+            app:layout_constraintStart_toStartOf="@id/text_input_layout_cpf"
+            app:layout_constraintEnd_toEndOf="@id/text_input_layout_cpf"
+            tools:text="Nome do Paciente Encontrado"
+            tools:visibility="visible"/>
 
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_bar"

@@ -2,53 +2,72 @@ package com.example.fisioplac
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class NewFileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        // A função enableEdgeToEdge() foi removida pois pode interferir com
+        // o padding manual que já existe no seu código.
         setContentView(R.layout.activity_new_file)
 
+        // Referências aos componentes da UI
         val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation_bar)
         val cardGeriatrica: CardView = findViewById(R.id.card_geriatrica)
         val cardTraumatoOrtopedica: CardView = findViewById(R.id.card_traumato_ortopedica)
 
-        // 1. Define o item de Nova Ficha como selecionado (Laranja)
+        // 1. Recebe a lista de especialidades enviada pela HomeActivity
+        val specialties = intent.getStringArrayListExtra("ESPECIALIDADES_LISTA")
+
+        // 2. Verifica quais cards devem ser mostrados
+        if (specialties != null) {
+            // Mostra o card de Geriatria APENAS SE a lista contiver "geriatria"
+            if (specialties.contains("geriatria")) {
+                cardGeriatrica.visibility = View.VISIBLE
+            }
+
+            // Mostra o card de Traumato-Ortopédica APENAS SE a lista contiver "traumatoortopedica"
+            if (specialties.contains("traumatoortopedica")) {
+                cardTraumatoOrtopedica.visibility = View.VISIBLE
+            }
+        } else {
+            // Opcional: Mostra uma mensagem se a lista não for recebida
+            Toast.makeText(this, "Não foi possível carregar as especialidades.", Toast.LENGTH_LONG).show()
+        }
+
+        // --- FIM DA NOVA LÓGICA ---
+
+        // Define o item de Nova Ficha como selecionado no menu
         bottomNav.selectedItemId = R.id.nav_new_file
 
-        // 2. Ação para o CardView Geriátrica
+        // Ação para o CardView de Geriátrica
         cardGeriatrica.setOnClickListener {
-            startActivity(Intent(this, GeriatricaActivity::class.java))
+            val intent = Intent(this, GeriatricaActivity::class.java)
+            // IMPORTANTE: Envia a informação da especialidade para a próxima tela
+            intent.putExtra("ESPECIALIDADE_SELECIONADA", "geriatria")
+            startActivity(intent)
         }
 
-        // 3. Ação para o CardView Traumato-Ortopédica
+        // Ação para o CardView de Traumato-Ortopédica
         cardTraumatoOrtopedica.setOnClickListener {
-            //Por enquanto, não vai ter nada
+            // Ação futura
+            Toast.makeText(this, "Ficha de Traumato-Ortopédica em desenvolvimento.", Toast.LENGTH_SHORT).show()
         }
 
-        // 4. Configura a navegação do BottomNavigationView
+        // Configura a navegação do BottomNavigationView
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
+                    // Usar finish() aqui previne que o usuário empilhe várias telas
                     finish()
                     true
                 }
                 else -> false
             }
-        }
-
-        // Configuração de Insets (para Status Bar e Navigation Bar)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
         }
     }
 }
