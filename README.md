@@ -1,4 +1,4 @@
-# Fisio-Plac
+# FisioPlac
 ![Logo da empresa](app/src/main/res/drawable/logo.png)  
 
 Aplicação mobile de fisioterapia para auxiliar na atualização de fichas de avaliação, criada com o objetivo de facilitar as consultas no Centro de Práticas da Uniceplac, este app promete agilizar os atendimentos, dar um fim em fichas fisicas preenchidas manualmente e facilitar cada vez mais o trabalho dos fisioterapeutas. 
