@@ -6,13 +6,13 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Button // NOVO IMPORT
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat // NOVO IMPORT
+import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
@@ -34,12 +34,12 @@ class GeriatricaActivity : AppCompatActivity() {
     private lateinit var textViewBirthdate: TextView
     private lateinit var textViewAge: TextView
     private lateinit var textViewSex: TextView
-    private lateinit var iniciarFichaButton: Button // NOVA VARIÁVEL DO BOTÃO
+    private lateinit var iniciarFichaButton: Button
 
     // Variáveis de estado
     private var foundPatientId: String? = null
     private var selectedSpecialty: String? = null
-    private var isPatientSelected = false // NOVA VARIÁVEL PARA CONTROLAR A SELEÇÃO
+    private var isPatientSelected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +55,7 @@ class GeriatricaActivity : AppCompatActivity() {
         textViewBirthdate = findViewById(R.id.text_view_birthdate)
         textViewAge = findViewById(R.id.text_view_age)
         textViewSex = findViewById(R.id.text_view_sex)
-        iniciarFichaButton = findViewById(R.id.btn_iniciar_ficha) // INICIALIZA O BOTÃO
+        iniciarFichaButton = findViewById(R.id.btn_iniciar_ficha)
 
         // 2. Recebe a especialidade da tela anterior
         selectedSpecialty = intent.getStringExtra("ESPECIALIDADE_SELECIONADA")
@@ -72,7 +72,7 @@ class GeriatricaActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString().length < 11) {
-                    resetPatientSelection() // Limpa tudo se o CPF for apagado
+                    resetPatientSelection()
                 }
                 if (s.toString().length == 11) {
                     searchPatient(s.toString())
@@ -80,40 +80,41 @@ class GeriatricaActivity : AppCompatActivity() {
             }
         })
 
-        // 4. LÓGICA DE CLIQUE NO CARD DO PACIENTE (ATUALIZADA)
+        // 4. Lógica de clique no card do paciente
         cardPatientInfo.setOnClickListener {
-            isPatientSelected = !isPatientSelected // Inverte o estado de seleção (true -> false, false -> true)
+            isPatientSelected = !isPatientSelected
 
             if (isPatientSelected) {
-                // Estado: SELECIONADO
                 cardPatientInfo.setCardBackgroundColor(ContextCompat.getColor(this, R.color.verde_claro))
                 iniciarFichaButton.isEnabled = true
             } else {
-                // Estado: NÃO SELECIONADO
                 cardPatientInfo.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
                 iniciarFichaButton.isEnabled = false
             }
         }
 
-        // 5. LÓGICA DE CLIQUE NO BOTÃO "INICIAR FICHA"
+        // 5. LÓGICA DE CLIQUE NO BOTÃO "INICIAR FICHA" (ATUALIZADA)
         iniciarFichaButton.setOnClickListener {
-            // Este código só será executado se o botão estiver habilitado
-            if (isPatientSelected) {
-                Toast.makeText(this, "Iniciando ficha para ${textViewPatientName.text}...", Toast.LENGTH_SHORT).show()
-                // Futuramente, aqui você colocará a lógica para abrir a próxima tela da ficha
+            if (isPatientSelected && foundPatientId != null) {
+                // Cria a intenção de ir para a próxima tela
+                val intent = Intent(this, Tela8FichaActivity::class.java)
+
+                // Opcional, mas recomendado: Passa o ID e o nome do paciente para a próxima tela
+                intent.putExtra("PACIENTE_ID", foundPatientId)
+                intent.putExtra("PACIENTE_NOME", textViewPatientName.text.toString())
+
+                startActivity(intent)
             } else {
-                // Este aviso é uma segurança extra, mas o botão já estará desabilitado
                 Toast.makeText(this, "Por favor, selecione um paciente primeiro.", Toast.LENGTH_SHORT).show()
             }
         }
-
 
         // 6. Configura a navegação
         setupNavigation()
     }
 
     private fun searchPatient(cpf: String) {
-        resetPatientSelection() // Reseta a UI antes de toda nova busca
+        resetPatientSelection()
 
         val cleanedCpf = cpf.replace(Regex("[^0-9]"), "")
         val doctorUid = auth.currentUser?.uid ?: return
@@ -153,15 +154,12 @@ class GeriatricaActivity : AppCompatActivity() {
             }
     }
 
-    /**
-     * NOVA FUNÇÃO: Reseta o estado da seleção do paciente e da UI para o padrão.
-     */
     private fun resetPatientSelection() {
         foundPatientId = null
         isPatientSelected = false
         cardPatientInfo.visibility = View.GONE
-        cardPatientInfo.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white)) // Garante que volte a ser branco
-        iniciarFichaButton.isEnabled = false // Desabilita o botão
+        cardPatientInfo.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
+        iniciarFichaButton.isEnabled = false
     }
 
     private fun populatePatientCard(document: com.google.firebase.firestore.DocumentSnapshot) {
@@ -174,7 +172,6 @@ class GeriatricaActivity : AppCompatActivity() {
 
         if (birthTimestamp != null) {
             val birthDate = birthTimestamp.toDate()
-
             val sdf = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", Locale("pt", "BR"))
             textViewBirthdate.text = "Nascimento: ${sdf.format(birthDate)}"
 
@@ -188,13 +185,11 @@ class GeriatricaActivity : AppCompatActivity() {
             }
 
             textViewAge.text = "Idade: $age anos"
-
         } else {
             textViewBirthdate.text = "Nascimento: Não informado"
             textViewAge.text = "Idade: Não informada"
         }
 
-        // Apenas torna o card visível. O botão continua desabilitado até o clique.
         cardPatientInfo.visibility = View.VISIBLE
     }
 
