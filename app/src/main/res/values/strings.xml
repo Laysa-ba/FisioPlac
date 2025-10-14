@@ -18,4 +18,42 @@
             <item>Superior Completo</item>
         </string-array>
 
+    <string-array name="opcoes_local_residencia">
+        <item>Urbano</item>
+        <item>Rural</item>
+    </string-array>
+
+    <string-array name="opcoes_mora_com">
+        <item>Sozinho</item>
+        <item>Cônjuge</item>
+        <item>Filhos</item>
+        <item>Outros</item>
+    </string-array>
+
+    <string-array name="opcoes_dias_semana">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
+
+    <string-array name="opcoes_atividade_social">
+        <item>Nenhuma</item>
+        <item>Igreja</item>
+        <item>Clube</item>
+        <item>Trabalho voluntário</item>
+        <item>Outros</item>
+    </string-array>
+
+    <string-array name="opcoes_doencas">
+        <item>Hipertensão</item>
+        <item>Diabetes</item>
+        <item>Cardiopatia</item>
+        <item>Osteoporose</item>
+        <item>Nenhuma</item>
+    </string-array>
+
 </resources>
