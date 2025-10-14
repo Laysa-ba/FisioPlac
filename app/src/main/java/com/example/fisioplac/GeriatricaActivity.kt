@@ -4,16 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log // IMPORT NECESSÁRIO
+import android.util.Log
 import android.view.View
+import android.widget.Button // NOVO IMPORT
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat // NOVO IMPORT
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class GeriatricaActivity : AppCompatActivity() {
 
@@ -23,11 +29,17 @@ class GeriatricaActivity : AppCompatActivity() {
 
     // Componentes da UI
     private lateinit var cpfEditText: EditText
-    private lateinit var patientNameTextView: TextView
+    private lateinit var cardPatientInfo: MaterialCardView
+    private lateinit var textViewPatientName: TextView
+    private lateinit var textViewBirthdate: TextView
+    private lateinit var textViewAge: TextView
+    private lateinit var textViewSex: TextView
+    private lateinit var iniciarFichaButton: Button // NOVA VARIÁVEL DO BOTÃO
 
-    // Variáveis para guardar dados importantes
+    // Variáveis de estado
     private var foundPatientId: String? = null
     private var selectedSpecialty: String? = null
+    private var isPatientSelected = false // NOVA VARIÁVEL PARA CONTROLAR A SELEÇÃO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,58 +50,74 @@ class GeriatricaActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
         cpfEditText = findViewById(R.id.edit_text_cpf)
-        patientNameTextView = findViewById(R.id.text_view_patient_name)
+        cardPatientInfo = findViewById(R.id.card_patient_info)
+        textViewPatientName = findViewById(R.id.text_view_patient_name)
+        textViewBirthdate = findViewById(R.id.text_view_birthdate)
+        textViewAge = findViewById(R.id.text_view_age)
+        textViewSex = findViewById(R.id.text_view_sex)
+        iniciarFichaButton = findViewById(R.id.btn_iniciar_ficha) // INICIALIZA O BOTÃO
 
         // 2. Recebe a especialidade da tela anterior
         selectedSpecialty = intent.getStringExtra("ESPECIALIDADE_SELECIONADA")
         if (selectedSpecialty == null) {
             Toast.makeText(this, "Erro: Especialidade não definida.", Toast.LENGTH_LONG).show()
-            finish() // Fecha a tela se não houver especialidade
+            finish()
             return
         }
 
-        // 3. Adiciona o "espião" de texto para busca automática
+        // 3. Adiciona o TextWatcher para busca automática
         cpfEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                // Limpa o resultado anterior se o usuário apagar o texto
                 if (s.toString().length < 11) {
-                    patientNameTextView.visibility = View.GONE
-                    foundPatientId = null
+                    resetPatientSelection() // Limpa tudo se o CPF for apagado
                 }
-                // Dispara a busca automaticamente quando o CPF tiver 11 dígitos
                 if (s.toString().length == 11) {
                     searchPatient(s.toString())
                 }
             }
         })
 
-        // 4. Adiciona a ação de "selecionar" o paciente quando o nome aparece
-        patientNameTextView.setOnClickListener {
-            if (foundPatientId != null) {
-                Toast.makeText(this, "${patientNameTextView.text} selecionado!", Toast.LENGTH_SHORT).show()
-                // Futuramente, aqui você pode habilitar o resto da ficha para preenchimento
+        // 4. LÓGICA DE CLIQUE NO CARD DO PACIENTE (ATUALIZADA)
+        cardPatientInfo.setOnClickListener {
+            isPatientSelected = !isPatientSelected // Inverte o estado de seleção (true -> false, false -> true)
+
+            if (isPatientSelected) {
+                // Estado: SELECIONADO
+                cardPatientInfo.setCardBackgroundColor(ContextCompat.getColor(this, R.color.verde_claro))
+                iniciarFichaButton.isEnabled = true
+            } else {
+                // Estado: NÃO SELECIONADO
+                cardPatientInfo.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white))
+                iniciarFichaButton.isEnabled = false
             }
         }
 
-        // 5. Configura a navegação
+        // 5. LÓGICA DE CLIQUE NO BOTÃO "INICIAR FICHA"
+        iniciarFichaButton.setOnClickListener {
+            // Este código só será executado se o botão estiver habilitado
+            if (isPatientSelected) {
+                Toast.makeText(this, "Iniciando ficha para ${textViewPatientName.text}...", Toast.LENGTH_SHORT).show()
+                // Futuramente, aqui você colocará a lógica para abrir a próxima tela da ficha
+            } else {
+                // Este aviso é uma segurança extra, mas o botão já estará desabilitado
+                Toast.makeText(this, "Por favor, selecione um paciente primeiro.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+        // 6. Configura a navegação
         setupNavigation()
     }
 
-    /**
-     * Função principal que busca o paciente no Firebase.
-     */
     private fun searchPatient(cpf: String) {
+        resetPatientSelection() // Reseta a UI antes de toda nova busca
+
         val cleanedCpf = cpf.replace(Regex("[^0-9]"), "")
         val doctorUid = auth.currentUser?.uid ?: return
 
-        // Esconde o resultado anterior antes de uma nova busca
-        patientNameTextView.visibility = View.GONE
-        foundPatientId = null
-
-        // Passo 1: Busca na coleção 'pacientes'
         db.collection("pacientes").whereEqualTo("cpf", cleanedCpf).get()
             .addOnSuccessListener { documents ->
                 if (documents.isEmpty) {
@@ -99,9 +127,7 @@ class GeriatricaActivity : AppCompatActivity() {
 
                 val patientDocument = documents.first()
                 val patientId = patientDocument.id
-                val patientName = patientDocument.getString("nome")
 
-                // Passo 2: Verifica na coleção 'vinculos'
                 db.collection("vinculos")
                     .whereEqualTo("medicoId", doctorUid)
                     .whereEqualTo("pacienteId", patientId)
@@ -112,26 +138,66 @@ class GeriatricaActivity : AppCompatActivity() {
                         if (vinculoDocuments.isEmpty) {
                             Toast.makeText(this, "Paciente não vinculado a você para esta especialidade.", Toast.LENGTH_LONG).show()
                         } else {
-                            // Sucesso! Mostra o nome e guarda o ID.
-                            patientNameTextView.text = patientName
-                            patientNameTextView.visibility = View.VISIBLE
                             foundPatientId = patientId
+                            populatePatientCard(patientDocument)
                         }
                     }
-                    .addOnFailureListener { e -> // ALTERADO AQUI
+                    .addOnFailureListener { e ->
                         Log.e("FIRESTORE_ERROR", "Falha ao verificar vínculo: ", e)
                         Toast.makeText(this, "Erro ao verificar vínculo. Verifique o Logcat.", Toast.LENGTH_LONG).show()
                     }
             }
-            .addOnFailureListener { e -> // ALTERADO AQUI
+            .addOnFailureListener { e ->
                 Log.e("FIRESTORE_ERROR", "Falha ao buscar paciente por CPF: ", e)
                 Toast.makeText(this, "Erro ao buscar paciente. Verifique o Logcat.", Toast.LENGTH_LONG).show()
             }
     }
 
     /**
-     * Configura a navegação (botão de voltar e menu inferior).
+     * NOVA FUNÇÃO: Reseta o estado da seleção do paciente e da UI para o padrão.
      */
+    private fun resetPatientSelection() {
+        foundPatientId = null
+        isPatientSelected = false
+        cardPatientInfo.visibility = View.GONE
+        cardPatientInfo.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white)) // Garante que volte a ser branco
+        iniciarFichaButton.isEnabled = false // Desabilita o botão
+    }
+
+    private fun populatePatientCard(document: com.google.firebase.firestore.DocumentSnapshot) {
+        val patientName = document.getString("nome") ?: "Nome não encontrado"
+        val sex = document.getString("sexo") ?: "Não informado"
+        val birthTimestamp = document.getTimestamp("dataNascimento")
+
+        textViewPatientName.text = patientName
+        textViewSex.text = "Sexo: $sex"
+
+        if (birthTimestamp != null) {
+            val birthDate = birthTimestamp.toDate()
+
+            val sdf = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", Locale("pt", "BR"))
+            textViewBirthdate.text = "Nascimento: ${sdf.format(birthDate)}"
+
+            val birthCal = Calendar.getInstance()
+            birthCal.time = birthDate
+            val todayCal = Calendar.getInstance()
+
+            var age = todayCal.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR)
+            if (todayCal.get(Calendar.DAY_OF_YEAR) < birthCal.get(Calendar.DAY_OF_YEAR)) {
+                age--
+            }
+
+            textViewAge.text = "Idade: $age anos"
+
+        } else {
+            textViewBirthdate.text = "Nascimento: Não informado"
+            textViewAge.text = "Idade: Não informada"
+        }
+
+        // Apenas torna o card visível. O botão continua desabilitado até o clique.
+        cardPatientInfo.visibility = View.VISIBLE
+    }
+
     private fun setupNavigation() {
         val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation_bar)
         val backButton: ImageButton = findViewById(R.id.btn_back)
@@ -139,7 +205,7 @@ class GeriatricaActivity : AppCompatActivity() {
         bottomNav.selectedItemId = R.id.nav_new_file
 
         backButton.setOnClickListener {
-            finish() // Simplifica a ação de voltar
+            finish()
         }
 
         bottomNav.setOnItemSelectedListener { item ->
