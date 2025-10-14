@@ -62,7 +62,8 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
 
             <!-- Aviso -->
             <androidx.cardview.widget.CardView
@@ -84,7 +85,8 @@
                     android:textAlignment="center"
                     android:textColor="@color/vermelho_aviso"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText"/>
 
             </androidx.cardview.widget.CardView>
 
@@ -99,7 +101,8 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cv_warning_container" />
+                app:layout_constraintTop_toBottomOf="@id/cv_warning_container"
+                tools:ignore="HardcodedText"/>
 
             <!-- Labels para Data e Estagiário -->
 
@@ -117,7 +120,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_personal_data_header"
                 app:layout_constraintVertical_bias="0.8"
-                tools:targetApi="28" />
+                tools:targetApi="28"
+                tools:ignore="HardcodedText"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_data"
@@ -152,7 +156,8 @@
                 app:layout_constraintBottom_toBottomOf="@id/til_data"
                 app:layout_constraintEnd_toStartOf="@+id/til_estagiario"
                 app:layout_constraintStart_toEndOf="@id/til_data"
-                app:layout_constraintTop_toTopOf="@id/til_data" />
+                app:layout_constraintTop_toTopOf="@id/til_data"
+                tools:ignore="HardcodedText"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_estagiario"
@@ -191,7 +196,8 @@
                 app:boxCornerRadiusBottomEnd="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_data">
+                app:layout_constraintTop_toBottomOf="@id/til_data"
+                tools:ignore="HardcodedText">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_nome"
@@ -218,7 +224,8 @@
                 app:boxCornerRadiusBottomEnd="5dp"
                 app:layout_constraintEnd_toStartOf="@+id/til_idade"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_nome">
+                app:layout_constraintTop_toBottomOf="@id/til_nome"
+                tools:ignore="HardcodedText">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_nascimento"
@@ -244,7 +251,8 @@
                 app:boxCornerRadiusBottomEnd="5dp"
                 app:layout_constraintBottom_toBottomOf="@id/til_nascimento"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/til_nascimento">
+                app:layout_constraintStart_toEndOf="@id/til_nascimento"
+                tools:ignore="HardcodedText">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_idade"
@@ -277,7 +285,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    tools:targetApi="28" />
+                    tools:targetApi="28"
+                    tools:ignore="HardcodedText"/>
 
                 <RadioGroup
                     android:id="@+id/rg_sexo"
@@ -300,14 +309,13 @@
                         android:textSize="15sp"
                         android:paddingStart="8dp"
                         app:buttonTint="@color/laranja"
-                        tools:ignore="RtlSymmetry"/>
+                        tools:ignore="RtlSymmetry,HardcodedText" />
 
                     <RadioButton
                         android:id="@+id/rb_feminino"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="30dp"
-                        android:layout_marginEnd="45dp"
                         android:button="@drawable/radio_button_selector"
                         android:checked="true"
                         android:text="Feminino"
@@ -315,7 +323,7 @@
                         android:textSize="14sp"
                         android:paddingStart="8dp"
                         app:buttonTint="@color/laranja"
-                        tools:ignore="RtlSymmetry"/>
+                        tools:ignore="RtlSymmetry,HardcodedText"/>
                 </RadioGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -338,7 +346,8 @@
                 app:endIconTint="@color/cinza_escuro"
                 app:layout_constraintEnd_toStartOf="@+id/til_telefone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cl_sexo_container">
+                app:layout_constraintTop_toBottomOf="@+id/cl_sexo_container"
+                tools:ignore="HardcodedText">
 
                 <AutoCompleteTextView
                     android:id="@+id/actv_estado_civil"
@@ -364,7 +373,8 @@
                 app:boxStrokeColor="@color/cinza_escuro"
                 app:layout_constraintBottom_toBottomOf="@id/til_estado_civil"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/til_estado_civil">
+                app:layout_constraintStart_toEndOf="@id/til_estado_civil"
+                tools:ignore="HardcodedText">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_telefone"
@@ -394,7 +404,8 @@
                 app:endIconTint="@color/cinza_escuro"
                 app:layout_constraintEnd_toStartOf="@+id/til_renda"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_estado_civil">
+                app:layout_constraintTop_toBottomOf="@id/til_estado_civil"
+                tools:ignore="HardcodedText">
 
                 <AutoCompleteTextView
                     android:id="@+id/actv_escolaridade"
@@ -419,7 +430,8 @@
                 app:boxStrokeColor="@color/cinza_escuro"
                 app:layout_constraintBottom_toBottomOf="@id/til_escolaridade"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/til_escolaridade">
+                app:layout_constraintStart_toEndOf="@id/til_escolaridade"
+                tools:ignore="HardcodedText">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_renda"
@@ -449,7 +461,8 @@
                 app:endIconTint="@color/cinza_escuro"
                 app:layout_constraintEnd_toStartOf="@+id/til_mora_com"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_escolaridade">
+                app:layout_constraintTop_toBottomOf="@id/til_escolaridade"
+                tools:ignore="HardcodedText">
 
                 <AutoCompleteTextView
                     android:id="@+id/actv_local_residencia"
@@ -474,7 +487,8 @@
                 app:endIconTint="@color/cinza_escuro"
                 app:layout_constraintBottom_toBottomOf="@id/til_local_residencia"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/til_local_residencia">
+                app:layout_constraintStart_toEndOf="@id/til_local_residencia"
+                tools:ignore="HardcodedText">
 
                 <AutoCompleteTextView
                     android:id="@+id/actv_mora_com"
@@ -496,7 +510,8 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_local_residencia" />
+                app:layout_constraintTop_toBottomOf="@id/til_local_residencia"
+                tools:ignore="HardcodedText"/>
 
 
             <!-- Seção de Frequência -->
@@ -518,7 +533,8 @@
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="HardcodedText"/>
 
                 <RadioGroup
                     android:id="@+id/rg_atividades_fisicas"
@@ -530,7 +546,8 @@
                     app:layout_constraintBottom_toBottomOf="@id/tv_atividades_fisicas_label"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_atividades_fisicas_label"
-                    app:layout_constraintTop_toTopOf="@id/tv_atividades_fisicas_label">
+                    app:layout_constraintTop_toTopOf="@id/tv_atividades_fisicas_label"
+                    tools:ignore="RtlSymmetry">
 
                     <RadioButton
                         android:id="@+id/rb_sim_atividade"
@@ -541,7 +558,8 @@
                         android:text="Sim"
                         android:textSize="16sp"
                         app:buttonTint="@color/laranja"
-                        android:textColor="@color/preto_claro"/>
+                        android:textColor="@color/preto_claro"
+                        tools:ignore="HardcodedText"/>
 
                     <RadioButton
                         android:id="@+id/rb_nao_atividade"
@@ -554,7 +572,8 @@
                         android:text="Não"
                         android:textSize="16sp"
                         app:buttonTint="@color/laranja"
-                        android:textColor="@color/preto_claro" />
+                        android:textColor="@color/preto_claro"
+                        tools:ignore="HardcodedText"/>
                 </RadioGroup>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -576,7 +595,8 @@
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="HardcodedText"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_dias_semana"
@@ -611,7 +631,8 @@
                 android:textSize="15sp"
                 android:textColor="@color/preto_claro"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dias_semana_container" />
+                app:layout_constraintTop_toBottomOf="@id/dias_semana_container"
+                tools:ignore="HardcodedText"/>
 
             <RadioGroup
                 android:id="@+id/rg_frequencia_sair"
@@ -632,7 +653,8 @@
                     android:text="Diariamente"
                     android:textSize="15sp"
                     app:buttonTint="@color/laranja"
-                    android:textColor="@color/preto_claro" />
+                    android:textColor="@color/preto_claro"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
 
                 <RadioButton
                     android:id="@+id/rb_pouca_frequencia"
@@ -645,7 +667,8 @@
                     android:text="Pouca frequência"
                     android:textSize="14sp"
                     app:buttonTint="@color/laranja"
-                    android:textColor="@color/preto_claro"/>
+                    android:textColor="@color/preto_claro"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
             </RadioGroup>
 
             <!-- Spinners de Atividade Social e Doenças -->
@@ -667,7 +690,8 @@
                 android:textColorHint="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/til_doencas"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rg_frequencia_sair">
+                app:layout_constraintTop_toBottomOf="@id/rg_frequencia_sair"
+                tools:ignore="HardcodedText">
 
                 <AutoCompleteTextView
                     android:id="@+id/actv_atividade_social"
@@ -694,7 +718,8 @@
                 android:textColorHint="@color/white"
                 app:layout_constraintBottom_toBottomOf="@id/til_atividade_social"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/til_atividade_social">
+                app:layout_constraintStart_toEndOf="@id/til_atividade_social"
+                tools:ignore="HardcodedText">
 
                 <AutoCompleteTextView
                     android:id="@+id/actv_doencas"
@@ -715,7 +740,8 @@
                 android:textColor="@color/preto_claro"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_atividade_social" />
+                app:layout_constraintTop_toBottomOf="@id/til_atividade_social"
+                tools:ignore="HardcodedText"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_outras_doencas"
@@ -747,7 +773,8 @@
                 android:textColor="@color/preto_claro"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_outras_doencas" />
+                app:layout_constraintTop_toBottomOf="@id/til_outras_doencas"
+                tools:ignore="HardcodedText"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_queixa_principal"
@@ -786,7 +813,8 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/til_queixa_principal"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                tools:ignore="HardcodedText"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
