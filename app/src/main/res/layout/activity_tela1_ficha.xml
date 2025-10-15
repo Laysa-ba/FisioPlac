@@ -45,6 +45,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/cinza"
             android:paddingStart="20dp"
             android:paddingTop="8dp"
             android:paddingEnd="20dp"
@@ -182,322 +183,322 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Campo Nome -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_nome"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="350dp"
-                android:layout_height="36dp"
-                android:layout_marginTop="20dp"
-                android:hint="Nome"
-                app:boxStrokeColor="@color/cinza_escuro"
-                app:boxCornerRadiusTopStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_data"
-                tools:ignore="HardcodedText">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_nome"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:textSize="14sp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Campos Nascimento e Idade -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_nascimento"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="170dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="2dp"
-                android:hint="Nascimento"
-                app:boxStrokeColor="@color/cinza_escuro"
-                app:boxCornerRadiusTopStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:layout_constraintEnd_toStartOf="@+id/til_idade"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_nome"
-                tools:ignore="HardcodedText">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_nascimento"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:inputType="date"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_idade"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="172dp"
-                android:layout_height="35dp"
-                android:layout_marginEnd="2dp"
-                android:hint="Idade"
-                app:boxStrokeColor="@color/cinza_escuro"
-                app:boxStrokeWidth="1dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:layout_constraintBottom_toBottomOf="@id/til_nascimento"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/til_nascimento"
-                tools:ignore="HardcodedText">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_idade"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Seleção de Sexo -->
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_sexo_container"
-                android:layout_width="353dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@+id/til_nascimento"
+                android:id="@+id/cl_dados_pessoais_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:paddingBottom="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/til_data">
 
-                <TextView
-                    android:id="@+id/tv_sexo_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:text="Sexo:"
-                    android:textColor="@color/preto_claro"
-                    android:textFontWeight="500"
-                    android:textSize="15sp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_nome"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="8dp"
+                    android:hint="Nome"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    tools:targetApi="28"
-                    tools:ignore="HardcodedText"/>
+                    tools:ignore="HardcodedText">
 
-                <RadioGroup
-                    android:id="@+id/rg_sexo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintStart_toEndOf="@id/tv_sexo_label"
-                    app:layout_constraintTop_toTopOf="@id/tv_sexo_label"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_sexo_label">
-
-                    <RadioButton
-                        android:id="@+id/rb_masculino"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_nome"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:button="@drawable/radio_button_selector"
-                        android:text="Masculino"
-                        android:textColor="@color/preto_claro"
-                        android:textSize="15sp"
-                        android:paddingStart="8dp"
-                        app:buttonTint="@color/laranja"
-                        tools:ignore="RtlSymmetry,HardcodedText" />
+                        android:inputType="textPersonName"
+                        android:textSize="14sp" />
 
-                    <RadioButton
-                        android:id="@+id/rb_feminino"
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_nascimento"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Nascimento"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:layout_constraintEnd_toStartOf="@+id/til_idade"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/til_nome"
+                    tools:ignore="HardcodedText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_nascimento"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="date"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_idade"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:hint="Idade"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:boxStrokeWidth="1dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:layout_constraintBottom_toBottomOf="@id/til_nascimento"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/til_nascimento"
+                    tools:ignore="HardcodedText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_idade"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_sexo_container"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintTop_toBottomOf="@+id/til_nascimento"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+                    <TextView
+                        android:id="@+id/tv_sexo_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="30dp"
-                        android:button="@drawable/radio_button_selector"
-                        android:checked="true"
-                        android:text="Feminino"
+                        android:text="Sexo:"
                         android:textColor="@color/preto_claro"
-                        android:textSize="14sp"
-                        android:paddingStart="8dp"
-                        app:buttonTint="@color/laranja"
-                        tools:ignore="RtlSymmetry,HardcodedText"/>
-                </RadioGroup>
+                        android:textFontWeight="500"
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:targetApi="28"
+                        tools:ignore="HardcodedText"/>
+                    <RadioGroup
+                        android:id="@+id/rg_sexo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toEndOf="@id/tv_sexo_label"
+                        app:layout_constraintTop_toTopOf="@id/tv_sexo_label"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_sexo_label">
+                        <RadioButton
+                            android:id="@+id/rb_masculino"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:button="@drawable/radio_button_selector"
+                            android:text="Masculino"
+                            android:textColor="@color/preto_claro"
+                            android:textSize="15sp"
+                            android:paddingStart="8dp"
+                            app:buttonTint="@color/laranja"
+                            tools:ignore="RtlSymmetry,HardcodedText" />
+                        <RadioButton
+                            android:id="@+id/rb_feminino"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:button="@drawable/radio_button_selector"
+                            android:checked="true"
+                            android:text="Feminino"
+                            android:textColor="@color/preto_claro"
+                            android:textSize="14sp"
+                            android:paddingStart="8dp"
+                            app:buttonTint="@color/laranja"
+                            tools:ignore="RtlSymmetry,HardcodedText"/>
+                    </RadioGroup>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_estado_civil"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="8dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    android:hint="Estado civil"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:endIconDrawable="@drawable/setadoselect"
+                    app:endIconTint="@color/cinza_escuro"
+                    app:layout_constraintEnd_toStartOf="@+id/til_telefone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_sexo_container"
+                    tools:ignore="HardcodedText">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actvEstadoCivil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="none"
+                        android:textSize="14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_telefone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    android:hint="Telefone"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:layout_constraintBottom_toBottomOf="@id/til_estado_civil"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/til_estado_civil"
+                    tools:ignore="HardcodedText">
+
+                    <AutoCompleteTextView
+                    android:id="@+id/etTelefone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:textSize="14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_escolaridade"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="8dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    android:hint="Escolaridade"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:endIconDrawable="@drawable/setadoselect"
+                    app:endIconTint="@color/cinza_escuro"
+                    app:layout_constraintEnd_toStartOf="@+id/til_renda"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/til_estado_civil"
+                    tools:ignore="HardcodedText">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actvEscolaridade"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:inputType="none"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_renda"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    android:hint="Renda"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:layout_constraintBottom_toBottomOf="@id/til_escolaridade"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/til_escolaridade"
+                    tools:ignore="HardcodedText">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etRenda"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:inputType="none"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_local_residencia"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="8dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    android:hint="Local de residência"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:endIconDrawable="@drawable/setadoselect"
+                    app:endIconTint="@color/cinza_escuro"
+                    app:layout_constraintEnd_toStartOf="@+id/til_mora_com"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/til_escolaridade"
+                    tools:ignore="HardcodedText">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actvLocalResidencia"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:inputType="none"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_mora_com"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    android:hint="Mora com"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:endIconDrawable="@drawable/setadoselect"
+                    app:endIconTint="@color/cinza_escuro"
+                    app:layout_constraintBottom_toBottomOf="@id/til_local_residencia"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/til_local_residencia"
+                    tools:ignore="HardcodedText">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actvMoraCom"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:inputType="none"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <!-- Campos Estado Civil e Telefone -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_estado_civil"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="172dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusBottomEnd="5dp"
-                android:hint="Estado civil"
-                app:boxStrokeColor="@color/cinza_escuro"
-                app:endIconDrawable="@drawable/setadoselect"
-                app:endIconTint="@color/cinza_escuro"
-                app:layout_constraintEnd_toStartOf="@+id/til_telefone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cl_sexo_container"
-                tools:ignore="HardcodedText">
 
-                <AutoCompleteTextView
-                    android:id="@+id/actv_estado_civil"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:inputType="none"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_telefone"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="172dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusBottomEnd="5dp"
-                android:hint="Telefone"
-                app:boxStrokeColor="@color/cinza_escuro"
-                app:layout_constraintBottom_toBottomOf="@id/til_estado_civil"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/til_estado_civil"
-                tools:ignore="HardcodedText">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_telefone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:inputType="phone"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Campos Escolaridade e Renda -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_escolaridade"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="172dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusBottomEnd="5dp"
-                android:hint="Escolaridade"
-                app:boxStrokeColor="@color/cinza_escuro"
-                app:endIconDrawable="@drawable/setadoselect"
-                app:endIconTint="@color/cinza_escuro"
-                app:layout_constraintEnd_toStartOf="@+id/til_renda"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_estado_civil"
-                tools:ignore="HardcodedText">
-
-                <AutoCompleteTextView
-                    android:id="@+id/actv_escolaridade"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:inputType="none"
-                    android:textSize="15sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_renda"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="172dp"
-                android:layout_height="35dp"
-                android:layout_marginEnd="1dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusBottomEnd="5dp"
-                android:hint="Renda"
-                app:boxStrokeColor="@color/cinza_escuro"
-                app:layout_constraintBottom_toBottomOf="@id/til_escolaridade"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/til_escolaridade"
-                tools:ignore="HardcodedText">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_renda"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:inputType="numberDecimal"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Campos Local de Residência e Mora Com -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_local_residencia"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="172dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusBottomEnd="5dp"
-                android:hint="Local de residência"
-                app:boxStrokeColor="@color/cinza_escuro"
-                app:endIconDrawable="@drawable/setadoselect"
-                app:endIconTint="@color/cinza_escuro"
-                app:layout_constraintEnd_toStartOf="@+id/til_mora_com"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_escolaridade"
-                tools:ignore="HardcodedText">
-
-                <AutoCompleteTextView
-                    android:id="@+id/actv_local_residencia"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_mora_com"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="172dp"
-                android:layout_height="35dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusBottomEnd="5dp"
-                android:hint="Mora com"
-                app:boxStrokeColor="@color/cinza_escuro"
-                app:endIconDrawable="@drawable/setadoselect"
-                app:endIconTint="@color/cinza_escuro"
-                app:layout_constraintBottom_toBottomOf="@id/til_local_residencia"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/til_local_residencia"
-                tools:ignore="HardcodedText">
-
-                <AutoCompleteTextView
-                    android:id="@+id/actv_mora_com"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:inputType="none"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Seção de Atividades Físicas -->
             <TextView
@@ -510,7 +511,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_local_residencia"
+                app:layout_constraintTop_toBottomOf="@id/cl_dados_pessoais_container"
                 tools:ignore="HardcodedText"/>
 
 
@@ -604,6 +605,11 @@
                     android:layout_width="97dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="8dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxStrokeWidth="2px"
                     app:boxStrokeColor="@color/cinza_escuro"
                     app:endIconDrawable="@drawable/setadoselect"
                     app:endIconTint="@color/cinza_escuro"
@@ -613,7 +619,8 @@
                     app:layout_constraintTop_toTopOf="@id/tv_dias_semana_label">
 
                     <AutoCompleteTextView
-                        android:id="@+id/actv_dias_semana"
+                        android:id="@+id/actvDiasSemana"
+                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none"
@@ -694,7 +701,7 @@
                 tools:ignore="HardcodedText">
 
                 <AutoCompleteTextView
-                    android:id="@+id/actv_atividade_social"
+                    android:id="@+id/actvAtividadeSocial"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
@@ -722,7 +729,7 @@
                 tools:ignore="HardcodedText">
 
                 <AutoCompleteTextView
-                    android:id="@+id/actv_doencas"
+                    android:id="@+id/actvDoencas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
