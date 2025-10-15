@@ -56,43 +56,5 @@
         <item>Nenhuma</item>
     </string-array>
 
-    <string-array name="opcoes_local_residencia">
-        <item>Urbano</item>
-        <item>Rural</item>
-    </string-array>
-
-    <string-array name="opcoes_mora_com">
-        <item>Sozinho</item>
-        <item>Cônjuge</item>
-        <item>Filhos</item>
-        <item>Outros</item>
-    </string-array>
-
-    <string-array name="opcoes_dias_semana">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-    </string-array>
-
-    <string-array name="opcoes_atividade_social">
-        <item>Nenhuma</item>
-        <item>Igreja</item>
-        <item>Clube</item>
-        <item>Trabalho voluntário</item>
-        <item>Outros</item>
-    </string-array>
-
-    <string-array name="opcoes_doencas">
-        <item>Hipertensão</item>
-        <item>Diabetes</item>
-        <item>Cardiopatia</item>
-        <item>Osteoporose</item>
-        <item>Nenhuma</item>
-    </string-array>
-
     <string name="tugt_instructions">Instruções: o paciente ou individuo que irá participar do teste de inicio deve estar sentado em uma cadeira sem braços com as costas apoiadas, usando seus calçados de uso habitual (seu dispositivo auxiliar de marcha caso utilize), após o comando “VÁ ou VAI”, ele deve se levantar da cadeira e andar em um percurso linear de 3 metros, com passos seguros (pode se acrescentar uma linha ou um objeto como por exemplo um cone) para que o idoso o contorne e em seguida retorne em direção a cadeira e sentar novamente, o tempo deste percurso será cronometrado a partir do comando verbal de “vá” e avaliado em seguida quando o paciente retorna a sua posição de inicio.</string>
 </resources>
