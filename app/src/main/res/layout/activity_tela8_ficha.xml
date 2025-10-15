@@ -8,10 +8,51 @@
     android:background="@color/cinza"
     tools:context=".Tela8FichaActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:paddingTop="15dp"
+        android:background="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Voltar"
+            android:src="@drawable/seta"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <ProgressBar
+            android:id="@+id/ficha_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:max="100"
+            android:progressDrawable="@drawable/custom_progress_bar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_back"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:progress="80" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/cinza_claro"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
         app:layout_constraintBottom_toTopOf="@id/btn_avancar">
 
         <LinearLayout
@@ -24,52 +65,60 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Timed Up and Go Test (TUGT)"
+                android:textColor="@color/verde"
                 android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/preto_claro"/>
+                android:textStyle="bold" />
 
-            <TextView
+            <com.codesgood.views.JustifiedTextView
+                android:id="@+id/text_view_instructions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="O paciente ou indivíduo que irá participar do teste de início deve estar sentado em uma cadeira sem braços com as costas apoiadas, usando seus calçados de uso habitual (se dispositivo auxiliar de marcha caso utilize). Após o comando verbal 'JÁ!', ele deve se levantar da cadeira e andar em um percurso linear de 3 metros em passos seguros. O tempo deste percurso será cronometrado a partir do comando verbal de 'JÁ!' e avaliado em seguida quando o paciente retorna a sua posição de início."
-                android:textSize="16sp"
-                android:lineSpacingExtra="4dp"/>
+                android:lineSpacingExtra="4dp"
+                android:text="@string/tugt_instructions"
+                android:textSize="16sp" />
 
-            <Chronometer
-                android:id="@+id/chronometer_tugt"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:textColor="@color/verde"
-                android:textSize="60sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="24dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
+                <Chronometer
+                    android:id="@+id/chronometer_tugt"
+                    android:layout_width="210dp"
+                    android:layout_height="88dp"
+                    android:textColor="@color/verde"
+                    android:textSize="60sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/btn_iniciar_cronometro"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:text="Iniciar"/>
+                    android:layout_width="144dp"
+                    android:layout_height="45dp"
+                    android:backgroundTint="@color/verde_claro"
+                    android:text="Iniciar"
+                    android:textColor="@color/preto_claro"
+                    app:cornerRadius="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/btn_finalizar_cronometro"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
+                    android:layout_width="143dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/laranja_050"
                     android:enabled="false"
-                    android:text="Finalizar"/>
+                    android:text="Finalizar"
+                    android:textColor="@color/preto_claro"
+                    app:cornerRadius="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_iniciar_cronometro" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/text_view_resultado_tugt"
@@ -90,11 +139,13 @@
 
     <Button
         android:id="@+id/btn_avancar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Avançar"
+        android:layout_width="144dp"
+        android:layout_height="44dp"
         android:layout_margin="16dp"
         android:enabled="false"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:text="Avançar"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
