@@ -97,7 +97,7 @@ class GeriatricaActivity : AppCompatActivity() {
         iniciarFichaButton.setOnClickListener {
             if (isPatientSelected && foundPatientId != null) {
                 // Cria a intenção de ir para a próxima tela
-                val intent = Intent(this, Tela8FichaActivity::class.java)
+                val intent = Intent(this, Tela1FichaActivity::class.java)
 
                 // Opcional, mas recomendado: Passa o ID e o nome do paciente para a próxima tela
                 intent.putExtra("PACIENTE_ID", foundPatientId)

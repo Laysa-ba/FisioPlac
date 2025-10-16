@@ -6,6 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".Tela1FichaActivity">
 
     <ImageView
@@ -118,13 +120,15 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:cursorVisible="false"
                 android:inputType="date"
                 android:padding="12dp"
                 android:textSize="14sp"
+                android:textColor="@color/preto_claro"
                 app:layout_constraintTop_toBottomOf="@+id/tv_personal_data_header"
                 app:layout_constraintStart_toEndOf="@id/tv_data_label"
-                app:layout_constraintEnd_toStartOf="@+id/tv_estagiario_label"/>
+                app:layout_constraintEnd_toStartOf="@+id/tv_estagiario_label" />
 
             <TextView
                 android:id="@+id/tv_estagiario_label"
@@ -147,6 +151,7 @@
                 android:inputType="textPersonName"
                 android:padding="12dp"
                 android:textSize="14sp"
+                android:textColor="@color/preto_claro"
                 app:layout_constraintTop_toTopOf="@id/et_data"
                 app:layout_constraintStart_toEndOf="@id/tv_estagiario_label"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -159,6 +164,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@color/white"
                 android:padding="8dp"
+                android:textColor="@color/preto_claro"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_data">
@@ -184,7 +190,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:cursorVisible="false"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -212,7 +222,11 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:inputType="date"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:cursorVisible="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -235,9 +249,12 @@
                         android:id="@+id/et_idade"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:clickable="false"
                         android:gravity="center"
-                        android:inputType="number"
-                        android:textSize="14sp" />
+                        android:inputType="phone"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -245,7 +262,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="3dp"
+                    android:layout_marginEnd="8dp"
                     android:text="Sexo:"
                     android:textColor="@color/preto_claro"
                     android:textSize="15sp"
@@ -268,7 +285,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:button="@drawable/radio_button_selector"
+                        android:layout_marginStart="8dp"  android:button="@drawable/radio_button_selector"
                         android:paddingStart="8dp"
                         android:text="Masculino"
                         android:textColor="@color/preto_claro"
@@ -282,7 +299,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:button="@drawable/radio_button_selector"
-                        android:checked="true"
                         android:paddingStart="8dp"
                         android:text="Feminino"
                         android:textColor="@color/preto_claro"
@@ -313,7 +329,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:inputType="none"
-                        android:textSize="14sp" />
+                        android:background="@null"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:popupBackground="@drawable/dropdown_item_background"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -335,7 +354,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:inputType="phone"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -361,7 +381,9 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:inputType="none"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:popupBackground="@drawable/dropdown_item_background"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -381,8 +403,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:inputType="text"
-                        android:textSize="14sp" />
+                        android:inputType="phone"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -407,7 +430,9 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:inputType="none"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:popupBackground="@drawable/dropdown_item_background"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -430,7 +455,9 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:inputType="none"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:popupBackground="@drawable/dropdown_item_background"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -497,12 +524,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
                         android:button="@drawable/radio_button_selector"
-                        android:checked="true"
                         android:paddingStart="8dp"
                         android:text="Não"
                         android:textColor="@color/preto_claro"
                         android:textSize="16sp"
                         app:buttonTint="@color/laranja"
+                        android:checked="true"
                         tools:ignore="HardcodedText,RtlSymmetry"/>
                 </RadioGroup>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -532,7 +559,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_dias_semana"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="120dp" android:layout_height="wrap_content"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     app:boxStrokeColor="@color/cinza_escuro"
                     app:boxStrokeWidth="1dp"
@@ -547,13 +575,14 @@
                         android:id="@+id/actvDiasSemana"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:inputType="none"
-                        android:textSize="14sp" />
+                        android:textColor="@color/preto_claro"
+                        android:textSize="14sp"
+                        android:popupBackground="@drawable/dropdown_item_background" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
             <TextView
                 android:id="@+id/tv_frequencia_sair_label"
                 android:layout_width="wrap_content"
@@ -595,7 +624,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:button="@drawable/radio_button_selector"
-                    android:checked="true"
                     android:paddingStart="8dp"
                     android:text="Pouca frequência"
                     android:textColor="@color/preto_claro"
@@ -627,7 +655,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="none"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:popupBackground="@drawable/dropdown_item_background"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -651,7 +680,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="none"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:popupBackground="@drawable/dropdown_item_background"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -684,7 +714,8 @@
                     android:gravity="top"
                     android:inputType="textMultiLine"
                     android:minLines="3"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textColor="@color/preto_claro"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -717,7 +748,8 @@
                     android:gravity="top"
                     android:inputType="textMultiLine"
                     android:minLines="3"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textColor="@color/preto_claro"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
