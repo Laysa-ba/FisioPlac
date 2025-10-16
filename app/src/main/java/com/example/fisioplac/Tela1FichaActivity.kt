@@ -1,5 +1,6 @@
 package com.example.fisioplac
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -79,7 +80,18 @@ class Tela1FichaActivity : AppCompatActivity() {
 
         binding.btnAvancar.setOnClickListener {
             if (validateFields()) {
-                Toast.makeText(this, "Ficha preenchida para o paciente com ID: $pacienteId", Toast.LENGTH_LONG).show()
+                // Se a validação passar, execute o código abaixo
+
+                // 1. Crie a Intent para ir para a Tela2
+                val intent = Intent(this, Tela2FichaActivity::class.java)
+
+                // 2. (Opcional, mas recomendado) Envie o ID do paciente para a próxima tela
+                //    Assim, a Tela2 também sabe a qual paciente ela pertence.
+                intent.putExtra("PACIENTE_ID", pacienteId)
+
+                // 3. Inicie a nova Activity
+                startActivity(intent)
+
             } else {
                 Toast.makeText(this, "Aviso: Todos os dados são obrigatórios!", Toast.LENGTH_LONG).show()
             }

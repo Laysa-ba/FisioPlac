@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_clickable_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/cinza_escuro" />
+
+        <TextView
+            android:id="@+id/tv_nome_medicamento_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:textColor="@color/preto_claro"
+            android:textSize="15sp"
+            app:drawableEndCompat="@drawable/setadoselect"
+            app:drawableTint="@color/cinza_escuro"
+            tools:text="Paracetamol" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/cinza_escuro" />
+
+        <TextView
+            android:id="@+id/tv_tempo_uso_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="12dp"
+            android:textColor="@color/preto_claro"
+            android:textSize="15sp"
+            tools:text="3 anos" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/cinza_escuro" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_como_usar_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F9F9F9"
+        android:padding="12dp"
+        android:textColor="@color/cinza_escuro"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:text="Tomar 1 comprimido de 8 em 8 horas."
+        tools:visibility="visible" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/cinza_escuro" />
+
+</LinearLayout>
