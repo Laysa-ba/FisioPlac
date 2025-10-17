@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView // Import necessário para a seta
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,7 @@ data class Medicamento(
     var isExpanded: Boolean = false
 )
 
+// A classe principal. A classe duplicada foi removida.
 class Tela2FichaActivity : AppCompatActivity() {
 
     private val listaDeMedicamentos = mutableListOf<Medicamento>()
@@ -35,14 +37,20 @@ class Tela2FichaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela2_ficha)
 
+        // --- CÓDIGO PARA A SETA DE VOLTAR ---
+        val backArrow = findViewById<ImageView>(R.id.back_arrow)
+        backArrow.setOnClickListener {
+            // finish() fecha a tela atual e volta para a anterior na pilha (Tela1)
+            finish()
+        }
+        // --- FIM DO CÓDIGO DA SETA ---
+
         val recyclerView = findViewById<RecyclerView>(R.id.rv_medicamentos)
         val headerLista = findViewById<LinearLayout>(R.id.ll_header_lista)
         val btnAdicionar = findViewById<MaterialButton>(R.id.btn_adicionar)
-
         val etNome = findViewById<TextInputEditText>(R.id.et_nome_medicamento)
         val etComoUsar = findViewById<TextInputEditText>(R.id.et_como_usar)
         val etTempoUso = findViewById<TextInputEditText>(R.id.et_tempo_uso)
-
         val tilNome = findViewById<TextInputLayout>(R.id.til_nome_medicamento)
         val tilComoUsar = findViewById<TextInputLayout>(R.id.til_como_usar)
         val tilTempoUso = findViewById<TextInputLayout>(R.id.til_tempo_uso)
@@ -62,25 +70,21 @@ class Tela2FichaActivity : AppCompatActivity() {
             val nome = etNome.text.toString().trim()
             val comoUsar = etComoUsar.text.toString().trim()
             val tempoUso = etTempoUso.text.toString().trim()
-
-            var isFormValid = true // Flag para controlar a validade do formulário
+            var isFormValid = true
 
             if (nome.isEmpty()) {
                 tilNome.error = "Campo obrigatório"
                 isFormValid = false
             }
-
             if (comoUsar.isEmpty()) {
                 tilComoUsar.error = "Campo obrigatório"
                 isFormValid = false
             }
-
             if (tempoUso.isEmpty()) {
                 tilTempoUso.error = "Campo obrigatório"
                 isFormValid = false
             }
 
-            // Apenas adiciona se o formulário for válido
             if (isFormValid) {
                 val novoMedicamento = Medicamento(nome, tempoUso, comoUsar)
                 listaDeMedicamentos.add(novoMedicamento)
@@ -90,7 +94,8 @@ class Tela2FichaActivity : AppCompatActivity() {
                 etComoUsar.text?.clear()
                 etTempoUso.text?.clear()
 
-                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val inputMethodManager =
+                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
                 etNome.clearFocus()
 
@@ -100,24 +105,14 @@ class Tela2FichaActivity : AppCompatActivity() {
                 }
             }
         }
-
-        // --- ADICIONADO ---
-        // Configura os listeners para limpar os erros em tempo real
         setupValidationListeners()
     }
 
-    // --- NOVA FUNÇÃO ---
-    /**
-     * Adiciona TextWatchers aos campos de input para limpar as mensagens de erro
-     * assim que o usuário começa a digitar.
-     */
     private fun setupValidationListeners() {
         val etNome = findViewById<TextInputEditText>(R.id.et_nome_medicamento)
         val tilNome = findViewById<TextInputLayout>(R.id.til_nome_medicamento)
-
         val etComoUsar = findViewById<TextInputEditText>(R.id.et_como_usar)
         val tilComoUsar = findViewById<TextInputLayout>(R.id.til_como_usar)
-
         val etTempoUso = findViewById<TextInputEditText>(R.id.et_tempo_uso)
         val tilTempoUso = findViewById<TextInputLayout>(R.id.til_tempo_uso)
 
@@ -125,7 +120,6 @@ class Tela2FichaActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                // Limpa o erro do TextInputLayout correspondente se ele tiver um
                 if (tilNome.error != null && !etNome.text.isNullOrBlank()) {
                     tilNome.error = null
                 }
@@ -137,15 +131,14 @@ class Tela2FichaActivity : AppCompatActivity() {
                 }
             }
         }
-
         etNome.addTextChangedListener(textWatcher)
         etComoUsar.addTextChangedListener(textWatcher)
         etTempoUso.addTextChangedListener(textWatcher)
     }
 }
 
-// Seu MedicamentoAdapter (sem alterações)
-class MedicamentoAdapter(private val medicamentos: MutableList<Medicamento>) : // Alterado para MutableList
+// Seu MedicamentoAdapter permanece fora da classe da Activity
+class MedicamentoAdapter(private val medicamentos: MutableList<Medicamento>) :
     RecyclerView.Adapter<MedicamentoAdapter.MedicamentoViewHolder>() {
 
     class MedicamentoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -169,12 +162,11 @@ class MedicamentoAdapter(private val medicamentos: MutableList<Medicamento>) : /
     override fun onBindViewHolder(holder: MedicamentoViewHolder, position: Int) {
         val medicamentoAtual = medicamentos[position]
         val context = holder.itemView.context
-
         holder.nomeMedicamento.text = medicamentoAtual.nome
         holder.tempoDeUso.text = medicamentoAtual.tempoDeUso
-
         val textoHtml = "<b>Como usa:</b> ${medicamentoAtual.comoUsar}"
-        holder.comoUsarTexto.text = HtmlCompat.fromHtml(textoHtml, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        holder.comoUsarTexto.text =
+            HtmlCompat.fromHtml(textoHtml, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
         if (medicamentoAtual.isExpanded) {
             holder.detailsArea.visibility = View.VISIBLE
