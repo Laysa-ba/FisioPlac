@@ -2,21 +2,23 @@ package com.example.fisioplac
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
-// Modelo de dados (Correto)
+// Modelo de dados (sem alterações)
 data class Medicamento(
     val nome: String,
     val tempoDeUso: String,
@@ -26,81 +28,132 @@ data class Medicamento(
 
 class Tela2FichaActivity : AppCompatActivity() {
 
-    // 1. A lista de medicamentos agora é uma variável da classe e é MUTÁVEL
     private val listaDeMedicamentos = mutableListOf<Medicamento>()
-    // 2. O adapter também se torna uma variável da classe para ser acessado depois
     private lateinit var medicamentoAdapter: MedicamentoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela2_ficha)
 
-        // Referências para os componentes da UI
         val recyclerView = findViewById<RecyclerView>(R.id.rv_medicamentos)
         val headerLista = findViewById<LinearLayout>(R.id.ll_header_lista)
         val btnAdicionar = findViewById<MaterialButton>(R.id.btn_adicionar)
+
         val etNome = findViewById<TextInputEditText>(R.id.et_nome_medicamento)
         val etComoUsar = findViewById<TextInputEditText>(R.id.et_como_usar)
         val etTempoUso = findViewById<TextInputEditText>(R.id.et_tempo_uso)
 
-        // 3. Oculta a lista e o cabeçalho no início
+        val tilNome = findViewById<TextInputLayout>(R.id.til_nome_medicamento)
+        val tilComoUsar = findViewById<TextInputLayout>(R.id.til_como_usar)
+        val tilTempoUso = findViewById<TextInputLayout>(R.id.til_tempo_uso)
+
         headerLista.visibility = View.GONE
         recyclerView.visibility = View.GONE
 
-        // Configuração do Adapter e RecyclerView
         medicamentoAdapter = MedicamentoAdapter(listaDeMedicamentos)
         recyclerView.adapter = medicamentoAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // 4. LÓGICA DO BOTÃO ADICIONAR
         btnAdicionar.setOnClickListener {
+            tilNome.error = null
+            tilComoUsar.error = null
+            tilTempoUso.error = null
+
             val nome = etNome.text.toString().trim()
             val comoUsar = etComoUsar.text.toString().trim()
             val tempoUso = etTempoUso.text.toString().trim()
 
-            // Validação simples para não adicionar item vazio
-            if (nome.isNotEmpty()) {
-                // Cria o novo objeto Medicamento
+            var isFormValid = true // Flag para controlar a validade do formulário
+
+            if (nome.isEmpty()) {
+                tilNome.error = "Campo obrigatório"
+                isFormValid = false
+            }
+
+            if (comoUsar.isEmpty()) {
+                tilComoUsar.error = "Campo obrigatório"
+                isFormValid = false
+            }
+
+            if (tempoUso.isEmpty()) {
+                tilTempoUso.error = "Campo obrigatório"
+                isFormValid = false
+            }
+
+            // Apenas adiciona se o formulário for válido
+            if (isFormValid) {
                 val novoMedicamento = Medicamento(nome, tempoUso, comoUsar)
-
-                // Adiciona na lista
                 listaDeMedicamentos.add(novoMedicamento)
-
-                // Notifica o adapter que um novo item foi inserido na última posição
                 medicamentoAdapter.notifyItemInserted(listaDeMedicamentos.size - 1)
 
-                // Limpa os campos de texto
                 etNome.text?.clear()
                 etComoUsar.text?.clear()
                 etTempoUso.text?.clear()
 
-                // Esconde o teclado
                 val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
                 etNome.clearFocus()
 
-                // 5. Se for o primeiro item, torna a lista e o cabeçalho visíveis
                 if (listaDeMedicamentos.size == 1) {
                     headerLista.visibility = View.VISIBLE
                     recyclerView.visibility = View.VISIBLE
                 }
-
-            } else {
-                // Mensagem de erro se o nome estiver vazio
-                Toast.makeText(this, "Por favor, insira o nome do medicamento.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // --- ADICIONADO ---
+        // Configura os listeners para limpar os erros em tempo real
+        setupValidationListeners()
+    }
+
+    // --- NOVA FUNÇÃO ---
+    /**
+     * Adiciona TextWatchers aos campos de input para limpar as mensagens de erro
+     * assim que o usuário começa a digitar.
+     */
+    private fun setupValidationListeners() {
+        val etNome = findViewById<TextInputEditText>(R.id.et_nome_medicamento)
+        val tilNome = findViewById<TextInputLayout>(R.id.til_nome_medicamento)
+
+        val etComoUsar = findViewById<TextInputEditText>(R.id.et_como_usar)
+        val tilComoUsar = findViewById<TextInputLayout>(R.id.til_como_usar)
+
+        val etTempoUso = findViewById<TextInputEditText>(R.id.et_tempo_uso)
+        val tilTempoUso = findViewById<TextInputLayout>(R.id.til_tempo_uso)
+
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                // Limpa o erro do TextInputLayout correspondente se ele tiver um
+                if (tilNome.error != null && !etNome.text.isNullOrBlank()) {
+                    tilNome.error = null
+                }
+                if (tilComoUsar.error != null && !etComoUsar.text.isNullOrBlank()) {
+                    tilComoUsar.error = null
+                }
+                if (tilTempoUso.error != null && !etTempoUso.text.isNullOrBlank()) {
+                    tilTempoUso.error = null
+                }
+            }
+        }
+
+        etNome.addTextChangedListener(textWatcher)
+        etComoUsar.addTextChangedListener(textWatcher)
+        etTempoUso.addTextChangedListener(textWatcher)
     }
 }
 
-class MedicamentoAdapter(private val medicamentos: List<Medicamento>) :
+// Seu MedicamentoAdapter (sem alterações)
+class MedicamentoAdapter(private val medicamentos: MutableList<Medicamento>) : // Alterado para MutableList
     RecyclerView.Adapter<MedicamentoAdapter.MedicamentoViewHolder>() {
 
     class MedicamentoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nomeMedicamento: TextView = itemView.findViewById(R.id.tv_nome_medicamento_item)
         val tempoDeUso: TextView = itemView.findViewById(R.id.tv_tempo_uso_item)
-        val comoUsar: TextView = itemView.findViewById(R.id.tv_como_usar_item)
+        val comoUsarTexto: TextView = itemView.findViewById(R.id.tv_como_usar_item)
         val areaClicavel: View = itemView.findViewById(R.id.ll_clickable_area)
+        val detailsArea: LinearLayout = itemView.findViewById(R.id.ll_details_area)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicamentoViewHolder {
@@ -115,12 +168,22 @@ class MedicamentoAdapter(private val medicamentos: List<Medicamento>) :
 
     override fun onBindViewHolder(holder: MedicamentoViewHolder, position: Int) {
         val medicamentoAtual = medicamentos[position]
+        val context = holder.itemView.context
 
         holder.nomeMedicamento.text = medicamentoAtual.nome
         holder.tempoDeUso.text = medicamentoAtual.tempoDeUso
-        holder.comoUsar.text = medicamentoAtual.comoUsar
 
-        holder.comoUsar.visibility = if (medicamentoAtual.isExpanded) View.VISIBLE else View.GONE
+        val textoHtml = "<b>Como usa:</b> ${medicamentoAtual.comoUsar}"
+        holder.comoUsarTexto.text = HtmlCompat.fromHtml(textoHtml, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+        if (medicamentoAtual.isExpanded) {
+            holder.detailsArea.visibility = View.VISIBLE
+            holder.nomeMedicamento.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.seta_para_cima, 0)
+        } else {
+            holder.detailsArea.visibility = View.GONE
+            holder.nomeMedicamento.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.setadoselect, 0)
+        }
+        holder.nomeMedicamento.compoundDrawables[2]?.setTint(context.getColor(R.color.cinza_escuro))
 
         holder.areaClicavel.setOnClickListener {
             medicamentoAtual.isExpanded = !medicamentoAtual.isExpanded

@@ -8,7 +8,6 @@
     android:background="@color/white"
     tools:context=".Tela2FichaActivity">
 
-    <!-- CABEÇALHO COM SETA DE VOLTAR E BARRA DE PROGRESSO -->
     <ImageView
         android:id="@+id/back_arrow"
         android:layout_width="wrap_content"
@@ -34,34 +33,12 @@
         app:layout_constraintTop_toTopOf="@id/back_arrow"
         tools:ignore="ContentDescription" />
 
-    <!-- BOTÃO AVANÇAR FIXO NO RODAPÉ -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_avancar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="@color/verde"
-        android:paddingStart="40dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="40dp"
-        android:paddingBottom="12dp"
-        android:text="Avançar"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        app:cornerRadius="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="HardcodedText" />
-
-
-    <!-- ÁREA DE ROLAGEM PARA O CONTEÚDO PRINCIPAL -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@id/btn_avancar"
+        android:background="@color/cinza"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/back_arrow">
@@ -71,10 +48,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:paddingBottom="16dp"
-            android:background="@color/cinza">
+            android:paddingBottom="32dp">
 
-            <!-- TÍTULO DA SEÇÃO -->
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
@@ -87,7 +62,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="HardcodedText" />
 
-            <!-- CAMPO: NOME DO MEDICAMENTO -->
             <TextView
                 android:id="@+id/tv_nome_medicamento_label"
                 android:layout_width="wrap_content"
@@ -121,12 +95,11 @@
                     android:id="@+id/et_nome_medicamento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:textSize="14sp"
                     android:textColor="@color/preto_claro"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- CAMPO: COMO USAR -->
             <TextView
                 android:id="@+id/tv_como_usar_label"
                 android:layout_width="wrap_content"
@@ -160,12 +133,11 @@
                     android:id="@+id/et_como_usar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:textSize="14sp"
                     android:textColor="@color/preto_claro"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- CAMPO: TEMPO DE USO -->
             <TextView
                 android:id="@+id/tv_tempo_uso_label"
                 android:layout_width="wrap_content"
@@ -199,13 +171,12 @@
                     android:id="@+id/et_tempo_uso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:textSize="14sp"
                     android:textColor="@color/preto_claro"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <!-- BOTÃO ADICIONAR -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_adicionar"
                 android:layout_width="wrap_content"
@@ -221,7 +192,6 @@
                 app:layout_constraintTop_toBottomOf="@id/til_tempo_uso"
                 tools:ignore="HardcodedText" />
 
-            <!-- CABEÇALHO DA LISTA DE MEDICAMENTOS -->
             <LinearLayout
                 android:id="@+id/ll_header_lista"
                 android:layout_width="0dp"
@@ -265,7 +235,26 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ll_header_lista"
-                tools:listitem="@layout/list_item_medicamento" /> <!-- Crie este layout de item -->
+                tools:listitem="@layout/list_item_medicamento" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_avancar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/verde"
+                android:paddingStart="40dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="40dp"
+                android:paddingBottom="12dp"
+                android:text="Avançar"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:cornerRadius="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_medicamentos" tools:ignore="HardcodedText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

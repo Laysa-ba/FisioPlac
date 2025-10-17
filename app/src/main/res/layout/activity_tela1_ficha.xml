@@ -148,13 +148,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:inputType="textPersonName"
+                android:inputType="textPersonName|textCapWords"
                 android:padding="12dp"
                 android:textSize="14sp"
                 android:textColor="@color/preto_claro"
                 app:layout_constraintTop_toTopOf="@id/et_data"
                 app:layout_constraintStart_toEndOf="@id/tv_estagiario_label"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -403,7 +403,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:inputType="phone"
+                        android:inputType="number"
                         android:textSize="14sp"
                         android:textColor="@color/preto_claro"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -712,7 +712,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
-                    android:inputType="textMultiLine"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:minLines="3"
                     android:textSize="14sp"
                     android:textColor="@color/preto_claro"/>
@@ -746,7 +746,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
-                    android:inputType="textMultiLine"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:minLines="3"
                     android:textSize="14sp"
                     android:textColor="@color/preto_claro"/>

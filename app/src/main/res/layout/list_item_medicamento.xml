@@ -53,17 +53,49 @@
             android:background="@color/cinza_escuro" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_como_usar_item"
+    <LinearLayout
+        android:id="@+id/ll_details_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F9F9F9"
-        android:padding="12dp"
-        android:textColor="@color/cinza_escuro"
-        android:textSize="14sp"
+        android:orientation="vertical"
         android:visibility="gone"
-        tools:text="Tomar 1 comprimido de 8 em 8 horas."
-        tools:visibility="visible" />
+        tools:visibility="visible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/cinza_escuro" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/cinza_escuro" />
+
+            <TextView
+                android:id="@+id/tv_como_usar_item"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="12dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="12dp"
+                android:textColor="@color/preto_claro"
+                android:textSize="14sp"
+                tools:text="Como usar: 3 vezes ao dia, uso contínuo" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/cinza_escuro" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

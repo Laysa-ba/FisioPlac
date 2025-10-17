@@ -41,6 +41,10 @@ class Tela1FichaActivity : AppCompatActivity() {
         setCurrentDate()
         setupPhoneMask()
         setupCurrencyMask()
+
+        // --- ADICIONADO ---
+        // Chama a função para configurar os listeners de validação em tempo real
+        setupValidationListeners()
     }
 
     private fun setupDropdownMenus() {
@@ -68,7 +72,7 @@ class Tela1FichaActivity : AppCompatActivity() {
             binding.main.requestFocus()
         }
 
-        view.setOnDismissListener { 
+        view.setOnDismissListener {
             binding.main.requestFocus()
         }
     }
@@ -80,18 +84,9 @@ class Tela1FichaActivity : AppCompatActivity() {
 
         binding.btnAvancar.setOnClickListener {
             if (validateFields()) {
-                // Se a validação passar, execute o código abaixo
-
-                // 1. Crie a Intent para ir para a Tela2
                 val intent = Intent(this, Tela2FichaActivity::class.java)
-
-                // 2. (Opcional, mas recomendado) Envie o ID do paciente para a próxima tela
-                //    Assim, a Tela2 também sabe a qual paciente ela pertence.
                 intent.putExtra("PACIENTE_ID", pacienteId)
-
-                // 3. Inicie a nova Activity
                 startActivity(intent)
-
             } else {
                 Toast.makeText(this, "Aviso: Todos os dados são obrigatórios!", Toast.LENGTH_LONG).show()
             }
@@ -102,7 +97,6 @@ class Tela1FichaActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setupRadioGroupLogic() {
         binding.diasSemanaContainer.visibility = View.GONE
         binding.rgAtividadesFisicas.setOnCheckedChangeListener { _, checkedId ->
@@ -111,9 +105,151 @@ class Tela1FichaActivity : AppCompatActivity() {
             } else {
                 binding.diasSemanaContainer.visibility = View.GONE
                 binding.actvDiasSemana.text.clear()
+                // Limpa o erro se o usuário mudar para "Não"
+                binding.tilDiasSemana.error = null
             }
         }
     }
+
+    // --- NOVA FUNÇÃO ---
+    /**
+     * Configura listeners em cada campo para remover a mensagem de erro
+     * assim que o usuário interage com o campo.
+     */
+    private fun setupValidationListeners() {
+        // Lista de todos os TextInputLayouts que são obrigatórios
+        val textInputLayouts = listOf(
+            binding.tilNome, binding.tilNascimento, binding.tilIdade,
+            binding.tilTelefone, binding.tilRenda, binding.tilEstadoCivil,
+            binding.tilEscolaridade, binding.tilLocalResidencia, binding.tilMoraCom,
+            binding.tilAtividadeSocial, binding.tilDoencas, binding.tilQueixaPrincipal,
+            binding.tilDiasSemana
+        )
+
+        // Adiciona um listener para cada campo de texto da lista
+        textInputLayouts.forEach { til ->
+            til.editText?.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    // Se o campo não estiver mais vazio, remove o erro
+                    if (!s.isNullOrBlank()) {
+                        til.error = null
+                    }
+                }
+            })
+        }
+
+        // Adiciona listeners para os RadioGroups
+        binding.rgSexo.setOnCheckedChangeListener { _, _ ->
+            binding.tvSexoLabel.error = null
+        }
+
+        // Listener já existente que também ajuda na validação
+        binding.rgAtividadesFisicas.setOnCheckedChangeListener { _, checkedId ->
+            binding.tvAtividadesFisicasLabel.error = null
+            if (checkedId == R.id.rb_sim_atividade) {
+                binding.diasSemanaContainer.visibility = View.VISIBLE
+            } else {
+                binding.diasSemanaContainer.visibility = View.GONE
+                binding.actvDiasSemana.text.clear()
+                binding.tilDiasSemana.error = null // Limpa o erro
+            }
+        }
+
+
+        binding.rgFrequenciaSair.setOnCheckedChangeListener { _, _ ->
+            binding.tvFrequenciaSairLabel.error = null
+        }
+    }
+
+
+    // --- FUNÇÃO ATUALIZADA ---
+    /**
+     * Valida todos os campos obrigatórios do formulário antes de avançar.
+     * Define o erro nos `TextInputLayout` para exibir o ícone de aviso.
+     * @return `true` se todos os campos forem válidos, `false` caso contrário.
+     */
+    private fun validateFields(): Boolean {
+        var allFieldsValid = true
+
+        // 1. Validação dos campos de texto (TextInputLayouts)
+        val mandatoryTextInputLayouts = mapOf(
+            binding.tilNome to binding.etNome,
+            binding.tilNascimento to binding.etNascimento,
+            binding.tilIdade to binding.etIdade,
+            binding.tilTelefone to binding.etTelefone,
+            binding.tilRenda to binding.etRenda,
+            binding.tilEstadoCivil to binding.actvEstadoCivil,
+            binding.tilEscolaridade to binding.actvEscolaridade,
+            binding.tilLocalResidencia to binding.actvLocalResidencia,
+            binding.tilMoraCom to binding.actvMoraCom,
+            binding.tilAtividadeSocial to binding.actvAtividadeSocial,
+            binding.tilDoencas to binding.actvDoencas,
+            binding.tilQueixaPrincipal to binding.etQueixaPrincipal
+        )
+
+        mandatoryTextInputLayouts.forEach { (layout, editText) ->
+            if (editText.text.toString().trim().isEmpty()) {
+                layout.error = "Campo obrigatório"
+                allFieldsValid = false
+            } else {
+                layout.error = null
+            }
+        }
+
+        // Validação para campos que não usam TextInputLayout
+        if (binding.etData.text.toString().trim().isEmpty()) {
+            binding.etData.error = "Campo obrigatório"
+            allFieldsValid = false
+        } else {
+            binding.etData.error = null
+        }
+        if (binding.etEstagiario.text.toString().trim().isEmpty()) {
+            binding.etEstagiario.error = "Campo obrigatório"
+            allFieldsValid = false
+        } else {
+            binding.etEstagiario.error = null
+        }
+
+        // 2. Validação dos RadioGroups
+        if (binding.rgSexo.checkedRadioButtonId == -1) {
+            binding.tvSexoLabel.error = "!" // Mostra um indicador de erro
+            allFieldsValid = false
+        } else {
+            binding.tvSexoLabel.error = null
+        }
+
+        if (binding.rgAtividadesFisicas.checkedRadioButtonId == -1) {
+            binding.tvAtividadesFisicasLabel.error = "!"
+            allFieldsValid = false
+        } else {
+            binding.tvAtividadesFisicasLabel.error = null
+        }
+
+        if (binding.rgFrequenciaSair.checkedRadioButtonId == -1) {
+            binding.tvFrequenciaSairLabel.error = "!"
+            allFieldsValid = false
+        } else {
+            binding.tvFrequenciaSairLabel.error = null
+        }
+
+        // 3. Validação condicional para "Dias na Semana"
+        if (binding.rgAtividadesFisicas.checkedRadioButtonId == R.id.rb_sim_atividade) {
+            if (binding.actvDiasSemana.text.toString().trim().isEmpty()) {
+                binding.tilDiasSemana.error = "Obrigatório"
+                allFieldsValid = false
+            } else {
+                binding.tilDiasSemana.error = null
+            }
+        } else {
+            binding.tilDiasSemana.error = null
+        }
+
+        return allFieldsValid
+    }
+
+    // --- Demais funções (sem alterações) ---
 
     private fun setupPhoneMask() {
         val phoneEditText = binding.etTelefone
@@ -206,25 +342,16 @@ class Tela1FichaActivity : AppCompatActivity() {
         return formatted.toString()
     }
 
-    // --- NOVO ---
-    /**
-     * Calcula a idade com base em uma data de nascimento.
-     * @param birthDate A data de nascimento em um objeto Calendar.
-     * @return A idade em anos.
-     */
     private fun calculateAge(birthDate: Calendar): Int {
         val today = Calendar.getInstance()
         var age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR)
 
-        // Se o dia de hoje for anterior ao dia do aniversário no ano corrente,
-        // significa que a pessoa ainda não fez aniversário este ano.
         if (today.get(Calendar.DAY_OF_YEAR) < birthDate.get(Calendar.DAY_OF_YEAR)) {
             age--
         }
 
         return age
     }
-
 
     private fun showDatePickerDialog(editText: EditText, fragmentManager: FragmentManager) {
         val utc = TimeZone.getTimeZone("UTC")
@@ -249,21 +376,15 @@ class Tela1FichaActivity : AppCompatActivity() {
             .setSelection(openAtDate)
             .build()
 
-        // --- MODIFICADO ---
         datePicker.addOnPositiveButtonClickListener { selection ->
-            // Configura o calendário com a data selecionada pelo usuário
             val selectedCalendar = Calendar.getInstance(utc)
             selectedCalendar.timeInMillis = selection
 
-            // 1. Formata a data para exibir no campo de nascimento
             val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             val formattedDate = sdf.format(selectedCalendar.time)
             editText.setText(formattedDate)
 
-            // 2. Calcula a idade a partir da data selecionada
             val age = calculateAge(selectedCalendar)
-
-            // 3. Preenche o campo de idade com o resultado
             binding.etIdade.setText(age.toString())
         }
 
@@ -274,24 +395,5 @@ class Tela1FichaActivity : AppCompatActivity() {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val currentDate = sdf.format(Date())
         binding.etData.setText(currentDate)
-    }
-
-    private fun validateFields(): Boolean {
-        val fieldsToValidate = listOf(
-            binding.etData, binding.etEstagiario, binding.etNome,
-            binding.etNascimento, binding.etIdade, binding.etTelefone,
-            binding.etRenda
-        )
-
-        var allFieldsValid = true
-        for (field in fieldsToValidate) {
-            if (field.text.toString().trim().isEmpty()) {
-                field.error = "Campo obrigatório"
-                allFieldsValid = false
-            } else {
-                field.error = null
-            }
-        }
-        return allFieldsValid
     }
 }
