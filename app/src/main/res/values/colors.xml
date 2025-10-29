@@ -15,4 +15,5 @@
     <color name="transparent_indicator">#00FFFFFF</color>
     <color name="laranja_ripple_base">#4DFFB086</color>
     <color name="vermelho_aviso">#E41D1D</color>
+    <color name="colorPrimary">#00744f</color>
 </resources>

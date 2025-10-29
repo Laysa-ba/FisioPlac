@@ -56,5 +56,38 @@
         <item>Nenhuma</item>
     </string-array>
 
+    <string-array name="opcoes_nota_0_1">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="opcoes_nota_0_2">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="opcoes_nota_0_3">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="opcoes_nota_0_5">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+
+
+    <string name="texto_linguagem_clique_aqui">Clique <font color="#00744F"><b>AQUI</b></font> e peça para o entrevistado ler a ordem e executá-la</string>
+
+    <string name="feche_os_ol">FECHE OS OLHOS</string>
+
     <string name="tugt_instructions">Instruções: o paciente ou individuo que irá participar do teste de inicio deve estar sentado em uma cadeira sem braços com as costas apoiadas, usando seus calçados de uso habitual (seu dispositivo auxiliar de marcha caso utilize), após o comando “VÁ ou VAI”, ele deve se levantar da cadeira e andar em um percurso linear de 3 metros, com passos seguros (pode se acrescentar uma linha ou um objeto como por exemplo um cone) para que o idoso o contorne e em seguida retorne em direção a cadeira e sentar novamente, o tempo deste percurso será cronometrado a partir do comando verbal de “vá” e avaliado em seguida quando o paciente retorna a sua posição de inicio.</string>
 </resources>
