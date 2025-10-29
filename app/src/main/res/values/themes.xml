@@ -23,4 +23,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="feche_os_ol">
+        <item name="android:textSize">80sp</item>
+        <item name="android:textColor">@color/preto_claro</item>
+    </style>
+
 </resources>
