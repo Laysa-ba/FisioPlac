@@ -1,48 +1,53 @@
 package com.example.fisioplac
 
-import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import com.example.fisioplac.databinding.ActivityTela1FichaBinding
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class Tela1FichaActivity : AppCompatActivity() {
 
-    // Declaração da variável de binding para acessar as views do XML de forma segura
     private lateinit var binding: ActivityTela1FichaBinding
+    private var pacienteId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Infla o layout usando View Binding e define como o conteúdo da tela
         binding = ActivityTela1FichaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configura todos os menus suspensos (AutoCompleteTextView)
+        pacienteId = intent.getStringExtra("PACIENTE_ID")
+        val pacienteNome = intent.getStringExtra("PACIENTE_NOME")
+
+        if (pacienteNome != null) {
+            binding.etNome.setText(pacienteNome)
+        }
+
         setupDropdownMenus()
-
-        // Configura os listeners de clique para os botões e outros componentes
         setupClickListeners()
-
-        // Configura a lógica para o RadioGroup de atividades físicas
         setupRadioGroupLogic()
-
-        // Define a data atual no campo de data
         setCurrentDate()
+        setupPhoneMask()
+        setupCurrencyMask()
+
+        // --- ADICIONADO ---
+        // Chama a função para configurar os listeners de validação em tempo real
+        setupValidationListeners()
     }
 
-    /**
-     * Configura todos os AutoCompleteTextViews com seus respectivos adaptadores e listas de opções.
-     */
     private fun setupDropdownMenus() {
-        // Mapeia cada AutoCompleteTextView para o seu array de strings correspondente
         val dropdownMap = mapOf(
             binding.actvEstadoCivil to R.array.opcoes_estado_civil,
             binding.actvEscolaridade to R.array.opcoes_escolaridade,
@@ -53,121 +58,342 @@ class Tela1FichaActivity : AppCompatActivity() {
             binding.actvDoencas to R.array.opcoes_doencas
         )
 
-        // Itera sobre o mapa e configura cada um
         dropdownMap.forEach { (autoCompleteTextView, arrayResourceId) ->
             setupAutoCompleteTextView(autoCompleteTextView, arrayResourceId)
         }
     }
 
-    /**
-     * Função auxiliar para configurar um único AutoCompleteTextView.
-     * @param view O componente AutoCompleteTextView a ser configurado.
-     * @param arrayResourceId O ID do recurso do array de strings a ser usado.
-     */
     private fun setupAutoCompleteTextView(view: AutoCompleteTextView, arrayResourceId: Int) {
         val items = resources.getStringArray(arrayResourceId)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, items)
+        val adapter = ArrayAdapter(this, R.layout.dropdown_item, items)
         view.setAdapter(adapter)
+
+        view.setOnItemClickListener { _, _, _, _ ->
+            binding.main.requestFocus()
+        }
+
+        view.setOnDismissListener {
+            binding.main.requestFocus()
+        }
     }
 
-    /**
-     * Configura os listeners de clique para os componentes interativos da tela.
-     */
     private fun setupClickListeners() {
-        // Seta de voltar: finaliza a activity atual
         binding.backArrow.setOnClickListener {
             finish()
         }
 
-        // Botão Avançar: valida os campos e exibe uma mensagem
         binding.btnAvancar.setOnClickListener {
             if (validateFields()) {
-                Toast.makeText(this, "Ficha preenchida, avançando...", Toast.LENGTH_SHORT).show()
-                // Aqui você adicionaria a lógica para ir para a próxima tela
-                // Ex: val intent = Intent(this, ProximaTelaActivity::class.java)
-                // startActivity(intent)
+                val intent = Intent(this, Tela2FichaActivity::class.java)
+                intent.putExtra("PACIENTE_ID", pacienteId)
+                startActivity(intent)
             } else {
                 Toast.makeText(this, "Aviso: Todos os dados são obrigatórios!", Toast.LENGTH_LONG).show()
             }
         }
 
-        // Campos de data: abrem um seletor de data ao serem clicados
-        binding.etData.setOnClickListener { showDatePickerDialog(binding.etData) }
-        binding.etNascimento.setOnClickListener { showDatePickerDialog(binding.etNascimento) }
+        binding.etNascimento.setOnClickListener {
+            showDatePickerDialog(binding.etNascimento, supportFragmentManager)
+        }
     }
 
-    /**
-     * Controla a visibilidade do campo "dias na semana" com base na seleção
-     * do RadioGroup de atividades físicas.
-     */
     private fun setupRadioGroupLogic() {
-        // Esconde o campo de dias por padrão, pois a opção "Não" já vem marcada
         binding.diasSemanaContainer.visibility = View.GONE
-
         binding.rgAtividadesFisicas.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId == R.id.rb_sim_atividade) {
-                // Se "Sim" for selecionado, mostra o campo
                 binding.diasSemanaContainer.visibility = View.VISIBLE
             } else {
-                // Se "Não" for selecionado, esconde o campo e limpa o texto
                 binding.diasSemanaContainer.visibility = View.GONE
                 binding.actvDiasSemana.text.clear()
+                // Limpa o erro se o usuário mudar para "Não"
+                binding.tilDiasSemana.error = null
             }
         }
     }
 
-
+    // --- NOVA FUNÇÃO ---
     /**
-     * Exibe um DatePickerDialog para facilitar a seleção de datas.
-     * @param editText O campo de texto onde a data selecionada será exibida.
+     * Configura listeners em cada campo para remover a mensagem de erro
+     * assim que o usuário interage com o campo.
      */
-    private fun showDatePickerDialog(editText: EditText) {
-        val calendar = Calendar.getInstance()
-        val datePickerDialog = DatePickerDialog(
-            this,
-            { _, year, month, dayOfMonth ->
-                // Formata a data e a define no EditText
-                val selectedDate = String.format(Locale.getDefault(), "%02d/%02d/%d", dayOfMonth, month + 1, year)
-                editText.setText(selectedDate)
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
+    private fun setupValidationListeners() {
+        // Lista de todos os TextInputLayouts que são obrigatórios
+        val textInputLayouts = listOf(
+            binding.tilNome, binding.tilNascimento, binding.tilIdade,
+            binding.tilTelefone, binding.tilRenda, binding.tilEstadoCivil,
+            binding.tilEscolaridade, binding.tilLocalResidencia, binding.tilMoraCom,
+            binding.tilAtividadeSocial, binding.tilDoencas, binding.tilQueixaPrincipal,
+            binding.tilDiasSemana
         )
-        datePickerDialog.show()
+
+        // Adiciona um listener para cada campo de texto da lista
+        textInputLayouts.forEach { til ->
+            til.editText?.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    // Se o campo não estiver mais vazio, remove o erro
+                    if (!s.isNullOrBlank()) {
+                        til.error = null
+                    }
+                }
+            })
+        }
+
+        // Adiciona listeners para os RadioGroups
+        binding.rgSexo.setOnCheckedChangeListener { _, _ ->
+            binding.tvSexoLabel.error = null
+        }
+
+        // Listener já existente que também ajuda na validação
+        binding.rgAtividadesFisicas.setOnCheckedChangeListener { _, checkedId ->
+            binding.tvAtividadesFisicasLabel.error = null
+            if (checkedId == R.id.rb_sim_atividade) {
+                binding.diasSemanaContainer.visibility = View.VISIBLE
+            } else {
+                binding.diasSemanaContainer.visibility = View.GONE
+                binding.actvDiasSemana.text.clear()
+                binding.tilDiasSemana.error = null // Limpa o erro
+            }
+        }
+
+
+        binding.rgFrequenciaSair.setOnCheckedChangeListener { _, _ ->
+            binding.tvFrequenciaSairLabel.error = null
+        }
     }
 
+
+    // --- FUNÇÃO ATUALIZADA ---
     /**
-     * Define a data atual no campo de data da ficha.
+     * Valida todos os campos obrigatórios do formulário antes de avançar.
+     * Define o erro nos `TextInputLayout` para exibir o ícone de aviso.
+     * @return `true` se todos os campos forem válidos, `false` caso contrário.
      */
+    private fun validateFields(): Boolean {
+        var allFieldsValid = true
+
+        // 1. Validação dos campos de texto (TextInputLayouts)
+        val mandatoryTextInputLayouts = mapOf(
+            binding.tilNome to binding.etNome,
+            binding.tilNascimento to binding.etNascimento,
+            binding.tilIdade to binding.etIdade,
+            binding.tilTelefone to binding.etTelefone,
+            binding.tilRenda to binding.etRenda,
+            binding.tilEstadoCivil to binding.actvEstadoCivil,
+            binding.tilEscolaridade to binding.actvEscolaridade,
+            binding.tilLocalResidencia to binding.actvLocalResidencia,
+            binding.tilMoraCom to binding.actvMoraCom,
+            binding.tilAtividadeSocial to binding.actvAtividadeSocial,
+            binding.tilDoencas to binding.actvDoencas,
+            binding.tilQueixaPrincipal to binding.etQueixaPrincipal
+        )
+
+        mandatoryTextInputLayouts.forEach { (layout, editText) ->
+            if (editText.text.toString().trim().isEmpty()) {
+                layout.error = "Campo obrigatório"
+                allFieldsValid = false
+            } else {
+                layout.error = null
+            }
+        }
+
+        // Validação para campos que não usam TextInputLayout
+        if (binding.etData.text.toString().trim().isEmpty()) {
+            binding.etData.error = "Campo obrigatório"
+            allFieldsValid = false
+        } else {
+            binding.etData.error = null
+        }
+        if (binding.etEstagiario.text.toString().trim().isEmpty()) {
+            binding.etEstagiario.error = "Campo obrigatório"
+            allFieldsValid = false
+        } else {
+            binding.etEstagiario.error = null
+        }
+
+        // 2. Validação dos RadioGroups
+        if (binding.rgSexo.checkedRadioButtonId == -1) {
+            binding.tvSexoLabel.error = "!" // Mostra um indicador de erro
+            allFieldsValid = false
+        } else {
+            binding.tvSexoLabel.error = null
+        }
+
+        if (binding.rgAtividadesFisicas.checkedRadioButtonId == -1) {
+            binding.tvAtividadesFisicasLabel.error = "!"
+            allFieldsValid = false
+        } else {
+            binding.tvAtividadesFisicasLabel.error = null
+        }
+
+        if (binding.rgFrequenciaSair.checkedRadioButtonId == -1) {
+            binding.tvFrequenciaSairLabel.error = "!"
+            allFieldsValid = false
+        } else {
+            binding.tvFrequenciaSairLabel.error = null
+        }
+
+        // 3. Validação condicional para "Dias na Semana"
+        if (binding.rgAtividadesFisicas.checkedRadioButtonId == R.id.rb_sim_atividade) {
+            if (binding.actvDiasSemana.text.toString().trim().isEmpty()) {
+                binding.tilDiasSemana.error = "Obrigatório"
+                allFieldsValid = false
+            } else {
+                binding.tilDiasSemana.error = null
+            }
+        } else {
+            binding.tilDiasSemana.error = null
+        }
+
+        return allFieldsValid
+    }
+
+    // --- Demais funções (sem alterações) ---
+
+    private fun setupPhoneMask() {
+        val phoneEditText = binding.etTelefone
+        phoneEditText.addTextChangedListener(object : TextWatcher {
+            private var isFormatting: Boolean = false
+            private var deletingHyphen: Boolean = false
+            private var hyphenStart: Int = 0
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                if (!isFormatting) {
+                    if (count > 0 && s.length > start && s[start] == '-') {
+                        deletingHyphen = true
+                        hyphenStart = start
+                    } else {
+                        deletingHyphen = false
+                    }
+                }
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable) {
+                if (isFormatting) return
+                isFormatting = true
+                val digits = s.toString().replace("[^\\d]".toRegex(), "")
+                val formatted = StringBuilder()
+                if (deletingHyphen && hyphenStart > 0 && hyphenStart - 1 < digits.length) {
+                    val newDigits = digits.substring(0, hyphenStart - 2) + digits.substring(hyphenStart - 1)
+                    formatted.append(formatPhoneNumber(newDigits))
+                } else {
+                    formatted.append(formatPhoneNumber(digits))
+                }
+                s.replace(0, s.length, formatted.toString())
+                isFormatting = false
+            }
+        })
+    }
+
+    private fun setupCurrencyMask() {
+        val editText = binding.etRenda
+        editText.addTextChangedListener(object : TextWatcher {
+            private var current = ""
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable) {
+                if (s.toString() != current) {
+                    editText.removeTextChangedListener(this)
+                    val cleanString = s.toString().replace("[^\\d]".toRegex(), "")
+                    if (cleanString.isNotEmpty()) {
+                        val parsed = cleanString.toDouble() / 100
+                        val formatted = NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(parsed)
+                        current = formatted
+                        editText.setText(formatted)
+                        editText.setSelection(formatted.length)
+                    } else {
+                        current = ""
+                        editText.setText("")
+                    }
+                    editText.addTextChangedListener(this)
+                }
+            }
+        })
+    }
+
+    private fun formatPhoneNumber(digits: String): String {
+        val formatted = StringBuilder()
+        var i = 0
+        if (i < digits.length) {
+            formatted.append("(")
+            formatted.append(digits.substring(i, minOf(i + 2, digits.length)))
+            i += 2
+        }
+        if (i < digits.length) {
+            formatted.append(") ")
+            if (digits.length > 10) {
+                formatted.append(digits.substring(i, minOf(i + 1, digits.length)))
+                i += 1
+                formatted.append(" ")
+                formatted.append(digits.substring(i, minOf(i + 4, digits.length)))
+                i += 4
+            } else {
+                formatted.append(digits.substring(i, minOf(i + 4, digits.length)))
+                i += 4
+            }
+        }
+        if (i < digits.length) {
+            formatted.append("-")
+            formatted.append(digits.substring(i, minOf(i + 4, digits.length)))
+        }
+        return formatted.toString()
+    }
+
+    private fun calculateAge(birthDate: Calendar): Int {
+        val today = Calendar.getInstance()
+        var age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR)
+
+        if (today.get(Calendar.DAY_OF_YEAR) < birthDate.get(Calendar.DAY_OF_YEAR)) {
+            age--
+        }
+
+        return age
+    }
+
+    private fun showDatePickerDialog(editText: EditText, fragmentManager: FragmentManager) {
+        val utc = TimeZone.getTimeZone("UTC")
+        val calendar = Calendar.getInstance(utc)
+        val today = MaterialDatePicker.todayInUtcMilliseconds()
+        calendar.timeInMillis = today
+        calendar.add(Calendar.YEAR, -100)
+        val startDate = calendar.timeInMillis
+        calendar.timeInMillis = today
+        calendar.add(Calendar.YEAR, -30)
+        val openAtDate = calendar.timeInMillis
+
+        val constraints = CalendarConstraints.Builder()
+            .setStart(startDate)
+            .setEnd(today)
+            .setOpenAt(openAtDate)
+            .build()
+
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Selecione sua data de nascimento")
+            .setCalendarConstraints(constraints)
+            .setSelection(openAtDate)
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            val selectedCalendar = Calendar.getInstance(utc)
+            selectedCalendar.timeInMillis = selection
+
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val formattedDate = sdf.format(selectedCalendar.time)
+            editText.setText(formattedDate)
+
+            val age = calculateAge(selectedCalendar)
+            binding.etIdade.setText(age.toString())
+        }
+
+        datePicker.show(fragmentManager, "BIRTH_DATE_PICKER")
+    }
+
     private fun setCurrentDate() {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val currentDate = sdf.format(Date())
         binding.etData.setText(currentDate)
-    }
-
-    /**
-     * Valida se os campos de texto obrigatórios foram preenchidos.
-     * @return true se todos os campos estiverem preenchidos, false caso contrário.
-     */
-    private fun validateFields(): Boolean {
-        // Lista de todos os EditTexts que são obrigatórios
-        val fieldsToValidate = listOf(
-            binding.etData, binding.etEstagiario, binding.etNome,
-            binding.etNascimento, binding.etIdade, binding.etTelefone,
-            binding.etRenda
-            // Adicione outros campos se necessário. Ex: binding.etQueixaPrincipal
-        )
-
-        var allFieldsValid = true
-        for (field in fieldsToValidate) {
-            if (field.text.toString().trim().isEmpty()) {
-                field.error = "Campo obrigatório"
-                allFieldsValid = false
-            } else {
-                field.error = null // Limpa o erro se o campo for preenchido
-            }
-        }
-        return allFieldsValid
     }
 }
