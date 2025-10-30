@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.example.fisioplac.ui.auth.LoginActivity
 
 class SplashActivity : AppCompatActivity() {
 
@@ -19,7 +20,7 @@ class SplashActivity : AppCompatActivity() {
         // Usa um Handler para atrasar a transição
         Handler(Looper.getMainLooper()).postDelayed({
             // Cria um Intent para iniciar a MainActivity
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
 
             // Finaliza a SplashActivity para que o usuário não possa voltar

@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.fisioplac.ui.home.HomeActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
@@ -172,7 +173,7 @@ class GeriatricaActivity : AppCompatActivity() {
 
         if (birthTimestamp != null) {
             val birthDate = birthTimestamp.toDate()
-            val sdf = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", Locale("pt", "BR"))
+            val sdf = SimpleDateFormat("dd 'de' MMMM 'de' yyyy",Locale.forLanguageTag("pt-BR"))
             textViewBirthdate.text = "Nascimento: ${sdf.format(birthDate)}"
 
             val birthCal = Calendar.getInstance()

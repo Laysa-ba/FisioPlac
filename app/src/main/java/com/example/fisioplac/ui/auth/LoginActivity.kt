@@ -1,30 +1,29 @@
-package com.example.fisioplac // Mude para com.example.fisioplac.ui.auth se desejar
+package com.example.fisioplac.ui.auth
 
+import com.example.fisioplac.databinding.ActivityLoginBinding
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels // Importante!
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.fisioplac.databinding.ActivityMainBinding
-import com.example.fisioplac.ui.auth.LoginUiState // Importe o novo estado
-import com.example.fisioplac.ui.auth.LoginViewModel // Importe o ViewModel
+import com.example.fisioplac.ui.home.HomeActivity
 
 // Recomendo renomear este arquivo/classe para LoginActivity
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     // Remove as referências diretas ao Firebase
     // private lateinit var auth: FirebaseAuth
     // private lateinit var db: FirebaseFirestore
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityLoginBinding // <-- MUDANÇA AQUI
 
     // 1. Obtenha a instância do ViewModel
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater) // <-- MUDANÇA AQUI
         setContentView(binding.root)
 
         // 2. A View "avisa" o ViewModel sobre eventos (clique)
