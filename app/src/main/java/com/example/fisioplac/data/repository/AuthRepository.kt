@@ -1,17 +1,19 @@
 package com.example.fisioplac.data.repository
 
+// import com.example.fisioplac.data.model.DoctorProfile // <-- ESTA LINHA FOI REMOVIDA
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-// Tipo de alias para o resultado de login (da tela de Login)
-typealias LoginResult = Result<String>
-
-// NOVO: Data class para guardar os dados do perfil da Home
+// Um data class para guardar o perfil do Doutor
+// A classe está definida aqui, por isso não precisa de import.
 data class DoctorProfile(
     val name: String,
-    val specialties: List<String> // Usar List em vez de ArrayList é mais idiomático
+    val specialties: List<String>
 )
+
+// Tipo de resultado para o login, que retorna o nome do doutor
+typealias LoginResult = Result<String>
 
 class AuthRepository {
 
@@ -29,43 +31,32 @@ class AuthRepository {
     fun getCurrentUid(): String? = auth.currentUser?.uid
 
     /**
+     * Faz o logout do usuário.
+     */
+    fun logout() {
+        auth.signOut()
+    }
+
+    /**
      * Tenta autenticar o usuário e, se bem-sucedido, busca o nome no Firestore.
-     * (Usado pela LoginActivity)
      */
     suspend fun loginAndFetchDoctorName(cpf: String, pass: String): LoginResult {
         return try {
             val email = "$cpf@fisioplac.com"
             auth.signInWithEmailAndPassword(email, pass).await()
-            val uid = getCurrentUid()!!
-            fetchDoctorName(uid)
+            val uid = getCurrentUid()!! // Seguro, pois o login acabou de acontecer
+
+            // Reutiliza a função de buscar perfil
+            val profileResult = fetchDoctorProfile(uid)
+            profileResult.map { it.name } // Retorna apenas o nome em caso de sucesso
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
     /**
-     * Busca APENAS o nome do doutor no Firestore usando um UID.
-     * (Usado pela LoginActivity)
-     */
-    suspend fun fetchDoctorName(uid: String): LoginResult {
-        return try {
-            val document = db.collection("doutores").document(uid).get().await()
-            if (document.exists()) {
-                val doctorName = document.getString("nome") ?: "Doutor(a)"
-                Result.success(doctorName)
-            } else {
-                Result.failure(Exception("Dados do doutor não encontrados no banco."))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    // --- FUNÇÕES NOVAS PARA A HOMEACTIVITY ---
-
-    /**
-     * Busca o perfil completo (nome e especialidades) do doutor.
-     * (Usado pela HomeActivity)
+     * Busca o perfil completo (nome e especialidades) do doutor no Firestore.
+     * Esta é a função que o SplashViewModel e o HomeViewModel usarão.
      */
     suspend fun fetchDoctorProfile(uid: String): Result<DoctorProfile> {
         return try {
@@ -73,25 +64,16 @@ class AuthRepository {
             if (document.exists()) {
                 val name = document.getString("nome") ?: "Doutor(a)"
 
-                // CORREÇÃO DO WARNING:
-                // Trocamos `as ArrayList<String>` por um "safe cast" `as? List<String>`.
+                // Cast seguro que corrige o warning (problema antigo)
                 val specialties = document.get("especialidades") as? List<String> ?: emptyList()
 
                 val profile = DoctorProfile(name = name, specialties = specialties)
                 Result.success(profile)
             } else {
-                Result.failure(Exception("Dados do doutor não encontrados."))
+                Result.failure(Exception("Dados do doutor não encontrados no banco."))
             }
         } catch (e: Exception) {
             Result.failure(e)
         }
-    }
-
-    /**
-     * Desloga o usuário do Firebase Auth.
-     * (Usado pela HomeActivity)
-     */
-    fun logout() {
-        auth.signOut()
     }
 }

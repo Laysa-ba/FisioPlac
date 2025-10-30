@@ -17,12 +17,9 @@ sealed class LoginUiState {
 
 class LoginViewModel : ViewModel() {
 
-    private val repository = AuthRepository() // (No futuro, isso será injetado)
+    private val repository = AuthRepository()
 
-    // 2. O LiveData privado que o ViewModel controla
     private val _uiState = MutableLiveData<LoginUiState>(LoginUiState.Idle)
-
-    // O LiveData público que a Activity vai "observar"
     val uiState: LiveData<LoginUiState> = _uiState
 
     // 3. Verifica no início se o usuário já está logado
@@ -32,40 +29,43 @@ class LoginViewModel : ViewModel() {
 
     private fun checkUserLoggedIn() {
         if (repository.isUserLoggedIn()) {
-            _uiState.value = LoginUiState.Loading // Já está logado, vamos buscar os dados
+            _uiState.value = LoginUiState.Loading
             viewModelScope.launch {
-                val uid = repository.getCurrentUid()!! // Seguro, pois isUserLoggedIn() foi true
-                repository.fetchDoctorName(uid).fold(
-                    onSuccess = { name -> _uiState.value = LoginUiState.Success(name) },
-                    onFailure = { e -> _uiState.value = LoginUiState.Error(e.message ?: "Erro ao buscar dados") }
+                val uid = repository.getCurrentUid()!!
+
+                // **** AQUI ESTÁ A CORREÇÃO ****
+                // Trocamos fetchDoctorName por fetchDoctorProfile
+                repository.fetchDoctorProfile(uid).fold(
+                    onSuccess = { profile ->
+                        // E pegamos o nome do objeto 'profile'
+                        _uiState.value = LoginUiState.Success(profile.name)
+                    },
+                    onFailure = { e ->
+                        _uiState.value = LoginUiState.Error(e.message ?: "Erro ao buscar dados")
+                    }
                 )
             }
         }
-        // Se não estiver logado, o estado continua LoginUiState.Idle
     }
 
     // 4. Função chamada pela Activity quando o botão de login é clicado
     fun onLoginClicked(cpf: String, pass: String) {
-        // Validação de UI fica no ViewModel
         if (cpf.isBlank() || pass.isBlank()) {
             _uiState.value = LoginUiState.Error("Preencha o CPF e a senha.")
             return
         }
 
-        // Define o estado para Carregando
         _uiState.value = LoginUiState.Loading
 
-        // Inicia uma Coroutine no escopo do ViewModel
         viewModelScope.launch {
+            // Esta função (loginAndFetchDoctorName) já estava correta e não mudou
             val result = repository.loginAndFetchDoctorName(cpf, pass)
 
-            // O .fold é uma forma elegante de tratar Success e Failure do Result
             result.fold(
                 onSuccess = { doctorName ->
-                    _uiState.value = LoginUiState.Success(doctorName) // Sucesso!
+                    _uiState.value = LoginUiState.Success(doctorName)
                 },
                 onFailure = { exception ->
-                    // Mapeia erros comuns para mensagens amigáveis
                     val errorMessage = when (exception) {
                         is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException ->
                             "CPF ou senha inválidos."
