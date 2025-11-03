@@ -38,7 +38,7 @@ class HomeViewModel : ViewModel() {
         val uid = repository.getCurrentUid()
         if (uid == null) {
             // Se não tem UID, o usuário não está logado
-            _uiState.value = _uiState.value?.copy(isLoggedOut = true)
+            _uiState.value = _uiState.value?.copy(isLoggedOut = true, isLoading = false) // Pare de carregar
             return
         }
 

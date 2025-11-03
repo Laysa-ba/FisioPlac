@@ -81,4 +81,7 @@ dependencies {
 
     // Coroutines para integração com APIs do Google Play Services (incluindo Firebase)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+
+    implementation("androidx.core:core-splashscreen:1.0.1")
+// (ou a versão mais recente)
 }
