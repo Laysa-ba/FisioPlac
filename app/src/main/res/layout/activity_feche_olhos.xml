@@ -45,7 +45,7 @@
         android:lineSpacingExtra="-5sp"
         android:rotation="90"
         android:text="@string/feche_os_ol"
-        android:textAppearance="@style/feche_os_ol"
+        android:textAppearance = " @style/feche_os_ol "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
