@@ -89,4 +89,23 @@
     <string name="feche_os_ol">FECHE OS OLHOS</string>
 
     <string name="tugt_instructions">Instruções: o paciente ou individuo que irá participar do teste de inicio deve estar sentado em uma cadeira sem braços com as costas apoiadas, usando seus calçados de uso habitual (seu dispositivo auxiliar de marcha caso utilize), após o comando “VÁ ou VAI”, ele deve se levantar da cadeira e andar em um percurso linear de 3 metros, com passos seguros (pode se acrescentar uma linha ou um objeto como por exemplo um cone) para que o idoso o contorne e em seguida retorne em direção a cadeira e sentar novamente, o tempo deste percurso será cronometrado a partir do comando verbal de “vá” e avaliado em seguida quando o paciente retorna a sua posição de inicio.</string>
+
+        <string name="taf_title">TAF (teste de alcance funcional)</string>
+        <string name="taf_procedure_label">Procedimento:</string>
+        <string name="taf_procedure_text">O paciente em posição ortostática, membros inferiores levemente abduzidos, descalço, coluna a mais ereta possível, olhar para o horizonte, braços em extensão a 90° e hemicorpo direito próximo à parede. A partir dessa posição, solicitava-se ao avaliado esticar-se o máximo possível para frente. A excursão do braço desde o início até o final é medida por uma fita métrica fixada na parede no sentido horizontal ao lado do paciente, na altura do acrômio. Para a aferição, a extremidade do terceiro metacarpo pode ser utilizada como marcação de partida até o alcance máximo.</string>
+        <string name="taf_table_header_age">Faixa etária</string>
+        <string name="taf_table_header_men">Homens (cm)</string>
+        <string name="taf_table_header_women">Mulheres (cm)</string>
+        <string name="taf_table_row1_age">20 - 40 anos</string>
+        <string name="taf_table_row1_men">42,41</string>
+        <string name="taf_table_row1_women">37,08</string>
+        <string name="taf_table_row2_age">41 - 69 anos</string>
+        <string name="taf_table_row2_men">37,89</string>
+        <string name="taf_table_row2_women">35,05</string>
+        <string name="taf_table_row3_age">70 - 87 anos</string>
+        <string name="taf_table_row3_men">33,52</string>
+        <string name="taf_table_row3_women">26,63</string>
+
+
+
 </resources>
