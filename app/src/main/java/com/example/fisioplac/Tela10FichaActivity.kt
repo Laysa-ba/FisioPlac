@@ -1,6 +1,6 @@
 package com.example.fisioplac
 
-import android.content.Intent // Importa a classe para navegar entre telas
+import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
@@ -8,7 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.fisioplac.databinding.ActivityTela10FichaBinding // Importa a classe de binding
+import com.example.fisioplac.databinding.ActivityTela10FichaBinding
 
 class Tela10FichaActivity : AppCompatActivity() {
 
@@ -39,12 +39,8 @@ class Tela10FichaActivity : AppCompatActivity() {
         // Ação para o botão de avançar
         binding.btnAvancar.setOnClickListener {
             if (validateFields()) {
-                // Se todos os campos estiverem válidos, navega para a próxima tela
-                // TODO: Substitua 'ProximaTelaActivity::class.java' pela sua próxima tela
-                // val intent = Intent(this, ProximaTelaActivity::class.java)
-                // startActivity(intent)
-
-                Toast.makeText(this, "Todos os campos preenchidos!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Tela11FichaActivity::class.java)
+                startActivity(intent)
             } else {
                 Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
             }

@@ -1,5 +1,6 @@
 package com.example.fisioplac
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
@@ -26,7 +27,7 @@ class Tela8FichaActivity : AppCompatActivity() {
     private lateinit var finalizarButton: Button
     private lateinit var resultadoTextView: TextView
     private lateinit var avancarButton: Button
-    private lateinit var instructionsTextView: TextView // NOVA VARIÁVEL
+    private lateinit var instructionsTextView: TextView
 
     private var isChronometerRunning = false
     private var lastElapsedTime: Long = 0
@@ -45,13 +46,13 @@ class Tela8FichaActivity : AppCompatActivity() {
         iniciarButton = findViewById(R.id.btn_iniciar_cronometro)
         finalizarButton = findViewById(R.id.btn_finalizar_cronometro)
         resultadoTextView = findViewById(R.id.text_view_resultado_tugt)
-        avancarButton = findViewById(R.id.btn_avancar)
-        instructionsTextView = findViewById(R.id.text_view_instructions) // INICIALIZA O TEXTVIEW
+        avancarButton = findViewById(R.id.btnAvancar)
+        instructionsTextView = findViewById(R.id.text_view_instructions)
 
         // 2. Atualiza o progresso da barra
         updateProgressBar(passoAtual, totalPassosDaFicha)
 
-        // 3. DEFINE O TEXTO DAS INSTRUÇÕES COM A COR (NOVA SEÇÃO)
+        // 3. DEFINE O TEXTO DAS INSTRUÇÕES COM A COR
         setFormattedInstructions()
 
         // 4. Configura os cliques dos botões
@@ -59,7 +60,6 @@ class Tela8FichaActivity : AppCompatActivity() {
             finish()
         }
 
-        // ... O resto do seu código de cliques continua o mesmo ...
         iniciarButton.setOnClickListener {
             startChronometer()
         }
@@ -70,8 +70,11 @@ class Tela8FichaActivity : AppCompatActivity() {
             avancarButton.backgroundTintList = ContextCompat.getColorStateList(this, R.color.verde)
         }
 
+        // --- 2. CÓDIGO DO BOTÃO "AVANÇAR" ---
         avancarButton.setOnClickListener {
-            // TODO: Lógica para salvar e avançar
+            val intent = Intent(this, Tela9FichaActivity::class.java)
+
+            startActivity(intent)
         }
     }
 

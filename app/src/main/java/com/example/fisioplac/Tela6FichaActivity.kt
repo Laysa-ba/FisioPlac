@@ -71,11 +71,8 @@ class Tela6FichaActivity : AppCompatActivity() {
         // --- LÓGICA DE VALIDAÇÃO ADICIONADA ---
         btnAvancar.setOnClickListener {
             if (validarCampos()) { // Verifica se todos os campos estão preenchidos
-                // TODO: Adicionar a lógica para SALVAR os dados desta tela
-                // TODO: Descomentar e ajustar quando a Tela 7 existir
-                // val intent = Intent(this, Tela7FichaActivity::class.java)
-                // startActivity(intent)
-                Toast.makeText(this, "Avançando... (Tela 7 ainda não implementada)", Toast.LENGTH_SHORT).show() // Mensagem temporária
+                val intent = Intent(this, Tela7FichaActivity::class.java)
+                startActivity(intent)
             } else {
                 // Exibe mensagem se algum campo estiver vazio
                 Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()

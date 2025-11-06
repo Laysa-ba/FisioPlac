@@ -1,5 +1,6 @@
 package com.example.fisioplac
 
+import android.content.Intent // 1. IMPORT ADICIONADO
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
@@ -39,6 +40,14 @@ class Tela7FichaActivity : AppCompatActivity() {
         setupBarthelItem(binding.itemTransferencia, "Transferência (Cama-Cadeira)", listOf(BarthelOption("Incapacitado", 0), BarthelOption("Muita ajuda (1 ou 2 pessoas)", 5), BarthelOption("Pouca ajuda (verbal ou fisica)", 10), BarthelOption("Independente", 15)))
         setupBarthelItem(binding.itemMobilidade, "Mobilidade em superfícies planas", listOf(BarthelOption("Imóvel ou < 50m", 0), BarthelOption("Independente em cadeira de rodas > 50m", 5), BarthelOption("Anda com ajuda de 1 pessoa", 10), BarthelOption("Independente (pode usar auxílio)", 15)))
         setupBarthelItem(binding.itemEscadas, "Escadas", listOf(BarthelOption("Incapaz", 0), BarthelOption("Precisa de ajuda", 5), BarthelOption("Independente", 10)))
+
+        binding.btnAvancar.setOnClickListener {
+            // (Assumindo que a próxima tela é a Tela11FichaActivity)
+            val intent = Intent(this, Tela8FichaActivity::class.java)
+
+            startActivity(intent)
+        }
+
 
         updateTotalScore()
         updateProgressBar()

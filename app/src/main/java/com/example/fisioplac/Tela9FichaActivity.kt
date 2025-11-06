@@ -36,12 +36,8 @@ class Tela9FichaActivity : AppCompatActivity() {
         }
 
         avancarButton.setOnClickListener {
-            // TODO: Lógica para salvar os dados e avançar para a Tela 10
-            Toast.makeText(this, "Avançando para a próxima etapa...", Toast.LENGTH_SHORT).show()
-
-            // Quando a Tela 10 estiver pronta, crie a classe e descomente a linha abaixo:
-            // val intent = Intent(this, Tela10FichaActivity::class.java)
-            // startActivity(intent)
+            val intent = Intent(this, Tela10FichaActivity::class.java)
+            startActivity(intent)
         }
     }
 

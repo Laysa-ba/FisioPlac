@@ -34,14 +34,16 @@
         tools:ignore="ContentDescription" />
 
     <ScrollView
+        android:id="@+id/scroll_view_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:background="@color/cinza"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/back_arrow">
+        app:layout_constraintTop_toBottomOf="@id/back_arrow"
+
+        app:layout_constraintBottom_toTopOf="@id/btn_avancar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -237,27 +239,21 @@
                 app:layout_constraintTop_toBottomOf="@id/ll_header_lista"
                 tools:listitem="@layout/list_item_medicamento" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_avancar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/verde"
-                android:paddingStart="40dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="40dp"
-                android:paddingBottom="12dp"
-                android:text="Avançar"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                app:cornerRadius="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_medicamentos" tools:ignore="HardcodedText" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_avancar"
+        android:layout_width="144dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/verde"
+        android:paddingVertical="12dp"
+        android:text="Avançar"
+        android:textColor="@color/white"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

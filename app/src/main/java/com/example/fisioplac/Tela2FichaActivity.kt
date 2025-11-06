@@ -1,6 +1,7 @@
 package com.example.fisioplac
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -105,6 +106,15 @@ class Tela2FichaActivity : AppCompatActivity() {
                 }
             }
         }
+
+        val btnAvancar = findViewById<MaterialButton>(R.id.btn_avancar)
+        btnAvancar.setOnClickListener {
+
+            val intent = Intent(this, Tela5FichaActivity::class.java)
+            // Inicia a próxima tela
+            startActivity(intent)
+        }
+
         setupValidationListeners()
     }
 

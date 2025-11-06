@@ -197,15 +197,17 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_avancar"
         android:layout_width="144dp"
-        android:layout_height="44dp"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:backgroundTint="@color/verde"
         android:text="Avançar"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingVertical="12dp"
+        android:textColor="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
