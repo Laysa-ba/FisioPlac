@@ -9,9 +9,9 @@
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
 
         <!--
-        CORREÇÃO ADICIONADA AQUI
         Define as cores de seleção para componentes Material 3
         -->
+        <item name="colorPrimary">@color/laranja</item>
         <!-- Cor do "pill" de seleção -->
         <item name="colorSecondaryContainer">@color/cinza</item>
         <!-- Cor do ícone/texto DENTRO do "pill" (ex: branco) -->
