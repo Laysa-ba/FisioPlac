@@ -1,4 +1,5 @@
 package com.example.fisioplac
+import com.example.fisioplac.TOTAL_FICHA_STEPS
 
 import android.content.Intent
 import android.os.Bundle
@@ -23,10 +24,19 @@ class Tela1FichaActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTela1FichaBinding
     private var pacienteId: String? = null
 
+    // --- 2. PASSO ATUAL DEFINIDO ---
+    private val PASSO_ATUAL = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTela1FichaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // --- 3. LÓGICA DA BARRA DE PROGRESSO ADICIONADA ---
+        // (Assumindo que o ID da sua barra no XML é 'ficha_progress_bar')
+        binding.fichaProgressBar.max = TOTAL_FICHA_STEPS
+        binding.fichaProgressBar.progress = PASSO_ATUAL
+        // --- FIM DA LÓGICA DA BARRA ---
 
         pacienteId = intent.getStringExtra("PACIENTE_ID")
         val pacienteNome = intent.getStringExtra("PACIENTE_NOME")
@@ -42,7 +52,6 @@ class Tela1FichaActivity : AppCompatActivity() {
         setupPhoneMask()
         setupCurrencyMask()
 
-        // --- ADICIONADO ---
         // Chama a função para configurar os listeners de validação em tempo real
         setupValidationListeners()
     }
@@ -111,7 +120,6 @@ class Tela1FichaActivity : AppCompatActivity() {
         }
     }
 
-    // --- NOVA FUNÇÃO ---
     /**
      * Configura listeners em cada campo para remover a mensagem de erro
      * assim que o usuário interage com o campo.
@@ -164,7 +172,6 @@ class Tela1FichaActivity : AppCompatActivity() {
     }
 
 
-    // --- FUNÇÃO ATUALIZADA ---
     /**
      * Valida todos os campos obrigatórios do formulário antes de avançar.
      * Define o erro nos `TextInputLayout` para exibir o ícone de aviso.

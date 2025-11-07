@@ -1,17 +1,24 @@
 package com.example.fisioplac
 
+import com.example.fisioplac.TOTAL_FICHA_STEPS
+
 import android.annotation.SuppressLint
-import android.content.Intent // Importação ADICIONADA
+import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
-import android.widget.Toast // Importação ADICIONADA
+import android.widget.ProgressBar // <-- 1. IMPORT ADICIONADO
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
 class Tela6FichaActivity : AppCompatActivity() {
+
+    // --- 2. VARIÁVEIS ADICIONADAS ---
+    private lateinit var progressBar: ProgressBar
+    private val PASSO_ATUAL = 6
 
     // ... (declarações de variáveis existentes)
     private lateinit var backButton: ImageButton
@@ -35,14 +42,23 @@ class Tela6FichaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tela6_ficha)
 
         inicializarViews()
+
+        // --- 4. LÓGICA DA BARRA DE PROGRESSO ADICIONADA ---
+        progressBar.max = TOTAL_FICHA_STEPS
+        progressBar.progress = PASSO_ATUAL
+        // --- FIM DA LÓGICA DA BARRA ---
+
         setupClickListeners()
         setupDropdownMenus()
         setupTouchParaAbrirDropdown()
     }
 
+    // --- 3. inicializarViews ATUALIZADO ---
     private fun inicializarViews() {
         backButton = findViewById(R.id.setaVoltar)
         btnAvancar = findViewById(R.id.btnAvancar)
+        progressBar = findViewById(R.id.barraProgresso) // ID da barra de progresso da Tela 6
+
         actvOmbroD = findViewById(R.id.actvOmbroD)
         actvOmbroE = findViewById(R.id.actvOmbroE)
         actvCotoveloD = findViewById(R.id.actvCotoveloD)

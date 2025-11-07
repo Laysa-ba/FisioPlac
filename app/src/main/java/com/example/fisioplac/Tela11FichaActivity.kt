@@ -1,5 +1,8 @@
 package com.example.fisioplac
 
+import com.example.fisioplac.TOTAL_FICHA_STEPS
+
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -7,6 +10,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.example.fisioplac.R
+import com.google.android.material.button.MaterialButton
+import android.widget.ProgressBar // <-- 1. IMPORT ADICIONADO
 
 class Tela11FichaActivity : AppCompatActivity() {
 
@@ -18,6 +23,12 @@ class Tela11FichaActivity : AppCompatActivity() {
     private lateinit var actvLevantarApoios: AutoCompleteTextView
     private lateinit var cbLevantarDesequilibrio: MaterialCheckBox
     private lateinit var tvLevantarNota: TextView
+
+    private lateinit var btnAvancar: MaterialButton
+
+    // --- 2. VARIÁVEIS ADICIONADAS ---
+    private lateinit var progressBar: ProgressBar
+    private val PASSO_ATUAL = 11
 
     // Mapas para armazenar as notas base
     private val notasBase = mapOf(
@@ -36,6 +47,11 @@ class Tela11FichaActivity : AppCompatActivity() {
         // Inicializa os componentes
         setupViews()
 
+        // --- 4. LÓGICA DA BARRA DE PROGRESSO ADICIONADA ---
+        progressBar.max = TOTAL_FICHA_STEPS
+        progressBar.progress = PASSO_ATUAL
+        // --- FIM DA LÓGICA DA BARRA ---
+
         // Configura os dropdowns
         setupDropdowns()
 
@@ -43,6 +59,7 @@ class Tela11FichaActivity : AppCompatActivity() {
         setupListeners()
     }
 
+    // --- 3. setupViews ATUALIZADO ---
     private fun setupViews() {
         actvSentarApoios = findViewById(R.id.actvSentarApoios)
         cbSentarDesequilibrio = findViewById(R.id.cbSentarDesequilibrio)
@@ -51,6 +68,12 @@ class Tela11FichaActivity : AppCompatActivity() {
         actvLevantarApoios = findViewById(R.id.actvLevantarApoios)
         cbLevantarDesequilibrio = findViewById(R.id.cbLevantarDesequilibrio)
         tvLevantarNota = findViewById(R.id.tvLevantarNota)
+
+        // Encontra o botão de avançar
+        btnAvancar = findViewById(R.id.btnAvancar)
+
+        // Encontra a barra de progresso
+        progressBar = findViewById(R.id.ficha_progress_bar)
     }
 
     private fun setupDropdowns() {
@@ -64,20 +87,14 @@ class Tela11FichaActivity : AppCompatActivity() {
         actvSentarApoios.setAdapter(adapter)
         actvLevantarApoios.setAdapter(adapter)
 
-        // --- IMPORTANTE ---
-        // No seu XML, o AutoCompleteTextView NÃO deve ter android:text="APOIOS".
-        // O TextInputLayout é que deve ter android:hint="APOIOS".
-        // Se o XML estiver como na nossa última versão, esta linha abaixo
-        // pode ser necessária para o HINT aparecer em vez do texto "APOIOS".
         actvSentarApoios.setText("", false)
         actvLevantarApoios.setText("", false)
     }
 
+    // --- 4. setupListeners ATUALIZADO ---
     private fun setupListeners() {
         // Listener para o dropdown de SENTAR
         actvSentarApoios.setOnItemClickListener { parent, _, position, _ ->
-            // Você precisa re-setar o texto, porque o setText("", false)
-            // de cima pode ter limpado ele.
             val adapter = parent.adapter as ArrayAdapter<String>
             val selection = adapter.getItem(position)
             actvSentarApoios.setText(selection, false) // Garante que o texto selecionado apareça
@@ -119,6 +136,15 @@ class Tela11FichaActivity : AppCompatActivity() {
                 calcularNotaLevantar(currentPosition, isChecked)
             }
         }
+
+        // Listener para o botão AVANÇAR
+        btnAvancar.setOnClickListener {
+            // TODO: Adicionar lógica para salvar os dados no Firebase, se necessário
+
+            // Navega para a Tela12FichaActivity
+            val intent = Intent(this, Tela12FichaActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     /**
@@ -145,8 +171,6 @@ class Tela11FichaActivity : AppCompatActivity() {
     private fun getPositionFromDropdown(dropdown: AutoCompleteTextView): Int {
         val adapter = dropdown.adapter as? ArrayAdapter<String>
         val currentText = dropdown.text.toString()
-        // Retorna -1 se o texto for vazio ou "APOIOS" (o hint),
-        // ou se não encontrar o item
         if (currentText.isEmpty() || currentText == "APOIOS") {
             return -1
         }

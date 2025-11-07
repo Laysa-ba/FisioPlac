@@ -1,8 +1,10 @@
 package com.example.fisioplac
 
+import com.example.fisioplac.TOTAL_FICHA_STEPS
+
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.widget.Button // Você está usando 'Button', não 'MaterialButton' aqui
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -13,9 +15,12 @@ class Tela9FichaActivity : AppCompatActivity() {
     // Componentes da UI
     private lateinit var backButton: ImageButton
     private lateinit var progressBar: ProgressBar
-    private lateinit var avancarButton: Button
+    private lateinit var avancarButton: Button // Usando Button padrão
 
-    private val totalPassosDaFicha = 13 // Total de passos da ficha (ajuste se necessário)
+    // --- 1. totalPassosDaFicha REMOVIDO (usaremos a constante) ---
+    // private val totalPassosDaFicha = 13
+
+    // O passo atual está correto
     private val passoAtual = 9 // Esta é a 9ª etapa
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,10 +30,10 @@ class Tela9FichaActivity : AppCompatActivity() {
         // 1. Inicializa os componentes da UI
         backButton = findViewById(R.id.btn_back)
         progressBar = findViewById(R.id.ficha_progress_bar)
-        avancarButton = findViewById(R.id.btn_avancar)
+        avancarButton = findViewById(R.id.btn_avancar) // ID do seu XML
 
-        // 2. Atualiza o progresso da barra
-        updateProgressBar(passoAtual, totalPassosDaFicha)
+        // --- 2. CHAMADA DA BARRA DE PROGRESSO ATUALIZADA ---
+        updateProgressBar()
 
         // 3. Configura os cliques dos botões
         backButton.setOnClickListener {
@@ -41,8 +46,10 @@ class Tela9FichaActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateProgressBar(currentStep: Int, totalSteps: Int) {
-        val progress = (currentStep * 100) / totalSteps
-        progressBar.progress = progress
+    // --- 3. FUNÇÃO updateProgressBar ATUALIZADA ---
+    private fun updateProgressBar() {
+        // Usa a constante global e a variável da classe
+        progressBar.max = TOTAL_FICHA_STEPS
+        progressBar.progress = passoAtual
     }
 }

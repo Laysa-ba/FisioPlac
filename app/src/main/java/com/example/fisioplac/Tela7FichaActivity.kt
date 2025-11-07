@@ -1,6 +1,8 @@
 package com.example.fisioplac
 
-import android.content.Intent // 1. IMPORT ADICIONADO
+import com.example.fisioplac.TOTAL_FICHA_STEPS
+
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
@@ -12,19 +14,29 @@ class Tela7FichaActivity : AppCompatActivity() {
     private data class BarthelOption(val description: String, val score: Int)
     private lateinit var binding: ActivityTela7FichaBinding
     private val currentScores = mutableMapOf<String, Int>()
-    private val completedItems = mutableSetOf<String>()
+
+    // --- 1. LÓGICA ANTIGA DE PROGRESSO REMOVIDA ---
+    // private val completedItems = mutableSetOf<String>()
+
+    // A lista de 'categories' ainda é usada para o map de scores, então ela fica.
     private val categories = listOf(
         "Alimentação", "Banho", "Atividades diárias", "Vestir-se", "Intestino",
         "Sistema urinário", "Uso do banheiro", "Transferência (Cama-Cadeira)",
         "Mobilidade em superfícies planas", "Escadas"
     )
 
+    // --- 2. PASSO ATUAL DEFINIDO ---
+    private val PASSO_ATUAL = 7
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTela7FichaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.fichaProgressBar.max = categories.size
+        // --- 3. LÓGICA DA BARRA DE PROGRESSO ATUALIZADA ---
+        binding.fichaProgressBar.max = TOTAL_FICHA_STEPS
+        binding.fichaProgressBar.progress = PASSO_ATUAL
+        // --- FIM DA ATUALIZAÇÃO ---
 
         categories.forEach { category ->
             currentScores[category] = 0
@@ -42,15 +54,16 @@ class Tela7FichaActivity : AppCompatActivity() {
         setupBarthelItem(binding.itemEscadas, "Escadas", listOf(BarthelOption("Incapaz", 0), BarthelOption("Precisa de ajuda", 5), BarthelOption("Independente", 10)))
 
         binding.btnAvancar.setOnClickListener {
-            // (Assumindo que a próxima tela é a Tela11FichaActivity)
+            // (Navega para a Tela 8, está correto)
             val intent = Intent(this, Tela8FichaActivity::class.java)
-
             startActivity(intent)
         }
 
 
         updateTotalScore()
-        updateProgressBar()
+
+        // --- 4. CHAMADA ANTIGA REMOVIDA ---
+        // updateProgressBar()
     }
 
     private fun setupBarthelItem(itemBinding: ItemBarthelBinding, hint: String, options: List<BarthelOption>) {
@@ -63,15 +76,12 @@ class Tela7FichaActivity : AppCompatActivity() {
             // Esta linha depende do ID 'etScore' no arquivo item_barthel.xml
             itemBinding.etScore.setText(selectedOption.score.toString())
             currentScores[hint] = selectedOption.score
-            completedItems.add(hint)
+
             updateTotalScore()
-            updateProgressBar()
+
         }
     }
 
-    private fun updateProgressBar() {
-        binding.fichaProgressBar.progress = completedItems.size
-    }
 
     private fun updateTotalScore() {
         val totalScore = currentScores.values.sum()

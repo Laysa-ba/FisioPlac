@@ -1,5 +1,7 @@
 package com.example.fisioplac
 
+import com.example.fisioplac.TOTAL_FICHA_STEPS
+
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
@@ -32,7 +34,10 @@ class Tela8FichaActivity : AppCompatActivity() {
     private var isChronometerRunning = false
     private var lastElapsedTime: Long = 0
 
-    private val totalPassosDaFicha = 13
+    // --- 1. totalPassosDaFicha REMOVIDO (usaremos a constante) ---
+    // private val totalPassosDaFicha = 13
+
+    // O passo atual está correto
     private val passoAtual = 8
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,8 +54,8 @@ class Tela8FichaActivity : AppCompatActivity() {
         avancarButton = findViewById(R.id.btnAvancar)
         instructionsTextView = findViewById(R.id.text_view_instructions)
 
-        // 2. Atualiza o progresso da barra
-        updateProgressBar(passoAtual, totalPassosDaFicha)
+        // --- 2. CHAMADA DA BARRA DE PROGRESSO ATUALIZADA ---
+        updateProgressBar()
 
         // 3. DEFINE O TEXTO DAS INSTRUÇÕES COM A COR
         setFormattedInstructions()
@@ -70,10 +75,9 @@ class Tela8FichaActivity : AppCompatActivity() {
             avancarButton.backgroundTintList = ContextCompat.getColorStateList(this, R.color.verde)
         }
 
-        // --- 2. CÓDIGO DO BOTÃO "AVANÇAR" ---
+        // Navegação para a Tela 9 (Correto)
         avancarButton.setOnClickListener {
             val intent = Intent(this, Tela9FichaActivity::class.java)
-
             startActivity(intent)
         }
     }
@@ -118,9 +122,11 @@ class Tela8FichaActivity : AppCompatActivity() {
         instructionsTextView.text = spannable
     }
 
-    private fun updateProgressBar(currentStep: Int, totalSteps: Int) {
-        val progress = (currentStep * 100) / totalSteps
-        progressBar.progress = progress
+    // --- 3. FUNÇÃO updateProgressBar ATUALIZADA ---
+    private fun updateProgressBar() {
+        // Usa a constante global e a variável da classe
+        progressBar.max = TOTAL_FICHA_STEPS
+        progressBar.progress = passoAtual
     }
 
     private fun startChronometer() {

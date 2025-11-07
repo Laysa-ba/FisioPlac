@@ -1,5 +1,7 @@
 package com.example.fisioplac
 
+import com.example.fisioplac.TOTAL_FICHA_STEPS
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +13,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView // Import necessário para a seta
 import android.widget.LinearLayout
+import android.widget.ProgressBar // <-- 1. IMPORT ADICIONADO
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
@@ -34,9 +37,18 @@ class Tela2FichaActivity : AppCompatActivity() {
     private val listaDeMedicamentos = mutableListOf<Medicamento>()
     private lateinit var medicamentoAdapter: MedicamentoAdapter
 
+    // --- 2. PASSO ATUAL DEFINIDO ---
+    private val PASSO_ATUAL = 2
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tela2_ficha)
+
+        // --- 3. LÓGICA DA BARRA DE PROGRESSO ADICIONADA ---
+        val progressBar = findViewById<ProgressBar>(R.id.ficha_progress_bar)
+        progressBar.max = TOTAL_FICHA_STEPS
+        progressBar.progress = PASSO_ATUAL
+        // --- FIM DA LÓGICA DA BARRA ---
 
         // --- CÓDIGO PARA A SETA DE VOLTAR ---
         val backArrow = findViewById<ImageView>(R.id.back_arrow)
@@ -110,7 +122,7 @@ class Tela2FichaActivity : AppCompatActivity() {
         val btnAvancar = findViewById<MaterialButton>(R.id.btn_avancar)
         btnAvancar.setOnClickListener {
 
-            val intent = Intent(this, Tela5FichaActivity::class.java)
+            val intent = Intent(this, Tela3FichaActivity::class.java)
             // Inicia a próxima tela
             startActivity(intent)
         }

@@ -12,8 +12,8 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="67dp"
-        android:background="@android:color/white"
         android:paddingTop="15dp"
+        android:background="@android:color/white"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton

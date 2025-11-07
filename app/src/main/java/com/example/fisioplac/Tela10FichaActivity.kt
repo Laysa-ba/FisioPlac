@@ -1,5 +1,7 @@
 package com.example.fisioplac
 
+import com.example.fisioplac.TOTAL_FICHA_STEPS
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
@@ -14,25 +16,35 @@ class Tela10FichaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTela10FichaBinding
 
+    // --- 1. PASSO ATUAL DEFINIDO ---
+    private val PASSO_ATUAL = 10
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge() // Esta linha lida com a exibição em tela cheia
 
         binding = ActivityTela10FichaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            // Remove o padding de cima para não empurrar a top_bar
+            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // --- 2. LÓGICA DA BARRA DE PROGRESSO ADICIONADA ---
+        binding.fichaProgressBar.max = TOTAL_FICHA_STEPS
+        binding.fichaProgressBar.progress = PASSO_ATUAL
+        // --- FIM DA LÓGICA DA BARRA ---
 
         setupClickListeners()
     }
 
     private fun setupClickListeners() {
         // Ação para o botão de voltar
-        binding.backArrow.setOnClickListener {
+        // ID corrigido de backArrow para btnBack (para corresponder ao XML do modelo)
+        binding.btnBack.setOnClickListener {
             finish() // 'finish()' simplesmente fecha a tela atual e volta para a anterior
         }
 

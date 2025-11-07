@@ -1,16 +1,18 @@
 package com.example.fisioplac
 
+import com.example.fisioplac.TOTAL_FICHA_STEPS // <-- Import CORRETO
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Button // Modificado de com.google.android.material.button.MaterialButton
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast // Importação ADICIONADA
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class Tela5FichaActivity : AppCompatActivity() {
@@ -18,7 +20,7 @@ class Tela5FichaActivity : AppCompatActivity() {
     // ... (declarações de variáveis existentes)
     private lateinit var backButton: ImageButton
     private lateinit var progressBar: ProgressBar
-    private lateinit var avancarButton: Button // Usando Button padrão aqui
+    private lateinit var avancarButton: Button
     private lateinit var tvResultadoFinal: TextView
     private lateinit var actvMemorizacao: AutoCompleteTextView
     private lateinit var actvLinguagemObjetos: AutoCompleteTextView
@@ -31,8 +33,11 @@ class Tela5FichaActivity : AppCompatActivity() {
     private lateinit var tvCliqueAquiVerDesenho: TextView
     private lateinit var allDropdowns: List<AutoCompleteTextView>
 
-    private val totalPassosDaFicha = 13 // Exemplo
-    private val passoAtual = 5 // Exemplo
+    // --- MUDANÇA 1: Variável 'totalPassosDaFicha' REMOVIDA (usaremos a constante) ---
+    // private val totalPassosDaFicha = 13
+
+    // Define o passo atual
+    private val passoAtual = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +48,10 @@ class Tela5FichaActivity : AppCompatActivity() {
         setupDropdownMenus()
         setupDropdownListeners()
         setupTouchParaAbrirDropdown()
-        updateProgressBar(passoAtual, totalPassosDaFicha) // Atualiza barra de progresso
+
+        // --- MUDANÇA 2: Atualiza a barra de progresso ---
+        updateProgressBar()
+
         calcularEExibirResultado()
     }
 
@@ -66,7 +74,7 @@ class Tela5FichaActivity : AppCompatActivity() {
             actvMemorizacao, actvLinguagemObjetos, actvLinguagemFrase,
             actvLinguagemEstagios, actvLinguagemLerOrdem, actvLinguagemEscreverFrase,
             actvLinguagemCopiarDesenho
-        ) //
+        )
     }
 
     private fun setupClickListeners() {
@@ -74,18 +82,15 @@ class Tela5FichaActivity : AppCompatActivity() {
             finish()
         }
 
-        // --- LÓGICA DE VALIDAÇÃO ADICIONADA ---
         avancarButton.setOnClickListener {
-            if (validarCampos()) { // Verifica se todos os campos estão preenchidos
+            if (validarCampos()) {
                 // TODO: Adicionar a lógica para SALVAR os dados desta tela
-                val intent = Intent(this, Tela6FichaActivity::class.java) //
+                val intent = Intent(this, Tela6FichaActivity::class.java)
                 startActivity(intent)
             } else {
-                // Exibe mensagem se algum campo estiver vazio
                 Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
             }
         }
-        // --- FIM DA LÓGICA DE VALIDAÇÃO ---
 
         tvCliqueAquiLerOrdem.setOnClickListener {
             val intent = Intent(this, FecheOlhosActivity::class.java)
@@ -98,20 +103,14 @@ class Tela5FichaActivity : AppCompatActivity() {
         }
     }
 
-    // --- FUNÇÃO DE VALIDAÇÃO ADICIONADA ---
-    /**
-     * Verifica se todos os AutoCompleteTextViews da lista `allDropdowns` estão preenchidos.
-     * @return `true` se todos estiverem preenchidos, `false` caso contrário.
-     */
     private fun validarCampos(): Boolean {
         for (dropdown in allDropdowns) {
             if (dropdown.text.isNullOrEmpty()) {
-                return false // Encontrou um campo vazio, retorna falso
+                return false
             }
         }
-        return true // Todos os campos estão preenchidos
+        return true
     }
-    // --- FIM DA FUNÇÃO DE VALIDAÇÃO ---
 
     private fun setupDropdownMenus() {
         val dropdownMap = mapOf(
@@ -122,7 +121,7 @@ class Tela5FichaActivity : AppCompatActivity() {
             actvLinguagemLerOrdem to R.array.opcoes_nota_0_1,
             actvLinguagemEscreverFrase to R.array.opcoes_nota_0_1,
             actvLinguagemCopiarDesenho to R.array.opcoes_nota_0_1
-        ) //
+        )
 
         dropdownMap.forEach { (autoCompleteTextView, arrayResourceId) ->
             setupAutoCompleteTextView(autoCompleteTextView, arrayResourceId)
@@ -142,16 +141,15 @@ class Tela5FichaActivity : AppCompatActivity() {
         allDropdowns.forEach { dropdown ->
             dropdown.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_UP) {
-                    // Evita fechar e reabrir se já estiver mostrando
                     if (!dropdown.isPopupShowing) {
                         dropdown.showDropDown()
                     }
-                    return@setOnTouchListener true // Indica que o evento foi consumido
+                    return@setOnTouchListener true
                 }
-                return@setOnTouchListener false // Deixa outros eventos (como scroll) passarem
+                return@setOnTouchListener false
             }
         }
-    } //
+    }
 
     private fun calcularEExibirResultado() {
         val notaMemorizacao = actvMemorizacao.text.toString().toIntOrNull() ?: 0
@@ -170,7 +168,7 @@ class Tela5FichaActivity : AppCompatActivity() {
 
         val diagnostico = obterDiagnostico(totalScore, escolaridadeMenos4Anos)
 
-        tvResultadoFinal.text = "$diagnostico, $totalScore pontos." //
+        tvResultadoFinal.text = "$diagnostico, $totalScore pontos."
     }
 
     private fun obterDiagnostico(score: Int, escolaridadeMenos4Anos: Boolean): String {
@@ -189,9 +187,10 @@ class Tela5FichaActivity : AppCompatActivity() {
         view.setAdapter(adapter)
     }
 
-    // Função para atualizar a barra de progresso
-    private fun updateProgressBar(currentStep: Int, totalSteps: Int) {
-        val progress = (currentStep * 100) / totalSteps
-        progressBar.progress = progress
+    // --- MUDANÇA 3: Função da barra de progresso ATUALIZADA ---
+    private fun updateProgressBar() {
+        // Usa a constante importada e a variável da classe
+        progressBar.max = TOTAL_FICHA_STEPS
+        progressBar.progress = passoAtual
     }
 }
