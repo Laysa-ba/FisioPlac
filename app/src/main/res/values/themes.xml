@@ -8,11 +8,11 @@
         <!-- Define o estilo customizado para a barra de navegação -->
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
 
-        <!--
-        CORREÇÃO ADICIONADA AQUI
-        Define as cores de seleção para componentes Material 3
-        -->
-        <!-- Cor do "pill" de seleção -->
+
+        <!-- COR ADICIONADA: Cor de foco para Campos de Texto, Botões, etc. -->
+        <item name="colorPrimary">@color/laranja</item>
+
+        <!-- Cor do "pill" de seleção do BottomNav -->
         <item name="colorSecondaryContainer">@color/cinza</item>
         <!-- Cor do ícone/texto DENTRO do "pill" (ex: branco) -->
         <item name="colorOnSecondaryContainer">@color/white</item>
@@ -43,4 +43,3 @@
         <item name="android:textStyle">bold</item>
     </style>
 </resources>
-

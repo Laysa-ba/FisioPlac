@@ -1,59 +1,31 @@
-package com.example.fisioplac.ui.form_geriatrica // 1. PACOTE ATUALIZADO
+package com.example.fisioplac.ui.form_geriatrica
 
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels // Importação do ViewModel
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.fisioplac.R // Importação do R
-import com.example.fisioplac.Tela8FichaActivity // Importação da Tela8
-import com.example.fisioplac.ui.home.HomeActivity // Importação da Home
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.card.MaterialCardView
-
-// NOTA: Esta Activity ainda usa findViewById. O ideal seria usar ViewBinding,
-// mas para isso, precisaríamos do seu arquivo activity_geriatrica.xml
-// para adicionar um <ProgressBar> e garantir os IDs.
+import com.example.fisioplac.R
+import com.example.fisioplac.databinding.ActivityGeriatricaBinding // 1. Import do ViewBinding
+import com.example.fisioplac.ui.home.HomeActivity
 
 class GeriatricaActivity : AppCompatActivity() {
 
-    // 2. Remove as instâncias do Firebase
-    // private lateinit var auth: FirebaseAuth
-    // private lateinit var db: FirebaseFirestore
-
-    // 3. Obtém a instância do ViewModel
+    // 2. ViewBinding CORRIGIDO
+    private lateinit var binding: ActivityGeriatricaBinding
     private val viewModel: GeriatricaViewModel by viewModels()
-
-    // Componentes da UI (permanecem)
-    private lateinit var cpfEditText: EditText
-    private lateinit var cardPatientInfo: MaterialCardView
-    private lateinit var textViewPatientName: TextView
-    private lateinit var textViewBirthdate: TextView
-    private lateinit var textViewAge: TextView
-    private lateinit var textViewSex: TextView
-    private lateinit var iniciarFichaButton: Button
-
-    // Remove variáveis de estado (agora estão no ViewModel)
-    // private var foundPatientId: String? = null
-    // private var selectedSpecialty: String? = null
-    // private var isPatientSelected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_geriatrica)
+        // 3. Inflar layout com ViewBinding
+        binding = ActivityGeriatricaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // 1. Inicializa os componentes da UI
-        initializeViews()
-
-        // 2. Recebe a especialidade e envia para o ViewModel
+        // 4. Recebe a especialidade e informa o ViewModel
         val specialty = intent.getStringExtra("ESPECIALIDADE_SELECIONADA")
         if (specialty == null) {
             Toast.makeText(this, "Erro: Especialidade não definida.", Toast.LENGTH_LONG).show()
@@ -62,55 +34,14 @@ class GeriatricaActivity : AppCompatActivity() {
         }
         viewModel.setSpecialty(specialty)
 
-        // 3. Configura os Listeners
+        // 5. Configura os Listeners
         setupListeners()
 
-        // 4. Configura a navegação
+        // 6. Configura a navegação
         setupNavigation()
 
-        // 5. OBSERVA o ViewModel
+        // 7. OBSERVA o ViewModel
         observeUiState()
-    }
-
-    private fun initializeViews() {
-        cpfEditText = findViewById(R.id.edit_text_cpf)
-        cardPatientInfo = findViewById(R.id.card_patient_info)
-        textViewPatientName = findViewById(R.id.text_view_patient_name)
-        textViewBirthdate = findViewById(R.id.text_view_birthdate)
-        textViewAge = findViewById(R.id.text_view_age)
-        textViewSex = findViewById(R.id.text_view_sex)
-        iniciarFichaButton = findViewById(R.id.btn_iniciar_ficha)
-        // Adicione um ProgressBar ao seu XML e inicialize-o aqui
-        // progressBar = findViewById(R.id.progress_bar)
-    }
-
-    private fun setupListeners() {
-        // O TextWatcher agora só DELEGA para o ViewModel
-        cpfEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.onCpfChanged(s.toString())
-            }
-        })
-
-        // O clique no card só DELEGA para o ViewModel
-        cardPatientInfo.setOnClickListener {
-            viewModel.onPatientCardClicked()
-        }
-
-        // O clique no botão de iniciar ficha
-        iniciarFichaButton.setOnClickListener {
-            // Pega o ID do paciente do estado atual do ViewModel
-            val patientId = viewModel.uiState.value?.foundPatientId
-            val patientName = textViewPatientName.text.toString()
-
-            val intent = Intent(this, Tela8FichaActivity::class.java)
-            intent.putExtra("PACIENTE_ID", patientId)
-            intent.putExtra("PACIENTE_NOME", patientName)
-            startActivity(intent)
-        }
     }
 
     /**
@@ -121,26 +52,26 @@ class GeriatricaActivity : AppCompatActivity() {
         viewModel.uiState.observe(this) { state ->
 
             // Controla o Loading (idealmente, um ProgressBar)
-            // progressBar.visibility = if (state.isLoading) View.VISIBLE else View.GONE
-            cpfEditText.isEnabled = !state.isLoading
+            // binding.progressBar.visibility = if (state.isLoading) View.VISIBLE else View.GONE
+            binding.editTextCpf.isEnabled = !state.isLoading
 
             // Mostra o card se o paciente foi encontrado
-            cardPatientInfo.visibility = if (state.isPatientFound) View.VISIBLE else View.GONE
+            binding.cardPatientInfo.visibility = if (state.isPatientFound) View.VISIBLE else View.GONE
 
             // Preenche os dados do paciente se eles existirem
             state.patientProfile?.let { profile ->
-                textViewPatientName.text = profile.name
-                textViewBirthdate.text = profile.birthDate
-                textViewAge.text = profile.age
-                textViewSex.text = profile.sex
+                binding.textViewPatientName.text = profile.name
+                binding.textViewBirthdate.text = profile.birthDate
+                binding.textViewAge.text = profile.age
+                binding.textViewSex.text = profile.sex
             }
 
             // Controla a seleção (cor de fundo) do card
             val cardColor = if (state.isPatientSelected) R.color.verde_claro else R.color.white
-            cardPatientInfo.setCardBackgroundColor(ContextCompat.getColor(this, cardColor))
+            binding.cardPatientInfo.setCardBackgroundColor(ContextCompat.getColor(this, cardColor))
 
             // Controla se o botão principal está habilitado
-            iniciarFichaButton.isEnabled = state.canInitiateFicha
+            binding.btnIniciarFicha.isEnabled = state.canInitiateFicha
 
             // Mostra mensagens de erro
             state.errorMessage?.let { message ->
@@ -150,20 +81,57 @@ class GeriatricaActivity : AppCompatActivity() {
         }
     }
 
-    // A lógica de busca (searchPatient, resetPatientSelection, populatePatientCard)
-    // foi COMPLETAMENTE REMOVIDA DA ACTIVITY.
-
-    private fun setupNavigation() {
-        val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation_bar)
-        val backButton: ImageButton = findViewById(R.id.btn_back)
-
-        bottomNav.selectedItemId = R.id.nav_new_file
-
-        backButton.setOnClickListener {
+    private fun setupListeners() {
+        // Botão de Voltar
+        binding.btnBack.setOnClickListener {
             finish()
         }
 
-        bottomNav.setOnItemSelectedListener { item ->
+        // Lógica de busca no CPF (com debounce do ViewModel)
+        binding.editTextCpf.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.onCpfChanged(s.toString())
+            }
+        })
+
+        // Clique no Card do Paciente
+        binding.cardPatientInfo.setOnClickListener {
+            viewModel.onPatientCardClicked()
+        }
+
+        // Botão "Iniciar Ficha"
+        binding.btnIniciarFicha.setOnClickListener {
+            // Pega os dados do estado atual do ViewModel
+            val patientId = viewModel.uiState.value?.foundPatientId
+            val patientName = viewModel.uiState.value?.patientProfile?.name
+
+            if (patientId != null && patientName != null) {
+
+                // --- 8. ALTERAÇÃO SOLICITADA ---
+                // Navega para a Tela 1 do formulário
+                val intent = Intent(this, Tela1FichaActivity::class.java).apply {
+                    putExtra("PACIENTE_ID", patientId)
+                    putExtra("PACIENTE_NOME", patientName) // Passa o nome correto
+                }
+                startActivity(intent)
+                // --- FIM DA ALTERAÇÃO ---
+
+            } else {
+                Toast.makeText(this, "Erro: ID ou Nome do paciente não encontrado.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setupNavigation() {
+        binding.bottomNavigationBar.selectedItemId = R.id.nav_new_file
+
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
+
+        binding.bottomNavigationBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
                     startActivity(Intent(this, HomeActivity::class.java).apply {
