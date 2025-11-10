@@ -1,23 +1,22 @@
 package com.example.fisioplac.data.model
 
+import androidx.annotation.Keep
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.Date
 
 /**
- * Representa o modelo de dados completo da ficha geriátrica.
- * (Atualizado para incluir todos os campos da Etapa 1)
+ * Representa o modelo de dados completo para a ficha geriátrica.
  */
+@Keep
 data class GeriatricFicha(
     // Metadados (Preenchidos pelo Repositório)
     var medicoId: String = "",
     @ServerTimestamp
-    var dataCriacao: Date? = null,
+    var dataUltimaAtualizacao: Date? = null,
 
-    // Metadados (Preenchidos pela Activity)
-    val pacienteId: String = "", // Este é o ID do paciente
-    val nome: String = "", // Este é o nome do paciente
-
-    // --- Dados da Etapa 1 ---
+    // Dados da Etapa 1
+    val pacienteId: String = "",
+    val nome: String = "",
     val dataAvaliacao: String = "",
     val estagiario: String = "",
     val dataNascimento: String = "",
@@ -30,12 +29,15 @@ data class GeriatricFicha(
     val moraCom: String = "",
     val renda: String = "",
     val queixaPrincipal: String = "",
-    val outrasDoencas: String = "", // <-- Campo que faltava
+    val outrasDoencas: String = "",
 
-    // --- Social / Atividades ---
+    // --- Social / Atividades (Etapa 1) ---
     val praticaAtividadeFisica: String? = null, // (Sim, Não)
     val diasPorSemana: String = "",
     val frequenciaSair: String? = null, // (Diariamente, Pouca frequência)
     val atividadeSocial: String = "",
-    val doencasAssociadas: String = ""
+    val doencasAssociadas: String = "",
+
+    // --- CAMPO ADICIONADO PARA A ETAPA 2 ---
+    val medicamentos: List<Medicamento> = emptyList()
 )

@@ -1,113 +1,169 @@
-package com.example.fisioplac.ui.form_geriatrica // <-- PACOTE ATUALIZADO
+package com.example.fisioplac.ui.form_geriatrica
 
-import android.content.Intent
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.fisioplac.R // <-- Import do R
-import com.example.fisioplac.TOTAL_FICHA_STEPS
+import androidx.fragment.app.activityViewModels
+import com.example.fisioplac.R
 import com.example.fisioplac.data.model.GeriatricFicha
-import com.example.fisioplac.databinding.ActivityTela1FichaBinding
+import com.example.fisioplac.databinding.FragmentStep1Binding
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Tela1FichaActivity : AppCompatActivity() {
+class Step1Fragment : Fragment() {
 
-    private lateinit var binding: ActivityTela1FichaBinding
-    private var pacienteId: String? = null
+    private var _binding: FragmentStep1Binding? = null
+    private val binding get() = _binding!!
+    private val viewModel: GeriatricFormViewModel by activityViewModels()
 
-    // 1. Obter a instância do ViewModel
-    private val viewModel: GeriatricFormViewModel by viewModels()
+    private var isRestoringState = false
 
-    private val PASSO_ATUAL = 1
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentStep1Binding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityTela1FichaBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        binding.fichaProgressBar.max = TOTAL_FICHA_STEPS
-        binding.fichaProgressBar.progress = PASSO_ATUAL
-
-        // 2. Recebe o ID do Paciente
-        pacienteId = intent.getStringExtra("PACIENTE_ID")
-        val pacienteNome = intent.getStringExtra("PACIENTE_NOME")
-
-        if (pacienteId == null) {
-            Toast.makeText(this, "Erro: ID do Paciente não encontrado.", Toast.LENGTH_LONG).show()
-            finish()
-            return
-        }
-
-        if (pacienteNome != null) {
-            binding.etNome.setText(pacienteNome)
-        }
-
-        // 3. Funções de UI permanecem na Activity
         setupDropdownMenus()
         setupClickListeners()
         setupRadioGroupLogic()
-        setCurrentDate()
         setupPhoneMask()
         setupCurrencyMask()
         setupValidationListeners()
-
-        // 4. Observa o estado do ViewModel
         observeUiState()
+        observeFormData()
     }
 
-    /**
-     * Observa o estado da UI (loading, erros, sucesso) vindo do ViewModel
-     */
     private fun observeUiState() {
-        viewModel.uiState.observe(this) { state ->
-            // Controla o Loading
-            binding.btnAvancar.isEnabled = !state.isLoading
-            binding.btnAvancar.text = if (state.isLoading) "Salvando..." else "Concluir"
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            val isLoading = state.isLoading
+            binding.btnAvancar.isEnabled = !isLoading
+            binding.btnAvancar.text = if (isLoading) "Salvando..." else "Avançar"
 
-            clearAllErrors() // Limpa erros antigos
+            clearAllErrors()
 
-            // Mostra erros de validação
-            state.validationErrors.forEach { (field, error) ->
-                setErrorForField(field, error)
+            if (state.validationErrors.isNotEmpty()) {
+                state.validationErrors.forEach { (field, error) ->
+                    setErrorForField(field, error)
+                }
             }
 
-            // Mostra erros gerais (como falha no save ou validação)
             state.errorMessage?.let {
-                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
                 viewModel.onErrorMessageShown()
-            }
-
-            // Sucesso!
-            if (state.isSaveSuccess) {
-                Toast.makeText(this, "Ficha salva com sucesso!", Toast.LENGTH_LONG).show()
-                finish() // Fecha a tela do formulário
             }
         }
     }
 
-    /**
-     * Coleta todos os dados da UI e os coloca em um objeto GeriatricFicha.
-     */
-    private fun gatherDataFromView(): GeriatricFicha {
-        // Helper para pegar texto de RadioGroups
-        val sexo = findViewById<RadioButton>(binding.rgSexo.checkedRadioButtonId)?.text.toString()
-        val praticaAtividade = findViewById<RadioButton>(binding.rgAtividadesFisicas.checkedRadioButtonId)?.text.toString()
-        val freqSair = findViewById<RadioButton>(binding.rgFrequenciaSair.checkedRadioButtonId)?.text.toString()
+    private fun observeFormData() {
+        viewModel.formData.observe(viewLifecycleOwner) { ficha ->
+            isRestoringState = true
 
-        return GeriatricFicha(
+            setTextIfChanged(binding.etData, ficha.dataAvaliacao)
+            setTextIfChanged(binding.etEstagiario, ficha.estagiario)
+            setTextIfChanged(binding.etNome, ficha.nome)
+            setTextIfChanged(binding.etNascimento, ficha.dataNascimento)
+            setTextIfChanged(binding.etIdade, ficha.idade)
+            setTextIfChanged(binding.etTelefone, ficha.telefone)
+            setTextIfChanged(binding.etRenda, ficha.renda)
+            setTextIfChanged(binding.etQueixaPrincipal, ficha.queixaPrincipal)
+            setTextIfChanged(binding.etOutrasDoencas, ficha.outrasDoencas)
+
+            setTextIfChanged(binding.actvEstadoCivil, ficha.estadoCivil, true)
+            setTextIfChanged(binding.actvEscolaridade, ficha.escolaridade, true)
+            setTextIfChanged(binding.actvLocalResidencia, ficha.localResidencia, true)
+            setTextIfChanged(binding.actvMoraCom, ficha.moraCom, true)
+            setTextIfChanged(binding.actvAtividadeSocial, ficha.atividadeSocial, true)
+            setTextIfChanged(binding.actvDoencas, ficha.doencasAssociadas, true)
+            setTextIfChanged(binding.actvDiasSemana, ficha.diasPorSemana, true)
+
+            setCheckedRadioButton(binding.rgSexo, ficha.sexo)
+            setCheckedRadioButton(binding.rgAtividadesFisicas, ficha.praticaAtividadeFisica)
+            setCheckedRadioButton(binding.rgFrequenciaSair, ficha.frequenciaSair)
+
+            binding.diasSemanaContainer.visibility = if (ficha.praticaAtividadeFisica == "Sim") View.VISIBLE else View.GONE
+
+            isRestoringState = false
+        }
+    }
+
+    private fun setTextIfChanged(editText: EditText, newText: String?, isAutoComplete: Boolean = false) {
+        if (newText == null) return
+        if (editText.text.toString() != newText) {
+            editText.setText(newText)
+            if (isAutoComplete && !newText.isNullOrBlank() && editText is AutoCompleteTextView) {
+                editText.dismissDropDown()
+            }
+        }
+    }
+
+    private fun setCheckedRadioButton(radioGroup: RadioGroup, textToMatch: String?) {
+        if (textToMatch == null) {
+            radioGroup.clearCheck()
+            return
+        }
+        for (i in 0 until radioGroup.childCount) {
+            val view = radioGroup.getChildAt(i)
+            if (view is RadioButton) {
+                if (view.text.toString().equals(textToMatch, ignoreCase = true)) {
+                    if (radioGroup.checkedRadioButtonId != view.id) {
+                        radioGroup.check(view.id)
+                    }
+                    return
+                }
+            }
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.btnAvancar.setOnClickListener {
+            if(isRestoringState) return@setOnClickListener
+            val data = gatherDataFromView()
+            viewModel.onStep1NextClicked(data)
+        }
+
+        binding.etNascimento.setOnClickListener {
+            showDatePickerDialogNascimento(binding.etNascimento, parentFragmentManager)
+        }
+
+        binding.etData.setOnClickListener {
+            showDatePickerDialogAvaliacao(binding.etData, parentFragmentManager)
+        }
+    }
+
+    private fun getSelectedRadioButtonText(checkedId: Int): String? {
+        if (checkedId == -1) return null
+        return view?.findViewById<RadioButton>(checkedId)?.text?.toString()
+    }
+
+    private fun gatherDataFromView(): GeriatricFicha {
+        val currentData = viewModel.formData.value!!
+
+        val sexo = getSelectedRadioButtonText(binding.rgSexo.checkedRadioButtonId)
+        val praticaAtividade = getSelectedRadioButtonText(binding.rgAtividadesFisicas.checkedRadioButtonId)
+        val freqSair = getSelectedRadioButtonText(binding.rgFrequenciaSair.checkedRadioButtonId)
+
+        return currentData.copy(
             dataAvaliacao = binding.etData.text.toString(),
             estagiario = binding.etEstagiario.text.toString(),
             nome = binding.etNome.text.toString(),
@@ -130,24 +186,7 @@ class Tela1FichaActivity : AppCompatActivity() {
         )
     }
 
-    // --- LÓGICA DE UI (MÁSCARAS, LISTENERS, DATEPICKER) ---
-    // (A maior parte do seu código original permanece aqui, sem alterações)
-
-    private fun setupClickListeners() {
-        binding.backArrow.setOnClickListener {
-            finish()
-        }
-
-        binding.btnAvancar.setOnClickListener {
-            val data = gatherDataFromView()
-            // Envia os dados E o pacienteId para o ViewModel
-            viewModel.onConcluirClicked(pacienteId!!, data)
-        }
-
-        binding.etNascimento.setOnClickListener {
-            showDatePickerDialog(binding.etNascimento, supportFragmentManager)
-        }
-    }
+    // --- Funções de UI (Copiadas da sua Activity) ---
 
     private fun setupDropdownMenus() {
         val dropdownMap = mapOf(
@@ -164,7 +203,7 @@ class Tela1FichaActivity : AppCompatActivity() {
 
     private fun setupAutoCompleteTextView(view: AutoCompleteTextView, arrayResourceId: Int) {
         val items = resources.getStringArray(arrayResourceId)
-        val adapter = ArrayAdapter(this, R.layout.dropdown_item, items)
+        val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, items)
         view.setAdapter(adapter)
         view.setOnItemClickListener { _, _, _, _ -> binding.main.requestFocus() }
         view.setOnDismissListener { binding.main.requestFocus() }
@@ -172,15 +211,7 @@ class Tela1FichaActivity : AppCompatActivity() {
 
     private fun setupRadioGroupLogic() {
         binding.diasSemanaContainer.visibility = View.GONE
-        binding.rgAtividadesFisicas.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.rb_sim_atividade) {
-                binding.diasSemanaContainer.visibility = View.VISIBLE
-            } else {
-                binding.diasSemanaContainer.visibility = View.GONE
-                binding.actvDiasSemana.text.clear()
-                binding.tilDiasSemana.error = null
-            }
-        }
+        // O listener principal do RadioGroup foi movido para 'setupValidationListeners'
     }
 
     private fun setupValidationListeners() {
@@ -196,12 +227,14 @@ class Tela1FichaActivity : AppCompatActivity() {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
+                    if (isRestoringState) return
                     if (!s.isNullOrBlank()) til.error = null
                 }
             })
         }
-        binding.rgSexo.setOnCheckedChangeListener { _, _ -> binding.tvSexoLabel.error = null }
+        binding.rgSexo.setOnCheckedChangeListener { _, _ -> if(isRestoringState) return@setOnCheckedChangeListener; binding.tvSexoLabel.error = null }
         binding.rgAtividadesFisicas.setOnCheckedChangeListener { _, checkedId ->
+            if(isRestoringState) return@setOnCheckedChangeListener
             binding.tvAtividadesFisicasLabel.error = null
             if (checkedId == R.id.rb_sim_atividade) {
                 binding.diasSemanaContainer.visibility = View.VISIBLE
@@ -211,17 +244,17 @@ class Tela1FichaActivity : AppCompatActivity() {
                 binding.tilDiasSemana.error = null
             }
         }
-        binding.rgFrequenciaSair.setOnCheckedChangeListener { _, _ -> binding.tvFrequenciaSairLabel.error = null }
+        binding.rgFrequenciaSair.setOnCheckedChangeListener { _, _ -> if(isRestoringState) return@setOnCheckedChangeListener; binding.tvFrequenciaSairLabel.error = null }
     }
 
     private fun setupPhoneMask() {
-        // (Seu código original da máscara de telefone - o mesmo que você forneceu)
         val phoneEditText = binding.etTelefone
         phoneEditText.addTextChangedListener(object : TextWatcher {
             private var isFormatting: Boolean = false
             private var deletingHyphen: Boolean = false
             private var hyphenStart: Int = 0
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                if (isRestoringState) return
                 if (!isFormatting) {
                     if (count > 0 && s.length > start && s[start] == '-') {
                         deletingHyphen = true
@@ -233,6 +266,7 @@ class Tela1FichaActivity : AppCompatActivity() {
             }
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
+                if (isRestoringState) return
                 if (isFormatting) return
                 isFormatting = true
                 val digits = s.toString().replace("[^\\d]".toRegex(), "")
@@ -250,13 +284,13 @@ class Tela1FichaActivity : AppCompatActivity() {
     }
 
     private fun setupCurrencyMask() {
-        // (Seu código original da máscara de Renda)
         val editText = binding.etRenda
         editText.addTextChangedListener(object : TextWatcher {
             private var current = ""
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
+                if (isRestoringState) return
                 if (s.toString() != current) {
                     editText.removeTextChangedListener(this)
                     val cleanString = s.toString().replace("[^\\d]".toRegex(), "")
@@ -277,7 +311,6 @@ class Tela1FichaActivity : AppCompatActivity() {
     }
 
     private fun formatPhoneNumber(digits: String): String {
-        // (Seu código original)
         val formatted = StringBuilder()
         var i = 0
         if (i < digits.length) {
@@ -306,7 +339,6 @@ class Tela1FichaActivity : AppCompatActivity() {
     }
 
     private fun calculateAge(birthDate: Calendar): Int {
-        // (Seu código original)
         val today = Calendar.getInstance()
         var age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR)
         if (today.get(Calendar.DAY_OF_YEAR) < birthDate.get(Calendar.DAY_OF_YEAR)) {
@@ -315,9 +347,8 @@ class Tela1FichaActivity : AppCompatActivity() {
         return age
     }
 
-    private fun showDatePickerDialog(editText: EditText, fragmentManager: FragmentManager) {
-        // (Seu código original)
-        val utc = TimeZone.getTimeZone("UTC")
+    private fun showDatePickerDialogNascimento(editText: EditText, fragmentManager: FragmentManager) {
+        val utc = TimeZone.getTimeZone("UTC") // <-- Fuso horário UTC
         val calendar = Calendar.getInstance(utc)
         val today = MaterialDatePicker.todayInUtcMilliseconds()
         calendar.timeInMillis = today
@@ -336,11 +367,17 @@ class Tela1FichaActivity : AppCompatActivity() {
             .setCalendarConstraints(constraints)
             .setSelection(openAtDate)
             .build()
+
         datePicker.addOnPositiveButtonClickListener { selection ->
             val selectedCalendar = Calendar.getInstance(utc)
             selectedCalendar.timeInMillis = selection
+
+            // --- CORREÇÃO DO FUSO HORÁRIO ---
             val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            sdf.timeZone = utc // <-- Força o SDF a usar UTC
             val formattedDate = sdf.format(selectedCalendar.time)
+            // --- FIM DA CORREÇÃO ---
+
             editText.setText(formattedDate)
             val age = calculateAge(selectedCalendar)
             binding.etIdade.setText(age.toString())
@@ -348,17 +385,38 @@ class Tela1FichaActivity : AppCompatActivity() {
         datePicker.show(fragmentManager, "BIRTH_DATE_PICKER")
     }
 
-    private fun setCurrentDate() {
-        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val currentDate = sdf.format(Date())
-        binding.etData.setText(currentDate)
+    private fun showDatePickerDialogAvaliacao(editText: EditText, fragmentManager: FragmentManager) {
+        val utc = TimeZone.getTimeZone("UTC") // <-- Fuso horário UTC
+        val calendar = Calendar.getInstance()
+        val today = calendar.timeInMillis
+
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Selecione a Data da Avaliação")
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) // <-- Usa UTC
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            val selectedCalendar = Calendar.getInstance(utc)
+            selectedCalendar.timeInMillis = selection
+
+            // --- CORREÇÃO DO FUSO HORÁRIO ---
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            sdf.timeZone = utc // <-- Força o SDF a usar UTC
+            val formattedDate = sdf.format(selectedCalendar.time)
+            // --- FIM DA CORREÇÃO ---
+
+            editText.setText(formattedDate)
+        }
+        datePicker.show(fragmentManager, "AVALIACAO_DATE_PICKER")
     }
 
-    // --- Funções de UI para Erros ---
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-    /**
-     * Define o erro no TextInputLayout ou TextView correto com base no nome do campo.
-     */
+    // --- FUNÇÕES DE ERRO RESTAURADAS ---
+
     private fun setErrorForField(fieldName: String, error: String) {
         val errorMsg = if (error.isNotBlank()) error else null
         when (fieldName) {
@@ -383,9 +441,6 @@ class Tela1FichaActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Limpa todas as mensagens de erro da tela.
-     */
     private fun clearAllErrors() {
         binding.etData.error = null
         binding.etEstagiario.error = null

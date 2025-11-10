@@ -40,12 +40,20 @@
             android:name=".ui.form_geriatrica.GeriatricaActivity"
             android:exported="false" />
 
-        <!-- *** ATUALIZAÇÃO AQUI *** -->
+        <!-- *** NOVA ACTIVITY "MÃE" DO FORMULÁRIO *** -->
         <activity
-            android:name=".ui.form_geriatrica.Tela1FichaActivity"
+            android:name=".ui.form_geriatrica.GeriatricFormActivity"
             android:exported="false" />
 
-        <!-- Activities Antigas (ainda no pacote raiz) -->
+        <!--
+          As Activities abaixo foram substituídas por Fragmentos
+          e não são mais necessárias.
+        -->
+        <!-- <activity android:name=".ui.form_geriatrica.Tela1FichaActivity" ... /> -->
+        <!-- <activity android:name=".Tela2FichaActivity" ... /> -->
+
+
+        <!-- Activity Antiga (ainda no pacote raiz) -->
         <activity
             android:name=".Tela8FichaActivity"
             android:exported="false" />
