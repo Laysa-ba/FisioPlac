@@ -57,7 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:id="@+id/content_div"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -67,7 +67,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_cpf"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"> <TextView
             android:id="@+id/text_instruction"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -81,107 +85,111 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_layout_cpf"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/white"
-            app:hintEnabled="false"
-            app:layout_constraintTop_toBottomOf="@id/text_instruction"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_cpf"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_cpf"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Digite o cpf, somente números..."
-                android:inputType="number"
-                android:maxLength="11"
-                android:maxLines="1" />
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/white"
+                app:hintEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/text_instruction"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_patient_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:visibility="gone"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:layout_constraintEnd_toEndOf="@id/text_input_layout_cpf"
-            app:layout_constraintStart_toStartOf="@id/text_input_layout_cpf"
-            app:layout_constraintTop_toBottomOf="@id/text_input_layout_cpf"
-            tools:visibility="visible">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/text_view_patient_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/preto_claro"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:text="Nome Completo do Paciente" />
-                <View
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_cpf"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="@color/cinza_escuro" />
-                <TextView
-                    android:id="@+id/text_view_birthdate"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    tools:text="Nascimento: 14 de maio de 2005" />
-                <TextView
-                    android:id="@+id/text_view_age"
-                    android:layout_width="wrap_content"
+                    android:hint="Digite o cpf, somente números..."
+                    android:inputType="number"
+                    android:maxLength="11"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_patient_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="@id/text_input_layout_cpf"
+                app:layout_constraintStart_toStartOf="@id/text_input_layout_cpf"
+                app:layout_constraintTop_toBottomOf="@id/text_input_layout_cpf"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textSize="16sp"
-                    tools:text="Idade: 20 anos" />
-                <TextView
-                    android:id="@+id/text_view_sex"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textSize="16sp"
-                    tools:text="Sexo: Masculino" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/text_view_patient_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/preto_claro"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        tools:text="Nome Completo do Paciente" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="@color/cinza_escuro" />
+                    <TextView
+                        android:id="@+id/text_view_birthdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        tools:text="Nascimento: 14 de maio de 2005" />
+                    <TextView
+                        android:id="@+id/text_view_age"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textSize="16sp"
+                        tools:text="Idade: 20 anos" />
+                    <TextView
+                        android:id="@+id/text_view_sex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textSize="16sp"
+                        tools:text="Sexo: Masculino" />
 
-        </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_iniciar_ficha"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:enabled="false"
-            android:padding="12dp"
-            android:text="Iniciar Ficha"
-            android:textAllCaps="false"
-            android:textSize="18sp"
-            android:background="@drawable/button_selector"
-            android:textColor="@color/button_text_selector"
-            app:layout_constraintEnd_toEndOf="@id/card_patient_info"
-            app:layout_constraintStart_toStartOf="@id/card_patient_info"
-            app:layout_constraintTop_toBottomOf="@id/card_patient_info" />
+            </com.google.android.material.card.MaterialCardView>
 
+            <Button
+                android:id="@+id/btn_iniciar_ficha"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:enabled="false"
+                android:padding="12dp"
+                android:text="Iniciar Ficha"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:background="@drawable/button_selector"
+                android:textColor="@color/button_text_selector"
+                app:layout_constraintEnd_toEndOf="@id/card_patient_info"
+                app:layout_constraintStart_toStartOf="@id/card_patient_info"
+                app:layout_constraintTop_toBottomOf="@id/card_patient_info" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" /> </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_bar"

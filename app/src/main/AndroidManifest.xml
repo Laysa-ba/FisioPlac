@@ -42,13 +42,10 @@
 
         <!-- *** ATUALIZAÇÃO AQUI *** -->
         <activity
-            android:name=".ui.form_geriatrica.Tela1FichaActivity"
+            android:name=".ui.form_geriatrica.Tela1FichaFragment"
             android:exported="false" />
 
         <!-- Activities Antigas (ainda no pacote raiz) -->
-        <activity
-            android:name=".Tela8FichaActivity"
-            android:exported="false" />
 
         <!-- Metadados do AdMob (para evitar crash) -->
         <meta-data
