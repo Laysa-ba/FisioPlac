@@ -226,7 +226,7 @@
         android:layout_margin="16dp"
         android:backgroundTint="@color/verde"
         android:paddingVertical="12dp"
-        android:text="Concluir"
+        android:text="Avançar"
         android:textColor="@color/white"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"

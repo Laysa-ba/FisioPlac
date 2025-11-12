@@ -71,9 +71,8 @@ class GeriatricFormActivity : AppCompatActivity() {
         val fragment: Fragment = when (step) {
             1 -> Step1Fragment()
             2 -> Step2Fragment()
-            // 3 -> Step3Fragment()
-            // (Quando você clicar em "Concluir" no Step 2, ele não vai navegar,
-            // mas se você tivesse um Step 3, o viewModel.onStep2NextClicked iria para 3)
+            3 -> Step3Fragment()
+
             else -> Step1Fragment()
         }
 

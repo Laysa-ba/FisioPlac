@@ -39,5 +39,33 @@ data class GeriatricFicha(
     val doencasAssociadas: String = "",
 
     // --- CAMPO ADICIONADO PARA A ETAPA 2 ---
-    val medicamentos: List<Medicamento> = emptyList()
+    val medicamentos: List<Medicamento> = emptyList(),
+
+    // --- NOVOS CAMPOS (Step 3) ---
+    val visao: String = "",
+    val audicao: String = "",
+
+    val incontinenciaUrinaria: String? = null,
+    val incontinenciaUrinariaData: String? = null,
+
+    val incontinenciaFecal: String? = null,
+    val incontinenciaFecalData: String? = null,
+
+    val sono: String? = null,
+    val sonoDisturbioDetalhes: String? = null,
+
+    val usaOrtese: String? = null,
+    val orteseDetalhes: String? = null,
+
+    val usaProtese: String? = null,
+    val proteseDetalhes: String? = null,
+
+    val teveQuedaUltimos12Meses: String? = null,
+    val contagemQuedas: String? = null,
+
+    val eFumante: String? = null,
+    val parouFumarTempo: String? = null,
+
+    val eEtilista: String? = null,
+    val parouBeberTempo: String? = null
 )

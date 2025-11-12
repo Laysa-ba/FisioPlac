@@ -81,11 +81,12 @@ class Step2Fragment : Fragment() {
         // Observa o estado da UI (Loading, Erro)
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             // --- CORREÇÃO APLICADA AQUI ---
-            // O estado agora é uma 'data class', então acessamos as propriedades
             val isLoading = state.isLoading
             binding.btnConcluir.isEnabled = !isLoading
             binding.btnAdicionar.isEnabled = !isLoading
-            binding.btnConcluir.text = if (isLoading) "Salvando..." else "Concluir"
+
+            // CORREÇÃO DE TEXTO: O botão no Step 2 deve ser "Avançar"
+            binding.btnConcluir.text = if (isLoading) "Avançando..." else "Avançar"
 
             // Mostra o Toast de erro
             state.errorMessage?.let { message ->
@@ -116,10 +117,17 @@ class Step2Fragment : Fragment() {
             }
         }
 
+        // --- CORREÇÃO APLICADA AQUI ---
         binding.btnConcluir.setOnClickListener {
-            // Apenas notifica o ViewModel. A lista já está lá.
-            viewModel.onConcluirClicked()
+            // Ação correta: Passar a lista atual e avançar para o próximo step
+            // A lista 'listaDeMedicamentosAdapter' já está sincronizada com o ViewModel
+            // através da função addMedicamento.
+            viewModel.onStep2NextClicked(listaDeMedicamentosAdapter)
         }
+        // --- FIM DA CORREÇÃO ---
+
+        // (Você pode adicionar um binding.buttonBack.setOnClickListener { viewModel.onBackClicked() }
+        // se você tiver um botão "Voltar" no seu layout fragment_step_2.xml)
     }
 
     private fun validateMedicamentoFields(): Boolean {
