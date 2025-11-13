@@ -31,7 +31,7 @@ class GeriatricFormActivity : AppCompatActivity() {
         viewModel.startForm(pacienteId, pacienteNome)
 
         // ATUALIZADO: Certifique-se que a constante TOTAL_FICHA_STEPS é 4
-        binding.fichaProgressBar.max = 4 // ou TOTAL_FICHA_STEPS se você atualizou
+        binding.fichaProgressBar.max = 5 // ou TOTAL_FICHA_STEPS se você atualizou
         binding.backArrow.setOnClickListener {
             viewModel.onBackClicked()
         }
@@ -73,6 +73,7 @@ class GeriatricFormActivity : AppCompatActivity() {
             2 -> Step2Fragment()
             3 -> Step3Fragment()
             4 -> Step4Fragment()
+            5 -> Step5Fragment()
             else -> Step1Fragment()
         }
 

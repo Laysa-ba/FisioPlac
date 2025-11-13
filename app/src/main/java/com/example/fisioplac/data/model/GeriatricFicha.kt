@@ -90,5 +90,16 @@ data class GeriatricFicha(
     val pontuacaoRegistroPalavras: Int = 0,
 
     val calculoRealiza: String? = null, // "Sim" ou "Não"
-    val pontuacaoCalculo: Int = 0
+    val pontuacaoCalculo: Int = 0,
+
+    // --- (Step 5 - Memorização e Linguagem) ---
+    val pontuacaoMemorizacao: Int = 0,
+    val linguagemNomearObjetos: Int = 0,
+    val linguagemRepetirFrase: Int = 0,
+    val linguagemComandoEstagios: Int = 0,
+    val linguagemLerOrdem: Int = 0,
+    val linguagemEscreverFrase: Int = 0,
+    val linguagemCopiarDesenho: Int = 0,
+    val pontuacaoTotalEstadoMental: Int = 0,
+    val diagnosticoEstadoMental: String = ""
 )

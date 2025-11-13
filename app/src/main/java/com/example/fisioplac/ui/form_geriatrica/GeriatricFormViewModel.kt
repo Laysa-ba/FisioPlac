@@ -56,6 +56,8 @@ class GeriatricFormViewModel : ViewModel() {
             dataAvaliacao = getCurrentDate()
             // O resto dos campos (em português) virão do default do GeriatricFicha
         )
+        // Reinicia a etapa para 1
+        _currentStep.value = 1
     }
 
     /**
@@ -87,7 +89,6 @@ class GeriatricFormViewModel : ViewModel() {
 
     /**
      * Chamado pelo Step3Fragment.
-     * *** MODIFICADO ***
      */
     fun onStep3NextClicked(dataFromView: GeriatricFicha) {
         _uiState.value = FormUiState(validationErrors = emptyMap())
@@ -98,16 +99,29 @@ class GeriatricFormViewModel : ViewModel() {
     }
 
     /**
-     * *** NOVA FUNÇÃO ***
-     * Chamado pelo Step4Fragment (ao clicar em "Concluir").
+     * Chamado pelo Step4Fragment.
+     * *** MODIFICADO ***
      */
     fun onStep4NextClicked(dataFromView: GeriatricFicha) {
         _uiState.value = FormUiState(validationErrors = emptyMap())
         _formData.value = dataFromView // Atualiza o formData com os dados do Step 4
 
+        // ATUALIZADO: Avança para o Step 5
+        _currentStep.value = 5
+    }
+
+    /**
+     * *** NOVA FUNÇÃO ***
+     * Chamado pelo Step5Fragment (ao clicar em "Concluir").
+     */
+    fun onStep5NextClicked(dataFromView: GeriatricFicha) {
+        _uiState.value = FormUiState(validationErrors = emptyMap())
+        _formData.value = dataFromView // Atualiza o formData com os dados do Step 5
+
         // Chama a função de concluir
         onConcluirClicked()
     }
+
 
     /**
      * Chamado pelo Step2Fragment quando um medicamento é adicionado.
@@ -135,11 +149,12 @@ class GeriatricFormViewModel : ViewModel() {
     }
 
     /**
-     * Chamado pela Etapa Final (agora, o Step 4) ao clicar em "Concluir".
+     * Chamado pela Etapa Final (agora, o Step 5) ao clicar em "Concluir".
      */
     fun onConcluirClicked() {
         _uiState.value = FormUiState(isLoading = true)
 
+        // Garante que a ficha completa seja a versão mais atual
         val fichaCompleta = _formData.value!!
 
         viewModelScope.launch {
@@ -169,13 +184,33 @@ class GeriatricFormViewModel : ViewModel() {
     private fun validateStep1(data: GeriatricFicha): Map<String, String> {
         val errors = mutableMapOf<String, String>()
         val requiredError = "Campo obrigatório"
-        val unmaskedTelefone = data.telefone.replace(Regex("[^\\d]"), "")
-        val unmaskedRenda = data.renda.replace(Regex("[^\\d]"), "")
 
+        // Exemplo de validação buscando campos em português
         if (data.dataAvaliacao.isBlank()) errors["dataAvaliacao"] = requiredError
         if (data.estagiario.isBlank()) errors["estagiario"] = requiredError
         if (data.nome.isBlank()) errors["nome"] = requiredError
-        // ... (etc. campos em português do modelo)
+
+        // Validação de campos do Step 1 (em português)
+        val unmaskedTelefone = data.telefone.replace(Regex("[^\\d]"), "")
+        val unmaskedRenda = data.renda.replace(Regex("[^\\d]"), "")
+        if (data.dataNascimento.isBlank()) errors["dataNascimento"] = requiredError
+        if (data.idade.isBlank()) errors["idade"] = requiredError
+        if (unmaskedTelefone.isBlank()) errors["telefone"] = requiredError
+        if (unmaskedRenda.isBlank()) errors["renda"] = requiredError
+        if (data.queixaPrincipal.isBlank()) errors["queixaPrincipal"] = requiredError
+        if (data.estadoCivil.isBlank()) errors["estadoCivil"] = requiredError
+        if (data.escolaridade.isBlank()) errors["escolaridade"] = requiredError
+        if (data.localResidencia.isBlank()) errors["localResidencia"] = requiredError
+        if (data.moraCom.isBlank()) errors["moraCom"] = requiredError
+        if (data.atividadeSocial.isBlank()) errors["atividadeSocial"] = requiredError
+        if (data.doencasAssociadas.isBlank()) errors["doencasAssociadas"] = requiredError
+        if (data.sexo.isNullOrBlank() || data.sexo == "null") errors["sexo"] = requiredError
+        if (data.praticaAtividadeFisica.isNullOrBlank() || data.praticaAtividadeFisica == "null") errors["praticaAtividadeFisica"] = requiredError
+        if (data.frequenciaSair.isNullOrBlank() || data.frequenciaSair == "null") errors["frequenciaSair"] = requiredError
+        if (data.praticaAtividadeFisica == "Sim" && data.diasPorSemana.isBlank()) {
+            errors["diasPorSemana"] = requiredError
+        }
+
         return errors
     }
 

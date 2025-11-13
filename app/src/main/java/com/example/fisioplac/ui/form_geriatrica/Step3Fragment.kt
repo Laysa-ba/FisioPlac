@@ -97,7 +97,7 @@ class Step3Fragment : Fragment() {
             // IDs do XML em PORTUGUÊS
             binding.progressBar.isVisible = state.isLoading
             binding.botaoProximo.isEnabled = !state.isLoading
-            binding.botaoProximo.text = if (state.isLoading) "Salvando..." else "Concluir"
+            binding.botaoProximo.text = if (state.isLoading) "Salvando..." else "Avançar"
 
             state.errorMessage?.let {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()

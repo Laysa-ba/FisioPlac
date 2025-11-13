@@ -71,7 +71,7 @@ class Step4Fragment : Fragment() {
             binding.tvCalculoInstrucaoNao.isVisible = checkedId == R.id.rbCalculoNao
         }
 
-        binding.botaoConcluir.setOnClickListener {
+        binding.botaoProximo.setOnClickListener {
             val data = collectDataFromUi()
             viewModel.onStep4NextClicked(data)
         }
@@ -104,8 +104,8 @@ class Step4Fragment : Fragment() {
         viewModel.uiState.observe(viewLifecycleOwner, Observer { state ->
             // IDs do XML em PORTUGUÊS
             binding.progressBar.isVisible = state.isLoading
-            binding.botaoConcluir.isEnabled = !state.isLoading
-            binding.botaoConcluir.text = if (state.isLoading) "Salvando..." else "Concluir"
+            binding.botaoProximo.isEnabled = !state.isLoading
+            binding.botaoProximo.text = if (state.isLoading) "Salvando..." else "Avançar"
 
             state.errorMessage?.let {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
