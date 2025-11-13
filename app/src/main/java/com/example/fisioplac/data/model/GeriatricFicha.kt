@@ -67,5 +67,28 @@ data class GeriatricFicha(
     val parouFumarTempo: String? = null,
 
     val eEtilista: String? = null,
-    val parouBeberTempo: String? = null
+    val parouBeberTempo: String? = null,
+
+    // --- (Step 4 - Estado Mental) ---
+    val orientacaoTempoMes: Boolean = false,
+    val orientacaoTempoDia: Boolean = false,
+    val orientacaoTempoAno: Boolean = false,
+    val orientacaoTempoDiaSemana: Boolean = false,
+    val orientacaoTempoAproximado: Boolean = false,
+    val pontuacaoOrientacaoTempo: Int = 0,
+
+    val orientacaoLocalEstado: Boolean = false,
+    val orientacaoLocalCidade: Boolean = false,
+    val orientacaoLocalBairro: Boolean = false,
+    val orientacaoLocalLocal: Boolean = false,
+    val orientacaoLocalPais: Boolean = false,
+    val pontuacaoOrientacaoLocal: Int = 0,
+
+    val registroPalavraCarro: Boolean = false,
+    val registroPalavraVaso: Boolean = false,
+    val registroPalavraTijolo: Boolean = false,
+    val pontuacaoRegistroPalavras: Int = 0,
+
+    val calculoRealiza: String? = null, // "Sim" ou "Não"
+    val pontuacaoCalculo: Int = 0
 )

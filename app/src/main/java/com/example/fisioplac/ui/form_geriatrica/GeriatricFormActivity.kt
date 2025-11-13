@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.fisioplac.TOTAL_FICHA_STEPS
+import com.example.fisioplac.TOTAL_FICHA_STEPS // Certifique-se que esta constante é 4
 import com.example.fisioplac.R
 import com.example.fisioplac.databinding.ActivityGeriatricFormBinding
 
@@ -30,7 +30,8 @@ class GeriatricFormActivity : AppCompatActivity() {
         // Inicia o ViewModel (apenas localmente)
         viewModel.startForm(pacienteId, pacienteNome)
 
-        binding.fichaProgressBar.max = TOTAL_FICHA_STEPS
+        // ATUALIZADO: Certifique-se que a constante TOTAL_FICHA_STEPS é 4
+        binding.fichaProgressBar.max = 4 // ou TOTAL_FICHA_STEPS se você atualizou
         binding.backArrow.setOnClickListener {
             viewModel.onBackClicked()
         }
@@ -57,7 +58,6 @@ class GeriatricFormActivity : AppCompatActivity() {
             }
         }
 
-        // *** NOVO OBSERVADOR ***
         // Observa o sucesso do salvamento
         viewModel.formSaveSuccess.observe(this) { isSuccess ->
             if (isSuccess) {
@@ -72,7 +72,7 @@ class GeriatricFormActivity : AppCompatActivity() {
             1 -> Step1Fragment()
             2 -> Step2Fragment()
             3 -> Step3Fragment()
-
+            4 -> Step4Fragment()
             else -> Step1Fragment()
         }
 

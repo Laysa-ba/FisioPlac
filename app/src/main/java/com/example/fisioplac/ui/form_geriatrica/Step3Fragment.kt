@@ -82,10 +82,6 @@ class Step3Fragment : Fragment() {
             val data = collectDataFromUi()
             viewModel.onStep3NextClicked(data) // VM em INGLÊS
         }
-
-        binding.botaoVoltar.setOnClickListener {
-            viewModel.onBackClicked() // VM em INGLÊS
-        }
     }
 
     private fun setupObservers() {
@@ -101,7 +97,6 @@ class Step3Fragment : Fragment() {
             // IDs do XML em PORTUGUÊS
             binding.progressBar.isVisible = state.isLoading
             binding.botaoProximo.isEnabled = !state.isLoading
-            binding.botaoVoltar.isEnabled = !state.isLoading
             binding.botaoProximo.text = if (state.isLoading) "Salvando..." else "Concluir"
 
             state.errorMessage?.let {
@@ -111,11 +106,6 @@ class Step3Fragment : Fragment() {
         })
     }
 
-    /**
-     * Preenche a UI com os dados do ViewModel.
-     * (Campos do Modelo em PORTUGUÊS)
-     * *** LÓGICA ATUALIZADA PARA String? E clearCheck() ***
-     */
     private fun populateUi(ficha: GeriatricFicha) {
         // IDs em PORTUGUÊS, Campos do Modelo em PORTUGUÊS
         binding.autoCompleteVisao.setText(ficha.visao, false)
