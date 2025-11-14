@@ -115,5 +115,19 @@ data class GeriatricFicha(
     val forcaJoelhoD: String = "",
     val forcaJoelhoE: String = "",
     val forcaTornozeloD: String = "",
-    val forcaTornozeloE: String = ""
+    val forcaTornozeloE: String = "",
+
+    // --- (Step 7 - Índice de Barthel) ---
+    val barthelAlimentacao: String? = null,
+    val barthelBanho: String? = null,
+    val barthelAtividadesDiarias: String? = null,
+    val barthelVestir: String? = null,
+    val barthelIntestino: String? = null,
+    val barthelUrinario: String? = null,
+    val barthelUsoBanheiro: String? = null,
+    val barthelTransferencia: String? = null,
+    val barthelMobilidade: String? = null,
+    val barthelEscadas: String? = null,
+    val barthelPontuacaoTotal: Int = 0,
+    val barthelNivelDependencia: String = ""
 )
