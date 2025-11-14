@@ -129,5 +129,9 @@ data class GeriatricFicha(
     val barthelMobilidade: String? = null,
     val barthelEscadas: String? = null,
     val barthelPontuacaoTotal: Int = 0,
-    val barthelNivelDependencia: String = ""
+    val barthelNivelDependencia: String = "",
+
+    // --- (Step 8 - TUGT) ---
+    val tugtTempo: String = "",
+    val tugtDiagnostico: String = ""
 )

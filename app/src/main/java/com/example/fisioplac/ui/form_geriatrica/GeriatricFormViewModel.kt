@@ -137,6 +137,14 @@ class GeriatricFormViewModel : ViewModel() {
         _uiState.value = FormUiState(validationErrors = emptyMap())
         _formData.value = dataFromView // Atualiza o formData com os dados do Step 7
 
+        // ATUALIZADO: Avança para o Step 8
+        _currentStep.value = 8
+    }
+
+    fun onStep8NextClicked(dataFromView: GeriatricFicha) {
+        _uiState.value = FormUiState(validationErrors = emptyMap())
+        _formData.value = dataFromView // Atualiza o formData com os dados do Step 8
+
         // Chama a função de concluir
         onConcluirClicked()
     }
