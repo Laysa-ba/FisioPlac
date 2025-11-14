@@ -105,4 +105,13 @@
     <string name="taf_table_row3_age">70 - 87 anos</string>
     <string name="taf_table_row3_men">33,52</string>
     <string name="taf_table_row3_women">26,63</string>
+
+    <string-array name="opcoes_apoio">
+        <item>Sem apoios</item>
+        <item>Com 1 apoio</item>
+        <item>Com 2 apoios</item>
+        <item>Com 3 apoios</item>
+        <item>Com 4 apoios</item>
+        <item>Com mais de 4 apoios</item>
+    </string-array>
 </resources>

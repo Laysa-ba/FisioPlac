@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cinza"
+    tools:context=".ui.form_geriatrica.Step11Fragment">
+
+    <!-- O ScrollView agora está constrangido entre o topo e o rodapé de botões -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/cinza"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@id/containerBotoes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- O seu layout de conteúdo original está aqui, com o padding -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Teste sentar e levantar (30 segundos):"
+                android:textColor="@color/verde"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="O teste inicia com o idoso sentado em uma cadeira, com as costas encostadas e os pés afastados à largura dos ombros e totalmente apoiados no solo. Os membros superiores devem estar cruzados ao nível dos punhos e contra o peito."
+                android:textColor="@color/preto_claro"
+                android:lineSpacingExtra="4dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+            <View
+                android:id="@+id/bg_sentar_box"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/borda_arredondada_branca"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDescription"
+                app:layout_constraintBottom_toBottomOf="@id/tvSentarNota"
+                android:layout_marginBottom="-24dp"/>
+
+            <TextView
+                android:id="@+id/tvSentarLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="16dp"
+                android:text="SENTAR:"
+                android:textColor="@color/laranja"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/bg_sentar_box"
+                app:layout_constraintTop_toTopOf="@id/bg_sentar_box" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier_labels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="tvSentarLabel, tvLevantarLabel" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilSentarApoios"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="APOIOS"
+                android:textColorHint="@color/white"
+                app:boxBackgroundColor="@color/verde"
+                app:endIconDrawable="@drawable/setadoselect"
+                app:endIconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/tvSentarLabel"
+                app:layout_constraintEnd_toEndOf="@id/bg_sentar_box"
+                app:layout_constraintStart_toEndOf="@id/barrier_labels"
+                app:layout_constraintTop_toTopOf="@id/tvSentarLabel">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvSentarApoios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:popupBackground="@drawable/dropdown_item_background"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cbSentarDesequilibrio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Houve desequilíbrio"
+                android:textColor="@color/preto_claro"
+                android:textSize="16sp"
+                app:buttonTint="@color/laranja"
+                app:layout_constraintStart_toStartOf="@id/tvSentarLabel"
+                app:layout_constraintTop_toBottomOf="@id/tilSentarApoios" />
+
+            <TextView
+                android:id="@+id/tvSentarNotaLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nota"
+                android:textColor="@color/preto_claro"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvSentarNota"
+                app:layout_constraintStart_toStartOf="@id/tvSentarLabel"
+                app:layout_constraintTop_toTopOf="@id/tvSentarNota" />
+
+            <TextView
+                android:id="@+id/tvSentarNota"
+                android:layout_width="60dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/caixa_selecao_laranja"
+                android:gravity="center"
+                android:text="-"
+                android:textColor="@color/preto_claro"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/tvSentarNotaLabel"
+                app:layout_constraintTop_toBottomOf="@id/cbSentarDesequilibrio" />
+
+
+            <View
+                android:id="@+id/bg_levantar_box"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/borda_arredondada_branca"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bg_sentar_box"
+                app:layout_constraintBottom_toBottomOf="@id/tvLevantarNota"
+                android:layout_marginBottom="-24dp"/>
+
+            <TextView
+                android:id="@+id/tvLevantarLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="16dp"
+                android:text="LEVANTAR:"
+                android:textColor="@color/laranja"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/bg_levantar_box"
+                app:layout_constraintTop_toTopOf="@id/bg_levantar_box"/>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilLevantarApoios"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="APOIOS"
+                android:textColorHint="@color/white"
+                app:boxBackgroundColor="@color/verde"
+                app:endIconDrawable="@drawable/setadoselect"
+                app:endIconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/tvLevantarLabel"
+                app:layout_constraintEnd_toEndOf="@id/bg_levantar_box"
+                app:layout_constraintStart_toEndOf="@id/barrier_labels"
+                app:layout_constraintTop_toTopOf="@id/tvLevantarLabel">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvLevantarApoios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:popupBackground="@drawable/dropdown_item_background"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cbLevantarDesequilibrio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Houve desequilíbrio"
+                android:textColor="@color/preto_claro"
+                android:textSize="16sp"
+                app:buttonTint="@color/laranja"
+                app:layout_constraintStart_toStartOf="@id/tvLevantarLabel"
+                app:layout_constraintTop_toBottomOf="@id/tilLevantarApoios" />
+
+            <TextView
+                android:id="@+id/tvLevantarNotaLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nota"
+                android:textColor="@color/preto_claro"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvLevantarNota"
+                app:layout_constraintStart_toStartOf="@id/tvLevantarLabel"
+                app:layout_constraintTop_toTopOf="@id/tvLevantarNota" />
+
+            <TextView
+                android:id="@+id/tvLevantarNota"
+                android:layout_width="60dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/caixa_selecao_laranja"
+                android:gravity="center"
+                android:text="-"
+                android:textColor="@color/preto_claro"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/tvLevantarNotaLabel"
+                app:layout_constraintTop_toBottomOf="@id/cbLevantarDesequilibrio"
+                app:layout_constraintBottom_toBottomOf="parent"/> <!-- Adicionado constraint para o fundo -->
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <!-- Este é o container de botões, AGORA FIXO no fundo -->
+    <LinearLayout
+        android:id="@+id/containerBotoes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="16dp"
+        android:background="@color/cinza"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/verde"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            tools:visibility="visible" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botaoProximo"
+            android:layout_width="144dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/verde"
+            android:paddingVertical="12dp"
+            android:text="Avançar"
+            android:textColor="@color/white"
+            app:cornerRadius="8dp"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

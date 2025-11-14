@@ -152,5 +152,16 @@ data class GeriatricFicha(
     val tc6mBorg3: String = "",
     val tc6mBorg6: String = "",
     val tc6mDistanciaPercorrida: String = "",
-    val tc6mDistanciaPredita: String = ""
+    val tc6mDistanciaPredita: String = "",
+
+    // --- (Step 11 - Equilíbrio) ---
+    val equilibrioSentarApoios: String? = null, // "Sem apoios", "Com 1 apoio", etc.
+    val equilibrioSentarDesequilibrio: Boolean = false,
+    val equilibrioSentarNota: Double = 0.0,
+    val equilibrioLevantarApoios: String? = null, // "Sem apoios", "Com 1 apoio", etc.
+    val equilibrioLevantarDesequilibrio: Boolean = false,
+    val equilibrioLevantarNota: Double = 0.0,
+
+    val diagnosticoFisioterapeutico: String = "",
+    val objetivosTratamento: String = ""
 )
