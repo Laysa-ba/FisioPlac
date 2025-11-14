@@ -133,5 +133,24 @@ data class GeriatricFicha(
 
     // --- (Step 8 - TUGT) ---
     val tugtTempo: String = "",
-    val tugtDiagnostico: String = ""
+    val tugtDiagnostico: String = "",
+
+    // --- (Step 10 - Teste de Caminhada 6 Minutos) ---
+    val tc6mPa0: String = "",
+    val tc6mPa3: String = "",
+    val tc6mPa6: String = "",
+    val tc6mFc0: String = "",
+    val tc6mFc3: String = "",
+    val tc6mFc6: String = "",
+    val tc6mSat0: String = "",
+    val tc6mSat3: String = "",
+    val tc6mSat6: String = "",
+    val tc6mFr0: String = "",
+    val tc6mFr3: String = "",
+    val tc6mFr6: String = "",
+    val tc6mBorg0: String = "",
+    val tc6mBorg3: String = "",
+    val tc6mBorg6: String = "",
+    val tc6mDistanciaPercorrida: String = "",
+    val tc6mDistanciaPredita: String = ""
 )

@@ -79,6 +79,7 @@ class Step8Fragment : Fragment() {
         }
 
         viewModel.uiState.observe(viewLifecycleOwner, Observer { state ->
+            binding.progressBar.isVisible = state.isLoading
             // Só pode concluir se o teste foi feito E não está carregando
             binding.botaoProximo.isEnabled = !state.isLoading && lastElapsedTime > 0
             binding.btnIniciarCronometro.isEnabled = !state.isLoading

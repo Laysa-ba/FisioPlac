@@ -145,10 +145,25 @@ class GeriatricFormViewModel : ViewModel() {
         _uiState.value = FormUiState(validationErrors = emptyMap())
         _formData.value = dataFromView // Atualiza o formData com os dados do Step 8
 
+        // ATUALIZADO: Avança para o Step 8
+        _currentStep.value = 9
+    }
+
+    fun onStep9NextClicked() { // <--- Parâmetro removido daqui
+        _uiState.value = FormUiState(validationErrors = emptyMap())
+        // Não atualiza o _formData.value, conforme solicitado
+
+        // ATUALIZADO: Avança para o Step 10
+        _currentStep.value = 10
+    }
+
+    fun onStep10NextClicked(dataFromView: GeriatricFicha) {
+        _uiState.value = FormUiState(validationErrors = emptyMap())
+        _formData.value = dataFromView // Atualiza o formData com os dados do Step 10
+
         // Chama a função de concluir
         onConcluirClicked()
     }
-
 
     /**
      * Chamado pelo Step2Fragment quando um medicamento é adicionado.
