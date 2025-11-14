@@ -519,11 +519,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end|center_vertical"
-            android:orientation="horizontal"
-            android:layout_marginRight="-15dp"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="-20dp">
+            android:layout_marginRight="-15dp"
+            android:gravity="end|center_vertical"
+            android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/botaoProximo"
@@ -534,7 +533,7 @@
                 android:paddingVertical="12dp"
                 android:text="Concluir"
                 android:textColor="@color/white"
-                app:cornerRadius="8dp"/>
+                app:cornerRadius="8dp" />
         </LinearLayout>
 
     </LinearLayout>

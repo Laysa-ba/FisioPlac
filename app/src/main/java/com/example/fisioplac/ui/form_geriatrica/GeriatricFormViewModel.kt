@@ -100,7 +100,6 @@ class GeriatricFormViewModel : ViewModel() {
 
     /**
      * Chamado pelo Step4Fragment.
-     * *** MODIFICADO ***
      */
     fun onStep4NextClicked(dataFromView: GeriatricFicha) {
         _uiState.value = FormUiState(validationErrors = emptyMap())
@@ -111,12 +110,24 @@ class GeriatricFormViewModel : ViewModel() {
     }
 
     /**
-     * *** NOVA FUNÇÃO ***
-     * Chamado pelo Step5Fragment (ao clicar em "Concluir").
+     * Chamado pelo Step5Fragment.
+     * *** MODIFICADO ***
      */
     fun onStep5NextClicked(dataFromView: GeriatricFicha) {
         _uiState.value = FormUiState(validationErrors = emptyMap())
         _formData.value = dataFromView // Atualiza o formData com os dados do Step 5
+
+        // ATUALIZADO: Avança para o Step 6
+        _currentStep.value = 6
+    }
+
+    /**
+     * *** NOVA FUNÇÃO ***
+     * Chamado pelo Step6Fragment (ao clicar em "Concluir").
+     */
+    fun onStep6NextClicked(dataFromView: GeriatricFicha) {
+        _uiState.value = FormUiState(validationErrors = emptyMap())
+        _formData.value = dataFromView // Atualiza o formData com os dados do Step 6
 
         // Chama a função de concluir
         onConcluirClicked()
@@ -149,7 +160,7 @@ class GeriatricFormViewModel : ViewModel() {
     }
 
     /**
-     * Chamado pela Etapa Final (agora, o Step 5) ao clicar em "Concluir".
+     * Chamado pela Etapa Final (agora, o Step 6) ao clicar em "Concluir".
      */
     fun onConcluirClicked() {
         _uiState.value = FormUiState(isLoading = true)

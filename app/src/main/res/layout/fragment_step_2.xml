@@ -16,16 +16,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_concluir">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:paddingBottom="32dp">
-
-            <!-- ... (Todo o seu conteúdo de formulário e RecyclerView) ... -->
+            tools:ignore="HardcodedText">
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
@@ -36,8 +34,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_nome_medicamento_label"
@@ -49,8 +46,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_nome_medicamento"
@@ -58,7 +54,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:background="@color/white"
+                app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
@@ -87,8 +83,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_nome_medicamento"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toBottomOf="@id/til_nome_medicamento" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_como_usar"
@@ -96,7 +91,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:background="@color/white"
+                app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
@@ -125,8 +120,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_como_usar"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toBottomOf="@id/til_como_usar" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_tempo_uso"
@@ -134,7 +128,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:background="@color/white"
+                app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
@@ -166,8 +160,7 @@
                 android:textStyle="bold"
                 app:cornerRadius="8dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_tempo_uso"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toBottomOf="@id/til_tempo_uso" />
 
             <LinearLayout
                 android:id="@+id/ll_header_lista"
@@ -188,8 +181,7 @@
                     android:text="Nome"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -199,8 +191,7 @@
                     android:text="Tempo de uso"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -214,22 +205,22 @@
                 app:layout_constraintTop_toBottomOf="@id/ll_header_lista"
                 tools:listitem="@layout/list_item_medicamento" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_concluir"
+                android:layout_width="144dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp" android:backgroundTint="@color/verde"
+                android:paddingVertical="12dp"
+                android:text="Avançar"
+                android:textColor="@color/white"
+                app:cornerRadius="8dp"
+                app:layout_constraintTop_toBottomOf="@id/rv_medicamentos"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-    <!-- *** BOTÃO ATUALIZADO *** -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_concluir"
-        android:layout_width="144dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/verde"
-        android:paddingVertical="12dp"
-        android:text="Avançar"
-        android:textColor="@color/white"
-        app:cornerRadius="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

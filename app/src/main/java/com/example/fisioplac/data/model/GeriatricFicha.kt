@@ -101,5 +101,19 @@ data class GeriatricFicha(
     val linguagemEscreverFrase: Int = 0,
     val linguagemCopiarDesenho: Int = 0,
     val pontuacaoTotalEstadoMental: Int = 0,
-    val diagnosticoEstadoMental: String = ""
+    val diagnosticoEstadoMental: String = "",
+
+    // --- (Step 6 - Força Muscular) ---
+    val forcaOmbroD: String = "",
+    val forcaOmbroE: String = "",
+    val forcaCotoveloD: String = "",
+    val forcaCotoveloE: String = "",
+    val forcaPunhoD: String = "",
+    val forcaPunhoE: String = "",
+    val forcaQuadrilD: String = "",
+    val forcaQuadrilE: String = "",
+    val forcaJoelhoD: String = "",
+    val forcaJoelhoE: String = "",
+    val forcaTornozeloD: String = "",
+    val forcaTornozeloE: String = ""
 )
