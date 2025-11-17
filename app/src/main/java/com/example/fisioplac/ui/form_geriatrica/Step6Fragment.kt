@@ -17,7 +17,7 @@ import com.example.fisioplac.R
 import com.example.fisioplac.data.model.GeriatricFicha
 import com.example.fisioplac.databinding.FragmentStep6Binding // XML que você vai criar
 
-class Step6Fragment : Fragment() {
+class Step6Fragment : Fragment(), FormStepFragment {
 
     private var _binding: FragmentStep6Binding? = null
     private val binding get() = _binding!!
@@ -113,7 +113,7 @@ class Step6Fragment : Fragment() {
      * Coleta todos os dados da UI.
      * (Campos do Modelo em PORTUGUÊS)
      */
-    private fun collectDataFromUi(): GeriatricFicha {
+    override fun collectDataFromUi(): GeriatricFicha {
         val currentFicha = viewModel.formData.value!!
 
         return currentFicha.copy(

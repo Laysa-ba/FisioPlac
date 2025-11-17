@@ -15,7 +15,7 @@ import com.example.fisioplac.data.model.GeriatricFicha
 import com.example.fisioplac.databinding.FragmentStep7Binding // XML que você vai criar
 import com.example.fisioplac.databinding.ItemBarthelBinding // Layout de item que você precisa ter
 
-class Step7Fragment : Fragment() {
+class Step7Fragment : Fragment(),FormStepFragment {
 
     private var _binding: FragmentStep7Binding? = null
     private val binding get() = _binding!!
@@ -169,7 +169,7 @@ class Step7Fragment : Fragment() {
      * Coleta todos os dados da UI.
      * (Campos do Modelo em PORTUGUÊS)
      */
-    private fun collectDataFromUi(): GeriatricFicha {
+    override fun collectDataFromUi(): GeriatricFicha {
         val currentFicha = viewModel.formData.value!!
         val (totalScore, dependencyLevel) = updateTotalScore() // Pega os valores calculados
 

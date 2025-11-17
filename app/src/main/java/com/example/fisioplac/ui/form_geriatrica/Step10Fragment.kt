@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer
 import com.example.fisioplac.data.model.GeriatricFicha
 import com.example.fisioplac.databinding.FragmentStep10Binding // Você precisará criar fragment_step_10.xml
 
-class Step10Fragment : Fragment() {
+class Step10Fragment : Fragment(), FormStepFragment {
 
     private var _binding: FragmentStep10Binding? = null
     private val binding get() = _binding!!
@@ -52,7 +52,6 @@ class Step10Fragment : Fragment() {
         binding.botaoProximo.setOnClickListener {
             if (validateFields()) {
                 val data = collectDataFromUi()
-                // Como esta é a última tela (por enquanto), ela chama a função de concluir
                 viewModel.onStep10NextClicked(data)
             } else {
                 Toast.makeText(requireContext(), "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
@@ -110,7 +109,7 @@ class Step10Fragment : Fragment() {
      * Coleta todos os dados da UI.
      * (Campos do Modelo em PORTUGUÊS)
      */
-    private fun collectDataFromUi(): GeriatricFicha {
+    override fun collectDataFromUi(): GeriatricFicha {
         val currentFicha = viewModel.formData.value!!
 
         return currentFicha.copy(

@@ -21,9 +21,8 @@ import com.example.fisioplac.databinding.FragmentStep5Binding
 import com.example.fisioplac.ui.dialogs.DesenhoDialogFragment
 import com.example.fisioplac.ui.dialogs.FecheOlhosDialogFragment
 
-class Step5Fragment : Fragment() {
+class Step5Fragment : Fragment(), FormStepFragment {
 
-    // ... código existente (onCreateView, onViewCreated, setupDropdownMenus) ...
     private var _binding: FragmentStep5Binding? = null
     private val binding get() = _binding!!
 
@@ -102,7 +101,6 @@ class Step5Fragment : Fragment() {
     }
 
     private fun setupObservers() {
-// ... código existente (viewModel.formData.observe) ...
         // Observa VM em INGLÊS
         viewModel.formData.observe(viewLifecycleOwner) { ficha ->
             if (ficha != null) {
@@ -111,7 +109,6 @@ class Step5Fragment : Fragment() {
         }
 
         viewModel.uiState.observe(viewLifecycleOwner, Observer { state ->
-// ... código existente (state handling) ...
             binding.progressBar.isVisible = state.isLoading
             binding.botaoProximo.isEnabled = !state.isLoading
             binding.botaoProximo.text = if (state.isLoading) "Salvando..." else "Avançar"
@@ -152,7 +149,7 @@ class Step5Fragment : Fragment() {
      * (Campos do Modelo em PORTUGUÊS)
      */
 // ... código existente (collectDataFromUi) ...
-    private fun collectDataFromUi(): GeriatricFicha {
+    override fun collectDataFromUi(): GeriatricFicha {
         val currentFicha = viewModel.formData.value!!
 
         val (totalScore, diagnostico) = calculateAndShowResult()

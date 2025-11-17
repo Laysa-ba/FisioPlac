@@ -46,19 +46,6 @@
             android:name=".ui.form_geriatrica.GeriatricFormActivity"
             android:exported="false" />
 
-        <!--
-          As Activities abaixo foram substituídas por Fragmentos
-          e não são mais necessárias.
-        -->
-        <!-- <activity android:name=".ui.form_geriatrica.Tela1FichaActivity" ... /> -->
-        <!-- <activity android:name=".Tela2FichaActivity" ... /> -->
-
-
-        <!-- Activity Antiga (ainda no pacote raiz) -->
-        <activity
-            android:name=".Tela8FichaActivity"
-            android:exported="false" />
-
         <!-- Metadados do AdMob (para evitar crash) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

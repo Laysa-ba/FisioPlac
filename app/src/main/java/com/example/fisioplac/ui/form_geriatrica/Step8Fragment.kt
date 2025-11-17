@@ -20,7 +20,7 @@ import com.example.fisioplac.R
 import com.example.fisioplac.data.model.GeriatricFicha
 import com.example.fisioplac.databinding.FragmentStep8Binding
 
-class Step8Fragment : Fragment() {
+class Step8Fragment : Fragment(), FormStepFragment {
 
     private var _binding: FragmentStep8Binding? = null
     private val binding get() = _binding!!
@@ -130,7 +130,7 @@ class Step8Fragment : Fragment() {
      * Coleta todos os dados da UI.
      * (Campos do Modelo em PORTUGUÊS)
      */
-    private fun collectDataFromUi(): GeriatricFicha {
+    override fun collectDataFromUi(): GeriatricFicha {
         val currentFicha = viewModel.formData.value!!
         return currentFicha.copy(
             tugtTempo = this.tugtTempo,

@@ -14,7 +14,7 @@ import com.example.fisioplac.data.model.GeriatricFicha
 import com.example.fisioplac.databinding.FragmentStep12Binding
 import com.example.fisioplac.ui.dialogs.ConfirmSaveDialogFragment // 1. IMPORTAR O NOVO DIALOG
 
-class Step12Fragment : Fragment() {
+class Step12Fragment : Fragment(), FormStepFragment {
 
     private var _binding: FragmentStep12Binding? = null
     private val binding get() = _binding!!
@@ -88,7 +88,7 @@ class Step12Fragment : Fragment() {
         binding.etObjetivos.setText(ficha.objetivosTratamento)
     }
 
-    private fun collectDataFromUi(): GeriatricFicha {
+    override fun collectDataFromUi(): GeriatricFicha {
         val currentFicha = viewModel.formData.value!!
 
         return currentFicha.copy(
