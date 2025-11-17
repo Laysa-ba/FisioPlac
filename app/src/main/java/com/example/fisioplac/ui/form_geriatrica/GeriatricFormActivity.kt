@@ -2,10 +2,10 @@ package com.example.fisioplac.ui.form_geriatrica
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback // <-- IMPORT ADICIONADO
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.fisioplac.TOTAL_FICHA_STEPS // Certifique-se que esta constante é 4
 import com.example.fisioplac.R
 import com.example.fisioplac.databinding.ActivityGeriatricFormBinding
 
@@ -27,13 +27,47 @@ class GeriatricFormActivity : AppCompatActivity() {
             return
         }
 
-        // Inicia o ViewModel (apenas localmente)
         viewModel.startForm(pacienteId, pacienteNome)
 
-        binding.fichaProgressBar.max = 12 // ou TOTAL_FICHA_STEPS se você atualizou
+        // Assumindo 12 steps no total
+        binding.fichaProgressBar.max = 12
+
+        // Lógica para a SETA NO TOPO (isto já estava correto)
         binding.backArrow.setOnClickListener {
+            // 1. Encontra o fragmento que está visível
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.id_fragment_container)
+
+            // 2. Verifica se esse fragmento é um 'FormStepFragment' (se ele sabe salvar dados)
+            if (currentFragment is FormStepFragment) {
+
+                // Exceção: Não salvar dados no Step 9 (que é só de passagem)
+                if (currentFragment !is Step9Fragment) {
+                    // 3. Se for, coleta os dados dele
+                    val data = currentFragment.collectDataFromUi()
+                    // 4. Envia os dados para o ViewModel (para salvar o estado)
+                    viewModel.updateFormData(data)
+                }
+            }
+
+            // 5. Agora, manda o ViewModel navegar para trás
             viewModel.onBackClicked()
         }
+
+        // *** LÓGICA PARA O BOTÃO "VOLTAR" DO SISTEMA (Android) ***
+        onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Executa a mesma lógica da seta no topo
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.id_fragment_container)
+                if (currentFragment is FormStepFragment) {
+                    if (currentFragment !is Step9Fragment) {
+                        val data = currentFragment.collectDataFromUi()
+                        viewModel.updateFormData(data)
+                    }
+                }
+                viewModel.onBackClicked()
+            }
+        })
+        // *** FIM DO NOVO BLOCO ***
 
         observeViewModel()
     }

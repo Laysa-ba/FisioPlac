@@ -14,7 +14,7 @@ import com.example.fisioplac.R
 import com.example.fisioplac.data.model.GeriatricFicha
 import com.example.fisioplac.databinding.FragmentStep3Binding // Usa o binding do XML traduzido
 
-class Step3Fragment : Fragment() {
+class Step3Fragment : Fragment(), FormStepFragment {
 
     // Usa o binding para o layout com IDs em português
     private var _binding: FragmentStep3Binding? = null
@@ -177,7 +177,7 @@ class Step3Fragment : Fragment() {
         binding.llEtilistaTempoParado.isVisible = ficha.eEtilista == "Não"
     }
 
-    private fun collectDataFromUi(): GeriatricFicha {
+    override fun collectDataFromUi(): GeriatricFicha {
         val currentFicha = viewModel.formData.value ?: GeriatricFicha()
 
         return currentFicha.copy(

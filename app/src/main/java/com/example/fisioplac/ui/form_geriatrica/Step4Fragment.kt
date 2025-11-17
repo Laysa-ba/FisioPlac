@@ -13,9 +13,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.example.fisioplac.R
 import com.example.fisioplac.data.model.GeriatricFicha
-import com.example.fisioplac.databinding.FragmentStep4Binding // Você precisará criar e nomear seu XML como fragment_step_4.xml
+import com.example.fisioplac.databinding.FragmentStep4Binding
 
-class Step4Fragment : Fragment() {
+class Step4Fragment : Fragment(), FormStepFragment {
 
     private var _binding: FragmentStep4Binding? = null
     private val binding get() = _binding!!
@@ -155,7 +155,7 @@ class Step4Fragment : Fragment() {
      * Coleta todos os dados da UI.
      * (Campos do Modelo em PORTUGUÊS)
      */
-    private fun collectDataFromUi(): GeriatricFicha {
+    override fun collectDataFromUi(): GeriatricFicha {
         val currentFicha = viewModel.formData.value ?: GeriatricFicha()
 
         return currentFicha.copy(

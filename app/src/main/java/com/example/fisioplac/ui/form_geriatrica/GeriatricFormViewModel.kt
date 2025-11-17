@@ -111,7 +111,6 @@ class GeriatricFormViewModel : ViewModel() {
 
     /**
      * Chamado pelo Step5Fragment.
-     * *** MODIFICADO ***
      */
     fun onStep5NextClicked(dataFromView: GeriatricFicha) {
         _uiState.value = FormUiState(validationErrors = emptyMap())
@@ -122,8 +121,7 @@ class GeriatricFormViewModel : ViewModel() {
     }
 
     /**
-     * *** NOVA FUNÇÃO ***
-     * Chamado pelo Step6Fragment (ao clicar em "Concluir").
+     * Chamado pelo Step6Fragment.
      */
     fun onStep6NextClicked(dataFromView: GeriatricFicha) {
         _uiState.value = FormUiState(validationErrors = emptyMap())
@@ -133,6 +131,9 @@ class GeriatricFormViewModel : ViewModel() {
         _currentStep.value = 7
     }
 
+    /**
+     * Chamado pelo Step7Fragment.
+     */
     fun onStep7NextClicked(dataFromView: GeriatricFicha) {
         _uiState.value = FormUiState(validationErrors = emptyMap())
         _formData.value = dataFromView // Atualiza o formData com os dados do Step 7
@@ -141,15 +142,21 @@ class GeriatricFormViewModel : ViewModel() {
         _currentStep.value = 8
     }
 
+    /**
+     * Chamado pelo Step8Fragment.
+     */
     fun onStep8NextClicked(dataFromView: GeriatricFicha) {
         _uiState.value = FormUiState(validationErrors = emptyMap())
         _formData.value = dataFromView // Atualiza o formData com os dados do Step 8
 
-        // ATUALIZADO: Avança para o Step 8
+        // ATUALIZADO: Avança para o Step 9
         _currentStep.value = 9
     }
 
-    fun onStep9NextClicked() { // <--- Parâmetro removido daqui
+    /**
+     * Chamado pelo Step9Fragment (não salva dados).
+     */
+    fun onStep9NextClicked() {
         _uiState.value = FormUiState(validationErrors = emptyMap())
         // Não atualiza o _formData.value, conforme solicitado
 
@@ -157,22 +164,31 @@ class GeriatricFormViewModel : ViewModel() {
         _currentStep.value = 10
     }
 
+    /**
+     * Chamado pelo Step10Fragment.
+     */
     fun onStep10NextClicked(dataFromView: GeriatricFicha) {
         _uiState.value = FormUiState(validationErrors = emptyMap())
         _formData.value = dataFromView // Atualiza o formData com os dados do Step 10
 
-        // Chama a função de concluir
+        // ATUALIZADO: Avança para o Step 11
         _currentStep.value = 11
     }
 
+    /**
+     * Chamado pelo Step11Fragment.
+     */
     fun onStep11NextClicked(dataFromView: GeriatricFicha) {
         _uiState.value = FormUiState(validationErrors = emptyMap())
         _formData.value = dataFromView // Atualiza o formData com os dados do Step 11
 
-        // Chama a função de concluir
+        // ATUALIZADO: Avança para o Step 12
         _currentStep.value = 12
     }
 
+    /**
+     * Chamado pelo Step12Fragment (Final).
+     */
     fun onStep12NextClicked(dataFromView: GeriatricFicha) {
         _uiState.value = FormUiState(validationErrors = emptyMap())
         _formData.value = dataFromView // Atualiza o formData com os dados do Step 12
@@ -207,7 +223,15 @@ class GeriatricFormViewModel : ViewModel() {
     }
 
     /**
-     * Chamado pela Etapa Final (agora, o Step 6) ao clicar em "Concluir".
+     * *** NOVA FUNÇÃO ***
+     * Chamada pelos fragments ao clicar em 'Voltar' para salvar o estado atual.
+     */
+    fun updateFormData(dataFromView: GeriatricFicha) {
+        _formData.value = dataFromView
+    }
+
+    /**
+     * Chamado pela Etapa Final (agora, o Step 12) ao clicar em "Concluir".
      */
     fun onConcluirClicked() {
         _uiState.value = FormUiState(isLoading = true)
@@ -226,53 +250,53 @@ class GeriatricFormViewModel : ViewModel() {
                 }
             )
         }
-    }
-
-    fun onBackClicked() {
-        val current = _currentStep.value ?: 1
-        if (current == 1) {
-            _closeForm.value = true
-        } else {
-            _uiState.value = FormUiState(validationErrors = emptyMap())
-            _currentStep.value = current - 1
-        }
-    }
-
-    // Lógica de validação
-    private fun validateStep1(data: GeriatricFicha): Map<String, String> {
-        val errors = mutableMapOf<String, String>()
-        val requiredError = "Campo obrigatório"
-
-        // Exemplo de validação buscando campos em português
-        if (data.dataAvaliacao.isBlank()) errors["dataAvaliacao"] = requiredError
-        if (data.estagiario.isBlank()) errors["estagiario"] = requiredError
-        if (data.nome.isBlank()) errors["nome"] = requiredError
-
-        // Validação de campos do Step 1 (em português)
-        val unmaskedTelefone = data.telefone.replace(Regex("[^\\d]"), "")
-        val unmaskedRenda = data.renda.replace(Regex("[^\\d]"), "")
-        if (data.dataNascimento.isBlank()) errors["dataNascimento"] = requiredError
-        if (data.idade.isBlank()) errors["idade"] = requiredError
-        if (unmaskedTelefone.isBlank()) errors["telefone"] = requiredError
-        if (unmaskedRenda.isBlank()) errors["renda"] = requiredError
-        if (data.queixaPrincipal.isBlank()) errors["queixaPrincipal"] = requiredError
-        if (data.estadoCivil.isBlank()) errors["estadoCivil"] = requiredError
-        if (data.escolaridade.isBlank()) errors["escolaridade"] = requiredError
-        if (data.localResidencia.isBlank()) errors["localResidencia"] = requiredError
-        if (data.moraCom.isBlank()) errors["moraCom"] = requiredError
-        if (data.atividadeSocial.isBlank()) errors["atividadeSocial"] = requiredError
-        if (data.doencasAssociadas.isBlank()) errors["doencasAssociadas"] = requiredError
-        if (data.sexo.isNullOrBlank() || data.sexo == "null") errors["sexo"] = requiredError
-        if (data.praticaAtividadeFisica.isNullOrBlank() || data.praticaAtividadeFisica == "null") errors["praticaAtividadeFisica"] = requiredError
-        if (data.frequenciaSair.isNullOrBlank() || data.frequenciaSair == "null") errors["frequenciaSair"] = requiredError
-        if (data.praticaAtividadeFisica == "Sim" && data.diasPorSemana.isBlank()) {
-            errors["diasPorSemana"] = requiredError
         }
 
-        return errors
-    }
+        fun onBackClicked() {
+            val current = _currentStep.value ?: 1
+            if (current == 1) {
+                _closeForm.value = true
+            } else {
+                _uiState.value = FormUiState(validationErrors = emptyMap())
+                _currentStep.value = current - 1
+            }
+        }
 
-    fun onErrorMessageShown() {
-        _uiState.value = _uiState.value?.copy(errorMessage = null)
-    }
-}
+        // Lógica de validação
+        private fun validateStep1(data: GeriatricFicha): Map<String, String> {
+            val errors = mutableMapOf<String, String>()
+            val requiredError = "Campo obrigatório"
+
+            // Exemplo de validação buscando campos em português
+            if (data.dataAvaliacao.isBlank()) errors["dataAvaliacao"] = requiredError
+            if (data.estagiario.isBlank()) errors["estagiario"] = requiredError
+            if (data.nome.isBlank()) errors["nome"] = requiredError
+
+            // Validação de campos do Step 1 (em português)
+            val unmaskedTelefone = data.telefone.replace(Regex("[^\\d]"), "")
+            val unmaskedRenda = data.renda.replace(Regex("[^\\d]"), "")
+            if (data.dataNascimento.isBlank()) errors["dataNascimento"] = requiredError
+            if (data.idade.isBlank()) errors["idade"] = requiredError
+            if (unmaskedTelefone.isBlank()) errors["telefone"] = requiredError
+            if (unmaskedRenda.isBlank()) errors["renda"] = requiredError
+            if (data.queixaPrincipal.isBlank()) errors["queixaPrincipal"] = requiredError
+            if (data.estadoCivil.isBlank()) errors["estadoCivil"] = requiredError
+            if (data.escolaridade.isBlank()) errors["escolaridade"] = requiredError
+            if (data.localResidencia.isBlank()) errors["localResidencia"] = requiredError
+            if (data.moraCom.isBlank()) errors["moraCom"] = requiredError
+            if (data.atividadeSocial.isBlank()) errors["atividadeSocial"] = requiredError
+            if (data.doencasAssociadas.isBlank()) errors["doencasAssociadas"] = requiredError
+            if (data.sexo.isNullOrBlank() || data.sexo == "null") errors["sexo"] = requiredError
+            if (data.praticaAtividadeFisica.isNullOrBlank() || data.praticaAtividadeFisica == "null") errors["praticaAtividadeFisica"] = requiredError
+            if (data.frequenciaSair.isNullOrBlank() || data.frequenciaSair == "null") errors["frequenciaSair"] = requiredError
+            if (data.praticaAtividadeFisica == "Sim" && data.diasPorSemana.isBlank()) {
+                errors["diasPorSemana"] = requiredError
+            }
+
+            return errors
+        }
+
+        fun onErrorMessageShown() {
+            _uiState.value = _uiState.value?.copy(errorMessage = null)
+        }
+        }
