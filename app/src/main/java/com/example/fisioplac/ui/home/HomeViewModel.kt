@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fisioplac.data.repository.AuthRepository
+import com.example.fisioplac.UserSession
 import kotlinx.coroutines.launch
 
 // 1. Data class para representar TODO o estado da tela Home
@@ -46,7 +47,7 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             repository.fetchDoctorProfile(uid).fold(
                 onSuccess = { profile ->
-                    // 5. Sucesso: Atualiza o estado com os dados formatados
+                    UserSession.doctorName = profile.name
                     _uiState.value = _uiState.value?.copy(
                         isLoading = false,
                         doctorName = "Dr(a). ${profile.name}", // Lógica de formatação

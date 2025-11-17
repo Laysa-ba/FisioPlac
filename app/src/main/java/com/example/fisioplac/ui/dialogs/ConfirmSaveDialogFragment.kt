@@ -18,38 +18,41 @@ class ConfirmSaveDialogFragment : DialogFragment() {
     private var _binding: DialogConfirmSaveBinding? = null
     private val binding get() = _binding!!
 
-    // *** FUNÇÃO ADICIONADA DE VOLTA para corrigir o tamanho esticado ***
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.apply {
-            // Define o layout para ter o tamanho do conteúdo (WRAP_CONTENT)
-            setLayout(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT
-            )
-        }
-    }
-
+    // A LÓGICA FOI MOVIDA DE 'onStart' PARA 'onCreateView'
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = DialogConfirmSaveBinding.inflate(inflater, container, false)
 
-        // Remove o fundo padrão, remove o título e aplica o fundo escuro (dim)
-        if (dialog != null && dialog!!.window != null) {
-            dialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog!!.window!!.requestFeature(Window.FEATURE_NO_TITLE)
+        // --- A LÓGICA DA JANELA VEIO PARA CÁ ---
+        dialog?.window?.apply {
+            // 1. Remove a barra de título (DEVE SER CHAMADO ANTES DE TUDO)
+            requestFeature(Window.FEATURE_NO_TITLE)
 
-            // --- O SEU NOVO CÓDIGO (está correto) ---
-            // Ativa o escurecimento (dim) do fundo
-            dialog!!.window!!.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-            // Define a intensidade do escurecimento (0.7f = 70%)
-            dialog!!.window!!.setDimAmount(0.7f)
-            // --- FIM DO NOVO CÓDIGO ---
+            // 2. Remove o fundo padrão para vermos o CardView
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            // 3. Ativa o escurecimento (dim) do fundo
+            addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+
+            // 4. Define a intensidade do escurecimento (0.7f = 70%)
+            setDimAmount(0.7f)
         }
+        // --- FIM DA LÓGICA DA JANELA ---
 
         return binding.root
+    }
+
+    // 'onStart' AGORA SÓ DEFINE O TAMANHO
+    override fun onStart() {
+        super.onStart()
+        // Definir o tamanho no onStart é mais seguro
+        // depois que a view já foi inflada
+        dialog?.window?.setLayout(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

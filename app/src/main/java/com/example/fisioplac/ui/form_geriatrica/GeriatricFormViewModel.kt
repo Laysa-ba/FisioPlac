@@ -18,6 +18,23 @@ data class FormUiState(
     val errorMessage: String? = null
 )
 
+/**
+ * NOVO data class para agrupar os dados de pré-preenchimento.
+ * A Activity que inicia este ViewModel deve buscar esses dados do paciente
+ * e passá-los para a função 'startForm'.
+ */
+data class PacienteInfo(
+    val nome: String?,
+    val dataNascimento: String?,
+    val sexo: String?,
+    val estadoCivil: String?,
+    val telefone: String?,
+    val escolaridade: String?,
+    val renda: String?,
+    val localResidencia: String?,
+    val moraCom: String?
+)
+
 class GeriatricFormViewModel : ViewModel() {
 
     private val repository = GeriatricFormRepository()
@@ -46,16 +63,37 @@ class GeriatricFormViewModel : ViewModel() {
 
     /**
      * Chamado pela Activity Mãe.
-     * *** CORREÇÃO DO AUTOFILL APLICADA AQUI ***
+     * *** ALTERADO PARA PRÉ-PREENCHER DADOS ***
+     *
+     * @param pacienteId O ID do paciente (para salvar a ficha)
+     * @param pacienteInfo Dados do paciente vindos do banco (para preencher o formulário)
+     * @param nomeDoutor Nome do doutor/estagiário logado (para preencher o campo 'estagiario')
      */
-    fun startForm(pacienteId: String, pacienteNome: String?) {
-        // Remove a verificação "if" para forçar uma nova ficha limpa
+    fun startForm(
+        pacienteId: String,
+        pacienteInfo: PacienteInfo,
+        nomeDoutor: String
+    ) {
+        // Cria uma nova ficha limpa, mas pré-preenche com os dados fornecidos
         _formData.value = GeriatricFicha(
+            // === DADOS FIXOS E DE IDENTIFICAÇÃO ===
             pacienteId = pacienteId,
-            nome = pacienteNome ?: "",
-            dataAvaliacao = getCurrentDate()
-            // O resto dos campos (em português) virão do default do GeriatricFicha
+            dataAvaliacao = getCurrentDate(), // Data de hoje, fixa
+            estagiario = nomeDoutor,          // Nome do doutor/estagiário
+
+            // === DADOS PRÉ-PREENCHIDOS DO PACIENTE ===
+            nome = pacienteInfo.nome ?: "",
+            dataNascimento = pacienteInfo.dataNascimento ?: "",
+            sexo = pacienteInfo.sexo, // Permitir nulo se o modelo base permitir
+            estadoCivil = pacienteInfo.estadoCivil ?: "",
+            telefone = pacienteInfo.telefone ?: "",
+            escolaridade = pacienteInfo.escolaridade ?: "",
+            renda = pacienteInfo.renda ?: "", // A máscara no Fragment vai formatar
+            localResidencia = pacienteInfo.localResidencia ?: "",
+            moraCom = pacienteInfo.moraCom ?: ""
+            // O resto dos campos (ex: queixaPrincipal) usarão o valor default ""
         )
+
         // Reinicia a etapa para 1
         _currentStep.value = 1
     }
@@ -250,53 +288,53 @@ class GeriatricFormViewModel : ViewModel() {
                 }
             )
         }
+    }
+
+    fun onBackClicked() {
+        val current = _currentStep.value ?: 1
+        if (current == 1) {
+            _closeForm.value = true
+        } else {
+            _uiState.value = FormUiState(validationErrors = emptyMap())
+            _currentStep.value = current - 1
+        }
+    }
+
+    // Lógica de validação
+    private fun validateStep1(data: GeriatricFicha): Map<String, String> {
+        val errors = mutableMapOf<String, String>()
+        val requiredError = "Campo obrigatório"
+
+        // Exemplo de validação buscando campos em português
+        if (data.dataAvaliacao.isBlank()) errors["dataAvaliacao"] = requiredError
+        if (data.estagiario.isBlank()) errors["estagiario"] = requiredError
+        if (data.nome.isBlank()) errors["nome"] = requiredError
+
+        // Validação de campos do Step 1 (em português)
+        val unmaskedTelefone = data.telefone.replace(Regex("[^\\d]"), "")
+        val unmaskedRenda = data.renda.replace(Regex("[^\\d]"), "")
+        if (data.dataNascimento.isBlank()) errors["dataNascimento"] = requiredError
+        if (data.idade.isBlank()) errors["idade"] = requiredError
+        if (unmaskedTelefone.isBlank()) errors["telefone"] = requiredError
+        if (unmaskedRenda.isBlank()) errors["renda"] = requiredError
+        if (data.queixaPrincipal.isBlank()) errors["queixaPrincipal"] = requiredError
+        if (data.estadoCivil.isBlank()) errors["estadoCivil"] = requiredError
+        if (data.escolaridade.isBlank()) errors["escolaridade"] = requiredError
+        if (data.localResidencia.isBlank()) errors["localResidencia"] = requiredError
+        if (data.moraCom.isBlank()) errors["moraCom"] = requiredError
+        if (data.atividadeSocial.isBlank()) errors["atividadeSocial"] = requiredError
+        if (data.doencasAssociadas.isBlank()) errors["doencasAssociadas"] = requiredError
+        if (data.sexo.isNullOrBlank() || data.sexo == "null") errors["sexo"] = requiredError
+        if (data.praticaAtividadeFisica.isNullOrBlank() || data.praticaAtividadeFisica == "null") errors["praticaAtividadeFisica"] = requiredError
+        if (data.frequenciaSair.isNullOrBlank() || data.frequenciaSair == "null") errors["frequenciaSair"] = requiredError
+        if (data.praticaAtividadeFisica == "Sim" && data.diasPorSemana.isBlank()) {
+            errors["diasPorSemana"] = requiredError
         }
 
-        fun onBackClicked() {
-            val current = _currentStep.value ?: 1
-            if (current == 1) {
-                _closeForm.value = true
-            } else {
-                _uiState.value = FormUiState(validationErrors = emptyMap())
-                _currentStep.value = current - 1
-            }
-        }
+        return errors
+    }
 
-        // Lógica de validação
-        private fun validateStep1(data: GeriatricFicha): Map<String, String> {
-            val errors = mutableMapOf<String, String>()
-            val requiredError = "Campo obrigatório"
-
-            // Exemplo de validação buscando campos em português
-            if (data.dataAvaliacao.isBlank()) errors["dataAvaliacao"] = requiredError
-            if (data.estagiario.isBlank()) errors["estagiario"] = requiredError
-            if (data.nome.isBlank()) errors["nome"] = requiredError
-
-            // Validação de campos do Step 1 (em português)
-            val unmaskedTelefone = data.telefone.replace(Regex("[^\\d]"), "")
-            val unmaskedRenda = data.renda.replace(Regex("[^\\d]"), "")
-            if (data.dataNascimento.isBlank()) errors["dataNascimento"] = requiredError
-            if (data.idade.isBlank()) errors["idade"] = requiredError
-            if (unmaskedTelefone.isBlank()) errors["telefone"] = requiredError
-            if (unmaskedRenda.isBlank()) errors["renda"] = requiredError
-            if (data.queixaPrincipal.isBlank()) errors["queixaPrincipal"] = requiredError
-            if (data.estadoCivil.isBlank()) errors["estadoCivil"] = requiredError
-            if (data.escolaridade.isBlank()) errors["escolaridade"] = requiredError
-            if (data.localResidencia.isBlank()) errors["localResidencia"] = requiredError
-            if (data.moraCom.isBlank()) errors["moraCom"] = requiredError
-            if (data.atividadeSocial.isBlank()) errors["atividadeSocial"] = requiredError
-            if (data.doencasAssociadas.isBlank()) errors["doencasAssociadas"] = requiredError
-            if (data.sexo.isNullOrBlank() || data.sexo == "null") errors["sexo"] = requiredError
-            if (data.praticaAtividadeFisica.isNullOrBlank() || data.praticaAtividadeFisica == "null") errors["praticaAtividadeFisica"] = requiredError
-            if (data.frequenciaSair.isNullOrBlank() || data.frequenciaSair == "null") errors["frequenciaSair"] = requiredError
-            if (data.praticaAtividadeFisica == "Sim" && data.diasPorSemana.isBlank()) {
-                errors["diasPorSemana"] = requiredError
-            }
-
-            return errors
-        }
-
-        fun onErrorMessageShown() {
-            _uiState.value = _uiState.value?.copy(errorMessage = null)
-        }
-        }
+    fun onErrorMessageShown() {
+        _uiState.value = _uiState.value?.copy(errorMessage = null)
+    }
+}

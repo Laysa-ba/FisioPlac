@@ -2,12 +2,13 @@ package com.example.fisioplac.ui.form_geriatrica
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback // <-- IMPORT ADICIONADO
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.fisioplac.R
 import com.example.fisioplac.databinding.ActivityGeriatricFormBinding
+import com.example.fisioplac.UserSession
 
 class GeriatricFormActivity : AppCompatActivity() {
 
@@ -19,15 +20,53 @@ class GeriatricFormActivity : AppCompatActivity() {
         binding = ActivityGeriatricFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // --- INÍCIO DO BLOCO DE CÓDIGO CORRIGIDO ---
+
+        // 1. Busca o ID do paciente (obrigatório)
         val pacienteId = intent.getStringExtra("PACIENTE_ID")
-        val pacienteNome = intent.getStringExtra("PACIENTE_NOME")
         if (pacienteId == null) {
             Toast.makeText(this, "Erro: Paciente ID nulo.", Toast.LENGTH_LONG).show()
             finish()
             return
         }
 
-        viewModel.startForm(pacienteId, pacienteNome)
+        // 2. Busca o nome do Doutor/Estagiário logado
+        val nomeDoutor = UserSession.doctorName ?: "Doutor(a)"
+
+        // 3. Busca TODOS os dados do paciente vindos do intent
+        // (Estes dados foram enviados pela GeriatricaActivity)
+        val pacienteNome = intent.getStringExtra("PACIENTE_NOME")
+        val pacienteNascimento = intent.getStringExtra("PACIENTE_NASCIMENTO")
+        val pacienteSexo = intent.getStringExtra("PACIENTE_SEXO")
+        val pacienteEstadoCivil = intent.getStringExtra("PACIENTE_ESTADO_CIVIL")
+        val pacienteTelefone = intent.getStringExtra("PACIENTE_TELEFONE")
+        val pacienteEscolaridade = intent.getStringExtra("PACIENTE_ESCOLARIDADE")
+        val pacienteRenda = intent.getStringExtra("PACIENTE_RENDA")
+        val pacienteLocalResidencia = intent.getStringExtra("PACIENTE_LOCAL_RESIDENCIA")
+        val pacienteMoraCom = intent.getStringExtra("PACIENTE_MORA_COM")
+
+        // 4. Cria o objeto PacienteInfo
+        val infoDoPaciente = PacienteInfo(
+            nome = pacienteNome,
+            dataNascimento = pacienteNascimento,
+            sexo = pacienteSexo,
+            estadoCivil = pacienteEstadoCivil,
+            telefone = pacienteTelefone,
+            escolaridade = pacienteEscolaridade,
+            renda = pacienteRenda,
+            localResidencia = pacienteLocalResidencia,
+            moraCom = pacienteMoraCom
+        )
+
+        // 5. CHAMA A FUNÇÃO CORRETA do ViewModel
+        // A linha antiga "viewModel.startForm(pacienteId, pacienteNome)" foi substituída
+        viewModel.startForm(
+            pacienteId = pacienteId,
+            pacienteInfo = infoDoPaciente,
+            nomeDoutor = nomeDoutor
+        )
+
+        // --- FIM DO BLOCO DE CÓDIGO CORRIGIDO ---
 
         // Assumindo 12 steps no total
         binding.fichaProgressBar.max = 12

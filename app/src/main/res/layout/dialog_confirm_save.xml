@@ -50,19 +50,18 @@
             android:orientation="horizontal"
             android:layout_marginTop="24dp">
 
-            <!-- Botão Salvar (Verde) -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnConfirmarSalvar"
-                android:layout_width="8dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Sim"
                 android:backgroundTint="@color/verde"
-                android:text="Sim, salvar"
                 android:textColor="@color/white"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"
+                android:maxLines="1"/>
 
-            <!-- Botão Cancelar (Laranja) -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCancelar"
                 android:layout_width="0dp"
@@ -72,7 +71,8 @@
                 android:text="Cancelar"
                 android:backgroundTint="@color/laranja"
                 android:textColor="@color/white"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"
+                android:maxLines="1"/>
 
         </LinearLayout>
 

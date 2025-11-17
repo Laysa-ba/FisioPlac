@@ -5,20 +5,26 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
-import java.text.SimpleDateFormat
+import java.text.SimpleDateFormat // Precisamos disso para converter a String
 import java.util.Calendar
 import java.util.Locale
 
 /**
  * Data class para guardar as informações do paciente.
- * Usar data classes é melhor do que passar o DocumentSnapshot.
+ * Contém os dados puros, prontos para serem usados em qualquer tela.
  */
 data class PatientProfile(
     val id: String,
     val name: String,
     val sex: String,
-    val birthDate: String,
-    val age: String
+    val birthDate: String, // Formato "dd/MM/yyyy"
+    val age: String,       // Apenas o número
+    val estadoCivil: String?,
+    val telefone: String?,
+    val escolaridade: String?,
+    val renda: String?,
+    val localResidencia: String?,
+    val moraCom: String?
 )
 
 class PatientRepository {
@@ -106,38 +112,74 @@ class PatientRepository {
 
     /**
      * Converte o DocumentSnapshot em uma Data Class limpa.
-     * Esta lógica foi movida da Activity para o Repository.
+     * *** FUNÇÃO CORRIGIDA PARA O CRASH ***
      */
     private fun formatPatientProfile(document: DocumentSnapshot): PatientProfile {
+        // --- DADOS BÁSICOS (PUROS) ---
         val patientName = document.getString("nome") ?: "Nome não encontrado"
         val sex = document.getString("sexo") ?: "Não informado"
-        val birthTimestamp = document.getTimestamp("dataNascimento")
 
-        var formattedBirthDate = "Nascimento: Não informado"
-        var formattedAge = "Idade: Não informada"
+        // --- DADOS COMPLEMENTARES (PUROS) ---
+        val estadoCivil = document.getString("estadoCivil")
+        val telefone = document.getString("telefone")
+        val escolaridade = document.getString("escolaridade")
+        val renda = document.getString("renda")
+        val localResidencia = document.getString("localResidencia")
+        val moraCom = document.getString("moraCom")
 
-        if (birthTimestamp != null) {
-            val birthDate = birthTimestamp.toDate()
-            val sdf = SimpleDateFormat("dd 'de' MMMM 'de' yyyy", Locale.forLanguageTag("pt-BR"))
-            formattedBirthDate = "Nascimento: ${sdf.format(birthDate)}"
+        // --- CORREÇÃO APLICADA AQUI ---
+        // 1. Lemos o campo como STRING, não como Timestamp
+        val birthDateString = document.getString("dataNascimento")
 
-            val birthCal = Calendar.getInstance()
-            birthCal.time = birthDate
-            val todayCal = Calendar.getInstance()
+        var formattedBirthDate = "" // Vazio por padrão
+        var formattedAge = ""       // Vazio por padrão
 
-            var age = todayCal.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR)
-            if (todayCal.get(Calendar.DAY_OF_YEAR) < birthCal.get(Calendar.DAY_OF_YEAR)) {
-                age--
+        // 2. Verificamos se a string não é nula ou vazia
+        if (!birthDateString.isNullOrBlank()) {
+
+            // A data de nascimento para o formulário é a própria string
+            formattedBirthDate = birthDateString
+
+            try {
+                // 3. Tentamos "converter" a string (ex: "20/05/1990") para um objeto Data
+                val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.forLanguageTag("pt-BR"))
+                val birthDate = sdf.parse(birthDateString) // Converte String para Date
+
+                if (birthDate != null) {
+                    // 4. Se der certo, calculamos a idade
+                    val birthCal = Calendar.getInstance()
+                    birthCal.time = birthDate
+                    val todayCal = Calendar.getInstance()
+
+                    var age = todayCal.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR)
+                    if (todayCal.get(Calendar.DAY_OF_YEAR) < birthCal.get(Calendar.DAY_OF_YEAR)) {
+                        age--
+                    }
+                    formattedAge = age.toString() // Idade como dado puro
+                }
+            } catch (e: Exception) {
+                // Se o formato da data no banco estiver errado (ex: "20-05-1990"), vai dar erro aqui
+                Log.e("PatientRepository", "Falha ao converter dataNascimento: $birthDateString", e)
+                formattedBirthDate = "Data Inválida"
+                formattedAge = "??"
             }
-            formattedAge = "Idade: $age anos"
         }
+        // --- FIM DA CORREÇÃO ---
 
+        // --- RETORNO CORRIGIDO ---
         return PatientProfile(
             id = document.id,
             name = patientName,
-            sex = "Sexo: $sex",
-            birthDate = formattedBirthDate,
-            age = formattedAge
+            sex = sex,
+            birthDate = formattedBirthDate, // <-- Passando a string
+            age = formattedAge,         // <-- Passando a idade calculada
+
+            estadoCivil = estadoCivil,
+            telefone = telefone,
+            escolaridade = escolaridade,
+            renda = renda,
+            localResidencia = localResidencia,
+            moraCom = moraCom
         )
     }
 }

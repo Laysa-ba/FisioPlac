@@ -52,6 +52,49 @@ class Step1Fragment : Fragment() {
         setupValidationListeners()
         observeUiState()
         observeFormData()
+
+        // --- CAMPOS TRAVADOS ---
+        // Trava o campo de data (preenchido pelo ViewModel)
+        binding.etData.isEnabled = false
+
+        // Trava o campo de idade (calculado automaticamente)
+        binding.etIdade.isEnabled = false
+
+        // Trava o nome do Estagiário/Doutor (preenchido pelo ViewModel)
+        binding.etEstagiario.isEnabled = false
+        // --- FIM DA ALTERAÇÃO ---
+
+        // Configura o listener para calcular a idade automaticamente
+        setupAgeCalculation()
+    }
+
+    private fun setupAgeCalculation() {
+        binding.etNascimento.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                // O cálculo agora ocorre mesmo durante o restore
+                val birthDateString = s.toString()
+                val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                sdf.isLenient = false
+
+                try {
+                    val birthDate = sdf.parse(birthDateString)
+                    if (birthDate != null) {
+                        val birthCal = Calendar.getInstance()
+                        birthCal.time = birthDate
+
+                        val age = calculateAge(birthCal)
+                        binding.etIdade.setText(age.toString())
+                    } else {
+                        binding.etIdade.setText("")
+                    }
+                } catch (e: Exception) {
+                    binding.etIdade.setText("")
+                }
+            }
+        })
     }
 
     private fun observeUiState() {
@@ -83,7 +126,9 @@ class Step1Fragment : Fragment() {
             setTextIfChanged(binding.etEstagiario, ficha.estagiario)
             setTextIfChanged(binding.etNome, ficha.nome)
             setTextIfChanged(binding.etNascimento, ficha.dataNascimento)
-            setTextIfChanged(binding.etIdade, ficha.idade)
+
+            // A idade não é mais setada aqui, é calculada pelo TextWatcher
+
             setTextIfChanged(binding.etTelefone, ficha.telefone)
             setTextIfChanged(binding.etRenda, ficha.renda)
             setTextIfChanged(binding.etQueixaPrincipal, ficha.queixaPrincipal)
@@ -145,10 +190,6 @@ class Step1Fragment : Fragment() {
         binding.etNascimento.setOnClickListener {
             showDatePickerDialogNascimento(binding.etNascimento, parentFragmentManager)
         }
-
-        binding.etData.setOnClickListener {
-            showDatePickerDialogAvaliacao(binding.etData, parentFragmentManager)
-        }
     }
 
     private fun getSelectedRadioButtonText(checkedId: Int): String? {
@@ -168,7 +209,7 @@ class Step1Fragment : Fragment() {
             estagiario = binding.etEstagiario.text.toString(),
             nome = binding.etNome.text.toString(),
             dataNascimento = binding.etNascimento.text.toString(),
-            idade = binding.etIdade.text.toString(),
+            idade = binding.etIdade.text.toString(), // <-- Pega a idade calculada
             sexo = sexo,
             telefone = binding.etTelefone.text.toString(),
             estadoCivil = binding.actvEstadoCivil.text.toString(),
@@ -211,7 +252,6 @@ class Step1Fragment : Fragment() {
 
     private fun setupRadioGroupLogic() {
         binding.diasSemanaContainer.visibility = View.GONE
-        // O listener principal do RadioGroup foi movido para 'setupValidationListeners'
     }
 
     private fun setupValidationListeners() {
@@ -296,7 +336,7 @@ class Step1Fragment : Fragment() {
                     val cleanString = s.toString().replace("[^\\d]".toRegex(), "")
                     if (cleanString.isNotEmpty()) {
                         val parsed = cleanString.toDouble() / 100
-                        val formatted = NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(parsed)
+                        val formatted = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR")).format(parsed)
                         current = formatted
                         editText.setText(formatted)
                         editText.setSelection(formatted.length)
@@ -348,7 +388,7 @@ class Step1Fragment : Fragment() {
     }
 
     private fun showDatePickerDialogNascimento(editText: EditText, fragmentManager: FragmentManager) {
-        val utc = TimeZone.getTimeZone("UTC") // <-- Fuso horário UTC
+        val utc = TimeZone.getTimeZone("UTC")
         val calendar = Calendar.getInstance(utc)
         val today = MaterialDatePicker.todayInUtcMilliseconds()
         calendar.timeInMillis = today
@@ -372,38 +412,35 @@ class Step1Fragment : Fragment() {
             val selectedCalendar = Calendar.getInstance(utc)
             selectedCalendar.timeInMillis = selection
 
-            // --- CORREÇÃO DO FUSO HORÁRIO ---
             val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            sdf.timeZone = utc // <-- Força o SDF a usar UTC
+            sdf.timeZone = utc
             val formattedDate = sdf.format(selectedCalendar.time)
-            // --- FIM DA CORREÇÃO ---
 
+            // A data é setada aqui...
             editText.setText(formattedDate)
-            val age = calculateAge(selectedCalendar)
-            binding.etIdade.setText(age.toString())
+            // ...e o TextWatcher (setupAgeCalculation) vai
+            // automaticamente calcular e setar a idade.
         }
         datePicker.show(fragmentManager, "BIRTH_DATE_PICKER")
     }
 
     private fun showDatePickerDialogAvaliacao(editText: EditText, fragmentManager: FragmentManager) {
-        val utc = TimeZone.getTimeZone("UTC") // <-- Fuso horário UTC
+        val utc = TimeZone.getTimeZone("UTC")
         val calendar = Calendar.getInstance()
         val today = calendar.timeInMillis
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Selecione a Data da Avaliação")
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) // <-- Usa UTC
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
 
         datePicker.addOnPositiveButtonClickListener { selection ->
             val selectedCalendar = Calendar.getInstance(utc)
             selectedCalendar.timeInMillis = selection
 
-            // --- CORREÇÃO DO FUSO HORÁRIO ---
             val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            sdf.timeZone = utc // <-- Força o SDF a usar UTC
+            sdf.timeZone = utc
             val formattedDate = sdf.format(selectedCalendar.time)
-            // --- FIM DA CORREÇÃO ---
 
             editText.setText(formattedDate)
         }

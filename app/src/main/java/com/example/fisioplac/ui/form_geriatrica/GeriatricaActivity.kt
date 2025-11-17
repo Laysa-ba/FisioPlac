@@ -50,14 +50,37 @@ class GeriatricaActivity : AppCompatActivity() {
         }
 
         binding.btnIniciarFicha.setOnClickListener {
-            val patientId = viewModel.uiState.value?.foundPatientId
-            val patientName = binding.textViewPatientName.text.toString()
+            // 1. Pega o estado atual
+            val currentState = viewModel.uiState.value ?: return@setOnClickListener
 
-            // *** MUDANÇA PRINCIPAL AQUI ***
-            // Inicia a nova Activity "Mãe" do formulário
+            // 2. Pega o perfil completo do paciente e o ID
+            val patientProfile = currentState.patientProfile
+            val patientId = currentState.foundPatientId
+
+            // 3. Validação (Garante que o paciente foi encontrado e carregado)
+            if (patientId == null || patientProfile == null) {
+                Toast.makeText(this, "Erro: Paciente não carregado.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // 4. Inicia a nova Activity "Mãe" do formulário
             val intent = Intent(this, GeriatricFormActivity::class.java).apply {
+
+                // Chave principal obrigatória
                 putExtra("PACIENTE_ID", patientId)
-                putExtra("PACIENTE_NOME", patientName)
+
+                // Dados para o PacienteInfo (as chaves DEVEM BATER com a GeriatricFormActivity)
+                putExtra("PACIENTE_NOME", patientProfile.name)
+                putExtra("PACIENTE_NASCIMENTO", patientProfile.birthDate)
+                putExtra("PACIENTE_SEXO", patientProfile.sex)
+
+                // (Veja a nota abaixo sobre o ViewModel)
+                putExtra("PACIENTE_ESTADO_CIVIL", patientProfile.estadoCivil)
+                putExtra("PACIENTE_TELEFONE", patientProfile.telefone)
+                putExtra("PACIENTE_ESCOLARIDADE", patientProfile.escolaridade)
+                putExtra("PACIENTE_RENDA", patientProfile.renda)
+                putExtra("PACIENTE_LOCAL_RESIDENCIA", patientProfile.localResidencia)
+                putExtra("PACIENTE_MORA_COM", patientProfile.moraCom)
             }
             startActivity(intent)
         }
@@ -73,9 +96,9 @@ class GeriatricaActivity : AppCompatActivity() {
 
             state.patientProfile?.let { profile ->
                 binding.textViewPatientName.text = profile.name
-                binding.textViewBirthdate.text = profile.birthDate
-                binding.textViewAge.text = profile.age
-                binding.textViewSex.text = profile.sex
+                binding.textViewBirthdate.text = "Nascimento: ${profile.birthDate}"
+                binding.textViewAge.text = "Idade: ${profile.age} anos"
+                binding.textViewSex.text = "Sexo: ${profile.sex}"
             }
 
             val cardColor = if (state.isPatientSelected) R.color.verde_claro else R.color.white
