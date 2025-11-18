@@ -12,15 +12,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.example.fisioplac.R
 import com.example.fisioplac.data.model.GeriatricFicha
-import com.example.fisioplac.databinding.FragmentStep3Binding // Usa o binding do XML traduzido
+import com.example.fisioplac.databinding.FragmentStep3Binding
 
 class Step3Fragment : Fragment(), FormStepFragment {
 
-    // Usa o binding para o layout com IDs em português
     private var _binding: FragmentStep3Binding? = null
     private val binding get() = _binding!!
 
-    // 1. Usa o ViewModel compartilhado (com nomes de função em INGLÊS)
+    // ViewModel em INGLÊS
     private val viewModel: GeriatricFormViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -31,7 +30,6 @@ class Step3Fragment : Fragment(), FormStepFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Funções do Fragment em INGLÊS
         setupDropdowns()
         setupListeners()
         setupObservers()
@@ -40,18 +38,84 @@ class Step3Fragment : Fragment(), FormStepFragment {
     private fun setupDropdowns() {
         val visionHearingOptions = listOf("Normal", "Déficit c/ uso de corretor", "Déficit s/ uso de corretor", "Perda parcial", "Perda total")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, visionHearingOptions)
-        // IDs do XML em PORTUGUÊS
         binding.autoCompleteVisao.setAdapter(adapter)
         binding.autoCompleteAudicao.setAdapter(adapter)
 
         val fallCountOptions = listOf("1", "2", "3", "4", "5 ou mais")
         val fallAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, fallCountOptions)
-        // IDs do XML em PORTUGUÊS
         binding.autoCompleteContagemQuedas.setAdapter(fallAdapter)
     }
 
+    /**
+     * Valida se os campos obrigatórios foram preenchidos.
+     * Se o RadioGroup estiver marcado como "Sim" ou "Distúrbio",
+     * valida se o campo de texto correspondente foi preenchido.
+     */
+    private fun validateFields(): Boolean {
+        var isValid = true
+
+        // Visão e Audição
+        if (binding.autoCompleteVisao.text.isNullOrEmpty()) {
+            binding.autoCompleteVisao.error = "Obrigatório"
+            isValid = false
+        }
+        if (binding.autoCompleteAudicao.text.isNullOrEmpty()) {
+            binding.autoCompleteAudicao.error = "Obrigatório"
+            isValid = false
+        }
+
+        // RadioGroups e campos condicionais
+        // (A lógica aqui é: se o container estiver visível, o campo dentro dele é obrigatório)
+
+        if (binding.llUrinariaData.isVisible && binding.etUrinariaData.text.isNullOrEmpty()) {
+            binding.etUrinariaData.error = "Obrigatório"
+            isValid = false
+        }
+        if (binding.llFecalData.isVisible && binding.etFecalData.text.isNullOrEmpty()) {
+            binding.etFecalData.error = "Obrigatório"
+            isValid = false
+        }
+        if (binding.llSonoDetalhes.isVisible && binding.etSonoDetalhes.text.isNullOrEmpty()) {
+            binding.etSonoDetalhes.error = "Obrigatório"
+            isValid = false
+        }
+        if (binding.llOrteseDetalhes.isVisible && binding.etOrteseDetalhes.text.isNullOrEmpty()) {
+            binding.etOrteseDetalhes.error = "Obrigatório"
+            isValid = false
+        }
+        if (binding.llProteseDetalhes.isVisible && binding.etProteseDetalhes.text.isNullOrEmpty()) {
+            binding.etProteseDetalhes.error = "Obrigatório"
+            isValid = false
+        }
+        if (binding.llQuedaDetalhes.isVisible && binding.autoCompleteContagemQuedas.text.isNullOrEmpty()) {
+            binding.autoCompleteContagemQuedas.error = "Obrigatório"
+            isValid = false
+        }
+        // Para fumante/etilista, o campo aparece se for "Não" (tempo parado)
+        if (binding.llFumanteTempoParado.isVisible && binding.etFumanteTempoParado.text.isNullOrEmpty()) {
+            binding.etFumanteTempoParado.error = "Obrigatório"
+            isValid = false
+        }
+        if (binding.llEtilistaTempoParado.isVisible && binding.etEtilistaTempoParado.text.isNullOrEmpty()) {
+            binding.etEtilistaTempoParado.error = "Obrigatório"
+            isValid = false
+        }
+
+        // Validação básica dos RadioGroups (deve ter algo selecionado)
+        if (binding.rgUrinaria.checkedRadioButtonId == -1) isValid = false
+        if (binding.rgFecal.checkedRadioButtonId == -1) isValid = false
+        if (binding.rgSono.checkedRadioButtonId == -1) isValid = false
+        if (binding.rgOrtese.checkedRadioButtonId == -1) isValid = false
+        if (binding.rgProtese.checkedRadioButtonId == -1) isValid = false
+        if (binding.rgQueda.checkedRadioButtonId == -1) isValid = false
+        if (binding.rgFumante.checkedRadioButtonId == -1) isValid = false
+        if (binding.rgEtilista.checkedRadioButtonId == -1) isValid = false
+
+
+        return isValid
+    }
+
     private fun setupListeners() {
-        // --- Lógica de visibilidade (usando IDs em PORTUGUÊS) ---
         binding.rgUrinaria.setOnCheckedChangeListener { _, checkedId ->
             binding.llUrinariaData.isVisible = checkedId == R.id.rbUrinariaSim
         }
@@ -77,41 +141,44 @@ class Step3Fragment : Fragment(), FormStepFragment {
             binding.llEtilistaTempoParado.isVisible = checkedId == R.id.rbEtilistaNao
         }
 
-        // --- Botões de Navegação (IDs em PORTUGUÊS, Funções do VM em INGLÊS) ---
         binding.botaoProximo.setOnClickListener {
-            val data = collectDataFromUi()
-            viewModel.onStep3NextClicked(data) // VM em INGLÊS
+            // Validação APENAS no clique
+            if (validateFields()) {
+                val data = collectDataFromUi()
+                viewModel.onStep3NextClicked(data)
+            } else {
+                Toast.makeText(requireContext(), "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     private fun setupObservers() {
-        // Observa o LiveData do VM em INGLÊS
         viewModel.formData.observe(viewLifecycleOwner) { ficha ->
             if (ficha != null) {
                 populateUi(ficha)
             }
         }
 
-        // Observa o LiveData do VM em INGLÊS
         viewModel.uiState.observe(viewLifecycleOwner, Observer { state ->
-            // IDs do XML em PORTUGUÊS
             binding.progressBar.isVisible = state.isLoading
+
+            // Botão sempre habilitado, exceto carregando
             binding.botaoProximo.isEnabled = !state.isLoading
             binding.botaoProximo.text = if (state.isLoading) "Salvando..." else "Avançar"
 
             state.errorMessage?.let {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-                viewModel.onErrorMessageShown() // VM em INGLÊS
+                viewModel.onErrorMessageShown()
             }
         })
     }
 
+    // --- O RESTANTE DO CÓDIGO PERMANECE IGUAL ---
+
     private fun populateUi(ficha: GeriatricFicha) {
-        // IDs em PORTUGUÊS, Campos do Modelo em PORTUGUÊS
         binding.autoCompleteVisao.setText(ficha.visao, false)
         binding.autoCompleteAudicao.setText(ficha.audicao, false)
 
-        // --- CORREÇÃO: Usa 'when' para lidar com 'null' e 'clearCheck' ---
         when (ficha.incontinenciaUrinaria) {
             "Sim" -> binding.rgUrinaria.check(R.id.rbUrinariaSim)
             "Não" -> binding.rgUrinaria.check(R.id.rbUrinariaNao)
@@ -181,11 +248,9 @@ class Step3Fragment : Fragment(), FormStepFragment {
         val currentFicha = viewModel.formData.value ?: GeriatricFicha()
 
         return currentFicha.copy(
-            // Campos do Modelo em PORTUGUÊS, IDs do XML em PORTUGUÊS
             visao = binding.autoCompleteVisao.text.toString(),
             audicao = binding.autoCompleteAudicao.text.toString(),
 
-            // --- CORREÇÃO: Salva 'null' se nada for selecionado ---
             incontinenciaUrinaria = when (binding.rgUrinaria.checkedRadioButtonId) {
                 R.id.rbUrinariaSim -> "Sim"
                 R.id.rbUrinariaNao -> "Não"

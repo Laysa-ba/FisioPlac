@@ -23,7 +23,6 @@ class Step4Fragment : Fragment(), FormStepFragment {
     // ViewModel em INGLÊS
     private val viewModel: GeriatricFormViewModel by activityViewModels()
 
-    // Listas de CheckBox (lógica em INGLÊS)
     private lateinit var timeCheckBoxes: List<CheckBox>
     private lateinit var locationCheckBoxes: List<CheckBox>
     private lateinit var wordCheckBoxes: List<CheckBox>
@@ -36,17 +35,37 @@ class Step4Fragment : Fragment(), FormStepFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Funções do Fragment em INGLÊS
-        // Os IDs do binding aqui (ex: binding.cbTempoMes) devem ser em português,
-        // de acordo com o XML que você vai criar.
         initializeCheckBoxLists()
         setupDropdowns()
         setupListeners()
         setupObservers()
     }
 
+    /**
+     * Valida se os campos obrigatórios foram preenchidos.
+     * Neste passo, a parte obrigatória é a seção de Cálculo e Atenção.
+     */
+    private fun validateFields(): Boolean {
+        var isValid = true
+
+        // 1. Valida RadioGroup (Sim/Não)
+        if (binding.rgCalculo.checkedRadioButtonId == -1) {
+            // Exibe erro visual ou Toast específico se preferir
+            isValid = false
+        }
+
+        // 2. Valida Dropdown de Pontuação
+        if (binding.autoCompletePontuacaoCalculo.text.isNullOrEmpty()) {
+            binding.autoCompletePontuacaoCalculo.error = "Obrigatório"
+            isValid = false
+        } else {
+            binding.autoCompletePontuacaoCalculo.error = null
+        }
+
+        return isValid
+    }
+
     private fun initializeCheckBoxLists() {
-        // (Os IDs do binding aqui devem ser em português, ex: binding.cbTempoMes)
         timeCheckBoxes = listOf(binding.cbTempoMes, binding.cbTempoDia, binding.cbTempoAno, binding.cbTempoDiaSemana, binding.cbTempoAproximado)
         locationCheckBoxes = listOf(binding.cbLocalEstado, binding.cbLocalCidade, binding.cbLocalBairro, binding.cbLocalLocal, binding.cbLocalPais)
         wordCheckBoxes = listOf(binding.cbPalavraCarro, binding.cbPalavraVaso, binding.cbPalavraTijolo)
@@ -55,29 +74,33 @@ class Step4Fragment : Fragment(), FormStepFragment {
     private fun setupDropdowns() {
         val mathScoreOptions = (0..5).map { it.toString() }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, mathScoreOptions)
-        // (ID do binding em português)
         binding.autoCompletePontuacaoCalculo.setAdapter(adapter)
     }
 
     private fun setupListeners() {
-        // Listeners simples para calcular pontuações na UI
         timeCheckBoxes.forEach { it.setOnCheckedChangeListener { _, _ -> calculateTimeScore() } }
         locationCheckBoxes.forEach { it.setOnCheckedChangeListener { _, _ -> calculateLocationScore() } }
         wordCheckBoxes.forEach { it.setOnCheckedChangeListener { _, _ -> calculateWordsScore() } }
 
-        // (IDs do binding em português)
         binding.rgCalculo.setOnCheckedChangeListener { _, checkedId ->
             binding.tvCalculoInstrucaoSim.isVisible = checkedId == R.id.rbCalculoSim
             binding.tvCalculoInstrucaoNao.isVisible = checkedId == R.id.rbCalculoNao
         }
 
+        // Removemos a limpeza de erro ao selecionar o dropdown
+        // binding.autoCompletePontuacaoCalculo.setOnItemClickListener { _, _, _, _ -> binding.autoCompletePontuacaoCalculo.error = null }
+
         binding.botaoProximo.setOnClickListener {
-            val data = collectDataFromUi()
-            viewModel.onStep4NextClicked(data)
+            // Validação ocorre APENAS no clique
+            if (validateFields()) {
+                val data = collectDataFromUi()
+                viewModel.onStep4NextClicked(data)
+            } else {
+                Toast.makeText(requireContext(), "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    // Funções de cálculo separadas (lógica em INGLÊS)
     private fun calculateTimeScore() {
         val timeScore = timeCheckBoxes.count { it.isChecked }
         binding.tvPontuacaoTempo.text = timeScore.toString()
@@ -94,7 +117,6 @@ class Step4Fragment : Fragment(), FormStepFragment {
     }
 
     private fun setupObservers() {
-        // Observa VM em INGLÊS
         viewModel.formData.observe(viewLifecycleOwner) { ficha ->
             if (ficha != null) {
                 populateUi(ficha)
@@ -102,24 +124,20 @@ class Step4Fragment : Fragment(), FormStepFragment {
         }
 
         viewModel.uiState.observe(viewLifecycleOwner, Observer { state ->
-            // IDs do XML em PORTUGUÊS
             binding.progressBar.isVisible = state.isLoading
+
+            // Botão sempre habilitado, exceto durante loading
             binding.botaoProximo.isEnabled = !state.isLoading
             binding.botaoProximo.text = if (state.isLoading) "Salvando..." else "Avançar"
 
             state.errorMessage?.let {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-                viewModel.onErrorMessageShown() // VM em INGLÊS
+                viewModel.onErrorMessageShown()
             }
         })
     }
 
-    /**
-     * Preenche a UI com os dados do ViewModel.
-     * (Campos do Modelo em PORTUGUÊS)
-     */
     private fun populateUi(ficha: GeriatricFicha) {
-        // IDs em PORTUGUÊS, Campos do Modelo em PORTUGUÊS
         binding.cbTempoMes.isChecked = ficha.orientacaoTempoMes
         binding.cbTempoDia.isChecked = ficha.orientacaoTempoDia
         binding.cbTempoAno.isChecked = ficha.orientacaoTempoAno
@@ -146,20 +164,14 @@ class Step4Fragment : Fragment(), FormStepFragment {
         }
         binding.autoCompletePontuacaoCalculo.setText(ficha.pontuacaoCalculo.toString(), false)
 
-        // Garante que o estado de visibilidade das instruções de cálculo seja restaurado
         binding.tvCalculoInstrucaoSim.isVisible = ficha.calculoRealiza == "Sim"
         binding.tvCalculoInstrucaoNao.isVisible = ficha.calculoRealiza == "Não"
     }
 
-    /**
-     * Coleta todos os dados da UI.
-     * (Campos do Modelo em PORTUGUÊS)
-     */
     override fun collectDataFromUi(): GeriatricFicha {
         val currentFicha = viewModel.formData.value ?: GeriatricFicha()
 
         return currentFicha.copy(
-            // Campos do Modelo em PORTUGUÊS, IDs do XML em PORTUGUÊS
             orientacaoTempoMes = binding.cbTempoMes.isChecked,
             orientacaoTempoDia = binding.cbTempoDia.isChecked,
             orientacaoTempoAno = binding.cbTempoAno.isChecked,

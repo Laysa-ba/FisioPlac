@@ -10,20 +10,17 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import com.example.fisioplac.R
+import com.example.fisioplac.databinding.FragmentStep7Binding
+import com.example.fisioplac.databinding.ItemBarthelBinding
 import com.example.fisioplac.data.model.GeriatricFicha
-import com.example.fisioplac.databinding.FragmentStep7Binding // XML que você vai criar
-import com.example.fisioplac.databinding.ItemBarthelBinding // Layout de item que você precisa ter
 
-class Step7Fragment : Fragment(),FormStepFragment {
+class Step7Fragment : Fragment(), FormStepFragment {
 
     private var _binding: FragmentStep7Binding? = null
     private val binding get() = _binding!!
 
-    // ViewModel em INGLÊS
     private val viewModel: GeriatricFormViewModel by activityViewModels()
 
-    // Mapeia o HINT (categoria) para a pontuação atual
     private val currentScores = mutableMapOf<String, Int>()
     private val categories = listOf(
         "Alimentação", "Banho", "Atividades diárias", "Vestir-se", "Intestino",
@@ -31,7 +28,9 @@ class Step7Fragment : Fragment(),FormStepFragment {
         "Mobilidade em superfícies planas", "Escadas"
     )
 
-    // Opções do Barthel (lógica em INGLÊS)
+    // Lista para facilitar a validação em loop
+    private lateinit var barthelItems: List<ItemBarthelBinding>
+
     private data class BarthelOption(val description: String, val score: Int)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -42,11 +41,74 @@ class Step7Fragment : Fragment(),FormStepFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Inicializa a lista de itens para validação
+        barthelItems = listOf(
+            binding.itemAlimentacao, binding.itemBanho, binding.itemAtividadesDiarias,
+            binding.itemVestir, binding.itemIntestino, binding.itemUrinario,
+            binding.itemUsoBanheiro, binding.itemTransferencia, binding.itemMobilidade,
+            binding.itemEscadas
+        )
+
         initializeScores()
         setupBarthelItems()
         setupListeners()
         setupObservers()
+        // Removemos a chamada de validateFields() aqui para não bloquear o botão no início
     }
+
+    /**
+     * Valida se todos os campos foram preenchidos.
+     * Retorna FALSE se algum estiver vazio e marca o campo com erro.
+     */
+    private fun validateFields(): Boolean {
+        var isValid = true
+        for (item in barthelItems) {
+            if (item.autoCompleteTextView.text.isNullOrEmpty()) {
+                item.autoCompleteTextView.error = "Obrigatório" // Sinalização visual
+                isValid = false
+            } else {
+                item.autoCompleteTextView.error = null // Limpa o erro
+            }
+        }
+        return isValid
+    }
+
+    private fun setupListeners() {
+        binding.botaoProximo.setOnClickListener {
+            // A validação ocorre AGORA, no clique
+            if (validateFields()) {
+                val data = collectDataFromUi()
+                viewModel.onStep7NextClicked(data)
+            } else {
+                // Mensagem se houver erro
+                Toast.makeText(requireContext(), "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.formData.observe(viewLifecycleOwner) { ficha ->
+            if (ficha != null) {
+                populateUi(ficha)
+            }
+        }
+
+        viewModel.uiState.observe(viewLifecycleOwner, Observer { state ->
+            binding.progressBar.isVisible = state.isLoading
+
+            // O botão só é desabilitado se estiver salvando (loading)
+            // Ele NÃO é mais desabilitado por falta de preenchimento
+            binding.botaoProximo.isEnabled = !state.isLoading
+            binding.botaoProximo.text = if (state.isLoading) "Salvando..." else "Avançar"
+
+            state.errorMessage?.let {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                viewModel.onErrorMessageShown()
+            }
+        })
+    }
+
+    // --- O RESTANTE DO CÓDIGO PERMANECE IGUAL ---
 
     private fun initializeScores() {
         categories.forEach { category ->
@@ -55,7 +117,6 @@ class Step7Fragment : Fragment(),FormStepFragment {
     }
 
     private fun setupBarthelItems() {
-        // IDs do XML em PORTUGUÊS (ex: binding.itemAlimentacao)
         setupBarthelItem(binding.itemAlimentacao, "Alimentação", listOf(BarthelOption("Incapaz", 0), BarthelOption("Precisa de ajuda", 5), BarthelOption("Independente", 10)))
         setupBarthelItem(binding.itemBanho, "Banho", listOf(BarthelOption("Dependente", 0), BarthelOption("Independente", 5)))
         setupBarthelItem(binding.itemAtividadesDiarias, "Atividades diárias", listOf(BarthelOption("Precisa de ajuda", 0), BarthelOption("Independente", 5)))
@@ -68,59 +129,25 @@ class Step7Fragment : Fragment(),FormStepFragment {
         setupBarthelItem(binding.itemEscadas, "Escadas", listOf(BarthelOption("Incapaz", 0), BarthelOption("Precisa de ajuda", 5), BarthelOption("Independente", 10)))
     }
 
-    /**
-     * Configura um item Barthel individual (o <include> no XML)
-     */
     private fun setupBarthelItem(itemBinding: ItemBarthelBinding, hint: String, options: List<BarthelOption>) {
-        // IDs do XML em PORTUGUÊS (assumindo item_barthel.xml)
         itemBinding.menu.hint = hint
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, options.map { it.description })
         itemBinding.autoCompleteTextView.setAdapter(adapter)
 
         itemBinding.autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
             val selectedOption = options[position]
-            // ID 'etScore' dentro do 'item_barthel.xml'
             itemBinding.etScore.setText(selectedOption.score.toString())
             currentScores[hint] = selectedOption.score
             updateTotalScore()
+
+            // Removemos a chamada de validateFields() aqui, pois o erro
+            // deve sumir apenas quando o usuário seleciona algo válido,
+            // o que já é feito pela linha: itemBinding.autoCompleteTextView.error = null
+            itemBinding.autoCompleteTextView.error = null
         }
     }
 
-    private fun setupListeners() {
-        // Navegação (VM em INGLÊS, IDs em PORTUGUÊS)
-        binding.botaoProximo.setOnClickListener {
-            val data = collectDataFromUi()
-            viewModel.onStep7NextClicked(data) // VM em INGLÊS
-        }
-    }
-
-    private fun setupObservers() {
-        // VM em INGLÊS
-        viewModel.formData.observe(viewLifecycleOwner) { ficha ->
-            if (ficha != null) {
-                populateUi(ficha)
-            }
-        }
-
-        viewModel.uiState.observe(viewLifecycleOwner, Observer { state ->
-            // IDs em PORTUGUÊS
-            binding.progressBar.isVisible = state.isLoading
-            binding.botaoProximo.isEnabled = !state.isLoading
-            binding.botaoProximo.text = if (state.isLoading) "Salvando..." else "Avançar"
-
-            state.errorMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-                viewModel.onErrorMessageShown() // VM em INGLÊS
-            }
-        })
-    }
-
-    /**
-     * Preenche a UI com os dados do ViewModel.
-     * (Campos do Modelo em PORTUGUÊS)
-     */
     private fun populateUi(ficha: GeriatricFicha) {
-        // IDs em PORTUGUÊS, Campos do Modelo em PORTUGUÊS
         setBarthelItem(binding.itemAlimentacao, ficha.barthelAlimentacao)
         setBarthelItem(binding.itemBanho, ficha.barthelBanho)
         setBarthelItem(binding.itemAtividadesDiarias, ficha.barthelAtividadesDiarias)
@@ -132,12 +159,9 @@ class Step7Fragment : Fragment(),FormStepFragment {
         setBarthelItem(binding.itemMobilidade, ficha.barthelMobilidade)
         setBarthelItem(binding.itemEscadas, ficha.barthelEscadas)
 
-        updateTotalScore() // Calcula a pontuação e o diagnóstico com base nos dados preenchidos
+        updateTotalScore()
     }
 
-    /**
-     * Preenche um item Barthel específico (lógica auxiliar para populateUi)
-     */
     private fun setBarthelItem(itemBinding: ItemBarthelBinding, selectedDescription: String?) {
         if (selectedDescription.isNullOrEmpty()) {
             itemBinding.autoCompleteTextView.setText("", false)
@@ -148,11 +172,10 @@ class Step7Fragment : Fragment(),FormStepFragment {
 
         val adapter = itemBinding.autoCompleteTextView.adapter
         var score = 0
-        if (adapter != null) { // Adiciona verificação de nulidade
+        if (adapter != null) {
             for (i in 0 until adapter.count) {
                 val description = adapter.getItem(i).toString()
                 if (description == selectedDescription) {
-                    // Encontra a opção correspondente (recria a lógica do BarthelOption)
                     val hint = itemBinding.menu.hint.toString()
                     score = getScoreForDescription(hint, description)
                     break
@@ -165,16 +188,11 @@ class Step7Fragment : Fragment(),FormStepFragment {
         currentScores[itemBinding.menu.hint.toString()] = score
     }
 
-    /**
-     * Coleta todos os dados da UI.
-     * (Campos do Modelo em PORTUGUÊS)
-     */
     override fun collectDataFromUi(): GeriatricFicha {
         val currentFicha = viewModel.formData.value!!
-        val (totalScore, dependencyLevel) = updateTotalScore() // Pega os valores calculados
+        val (totalScore, dependencyLevel) = updateTotalScore()
 
         return currentFicha.copy(
-            // Campos do Modelo em PORTUGUÊS, IDs do XML em PORTUGUÊS
             barthelAlimentacao = binding.itemAlimentacao.autoCompleteTextView.text.toString(),
             barthelBanho = binding.itemBanho.autoCompleteTextView.text.toString(),
             barthelAtividadesDiarias = binding.itemAtividadesDiarias.autoCompleteTextView.text.toString(),
@@ -190,10 +208,6 @@ class Step7Fragment : Fragment(),FormStepFragment {
         )
     }
 
-    /**
-     * Calcula a pontuação total e o nível de dependência, atualiza a UI.
-     * Retorna o Par (Pontuação, Nível) para ser usado no collectDataFromUi.
-     */
     private fun updateTotalScore(): Pair<Int, String> {
         val totalScore = currentScores.values.sum()
         val dependencyLevel = when (totalScore) {
@@ -202,15 +216,12 @@ class Step7Fragment : Fragment(),FormStepFragment {
             in 51..75 -> "Dependência moderada"
             in 76..99 -> "Dependência leve"
             100 -> "Totalmente independente"
-            else -> "Nenhuma seleção" // Caso de 0 ou < 0
+            else -> "Nenhuma seleção"
         }
         binding.tvResultado.text = "RESULTADO: $dependencyLevel, $totalScore pontos."
         return Pair(totalScore, dependencyLevel)
     }
 
-    /**
-     * Função auxiliar para encontrar a pontuação de uma descrição (necessária para o populateUi)
-     */
     private fun getScoreForDescription(hint: String, description: String): Int {
         val options = when (hint) {
             "Alimentação" -> listOf(BarthelOption("Incapaz", 0), BarthelOption("Precisa de ajuda", 5), BarthelOption("Independente", 10))
