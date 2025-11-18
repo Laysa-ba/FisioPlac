@@ -34,7 +34,7 @@
         <!-- Ícone (ex: seu logo) -->
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
         <!-- Cor de fundo da splash -->
-        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenBackground">@color/green_dark</item>
         <!-- Tema para o qual a app vai transicionar -->
         <item name="postSplashScreenTheme">@style/Theme.FisioPlac</item>
     </style>
