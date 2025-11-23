@@ -19,6 +19,7 @@
         <!-- Activity de Splash (Launcher) -->
         <activity
             android:name=".ui.splash.SplashActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
@@ -30,20 +31,26 @@
         <!-- Activities Refatoradas (com pacotes UI) -->
         <activity
             android:name=".ui.auth.LoginActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.home.HomeActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.newfile.NewFileActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.form_geriatrica.GeriatricaActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <!-- *** NOVA ACTIVITY "MÃE" DO FORMULÁRIO *** -->
         <activity
             android:name=".ui.form_geriatrica.GeriatricFormActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Metadados do AdMob (para evitar crash) -->

@@ -1,6 +1,7 @@
 package com.example.fisioplac.ui.form_geriatrica
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -50,23 +51,6 @@ class Step5Fragment : Fragment(), FormStepFragment {
         setupTouchToOpenDropdown()
     }
 
-    /**
-     * Valida se todos os campos de dropdown foram preenchidos.
-     * Retorna FALSE se algum estiver vazio e marca o campo com erro.
-     */
-    private fun validateFields(): Boolean {
-        var isValid = true
-        for (dropdown in allDropdowns) {
-            if (dropdown.text.isNullOrEmpty()) {
-                dropdown.error = "Obrigatório" // Sinalização visual
-                isValid = false
-            } else {
-                dropdown.error = null // Limpa o erro
-            }
-        }
-        return isValid
-    }
-
     private fun setupListeners() {
         // Navegação
         binding.botaoProximo.setOnClickListener {
@@ -78,9 +62,6 @@ class Step5Fragment : Fragment(), FormStepFragment {
                 Toast.makeText(requireContext(), "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
             }
         }
-
-        // Botão Voltar (se existir no layout, adicione aqui)
-        // binding.botaoVoltar.setOnClickListener { viewModel.onBackClicked() }
 
         // Dialogs
         binding.tvCliqueAquiLerOrdem.setOnClickListener {
@@ -95,7 +76,6 @@ class Step5Fragment : Fragment(), FormStepFragment {
         allDropdowns.forEach { dropdown ->
             dropdown.setOnItemClickListener { _, _, _, _ ->
                 calculateAndShowResult()
-                // Limpa o erro se o usuário selecionar algo
                 dropdown.error = null
             }
         }
@@ -111,7 +91,6 @@ class Step5Fragment : Fragment(), FormStepFragment {
         viewModel.uiState.observe(viewLifecycleOwner, Observer { state ->
             binding.progressBar.isVisible = state.isLoading
 
-            // Botão sempre habilitado, exceto durante loading
             binding.botaoProximo.isEnabled = !state.isLoading
             binding.botaoProximo.text = if (state.isLoading) "Salvando..." else "Avançar"
 
@@ -122,16 +101,26 @@ class Step5Fragment : Fragment(), FormStepFragment {
         })
     }
 
-    // --- O RESTANTE DO CÓDIGO PERMANECE IGUAL ---
-
+    /**
+     * CORREÇÃO AQUI: Lógica para exibir vazio se o valor for -1 ou 0 inicial.
+     */
     private fun populateUi(ficha: GeriatricFicha) {
-        binding.actvMemorizacaoNota.setText(ficha.pontuacaoMemorizacao.toString(), false)
-        binding.actvLinguagemObjetosNota.setText(ficha.linguagemNomearObjetos.toString(), false)
-        binding.actvLinguagemFraseNota.setText(ficha.linguagemRepetirFrase.toString(), false)
-        binding.actvLinguagemEstagiosNota.setText(ficha.linguagemComandoEstagios.toString(), false)
-        binding.actvLinguagemLerOrdemNota.setText(ficha.linguagemLerOrdem.toString(), false)
-        binding.actvLinguagemEscreverFraseNota.setText(ficha.linguagemEscreverFrase.toString(), false)
-        binding.actvLinguagemCopiarDesenhoNota.setText(ficha.linguagemCopiarDesenho.toString(), false)
+        // Se não tem diagnóstico, é ficha nova: 0 deve ser mostrado como vazio
+        val isFichaNova = ficha.diagnosticoEstadoMental.isEmpty()
+
+        fun formatScore(value: Int): String {
+            // Se é -1 (vazio salvo) ou 0 numa ficha nova, mostra vazio
+            if (value == -1 || (isFichaNova && value == 0)) return ""
+            return value.toString()
+        }
+
+        binding.actvMemorizacaoNota.setText(formatScore(ficha.pontuacaoMemorizacao), false)
+        binding.actvLinguagemObjetosNota.setText(formatScore(ficha.linguagemNomearObjetos), false)
+        binding.actvLinguagemFraseNota.setText(formatScore(ficha.linguagemRepetirFrase), false)
+        binding.actvLinguagemEstagiosNota.setText(formatScore(ficha.linguagemComandoEstagios), false)
+        binding.actvLinguagemLerOrdemNota.setText(formatScore(ficha.linguagemLerOrdem), false)
+        binding.actvLinguagemEscreverFraseNota.setText(formatScore(ficha.linguagemEscreverFrase), false)
+        binding.actvLinguagemCopiarDesenhoNota.setText(formatScore(ficha.linguagemCopiarDesenho), false)
 
         if (ficha.diagnosticoEstadoMental.isNotBlank()) {
             binding.tvResultadoFinal.text = "${ficha.diagnosticoEstadoMental}, ${ficha.pontuacaoTotalEstadoMental} pontos."
@@ -140,21 +129,42 @@ class Step5Fragment : Fragment(), FormStepFragment {
         }
     }
 
+    /**
+     * CORREÇÃO AQUI: Salva -1 se o campo estiver vazio.
+     */
     override fun collectDataFromUi(): GeriatricFicha {
         val currentFicha = viewModel.formData.value!!
         val (totalScore, diagnostico) = calculateAndShowResult()
 
+        fun parse(view: AutoCompleteTextView): Int {
+            // Se estiver vazio, retorna -1
+            return view.text.toString().toIntOrNull() ?: -1
+        }
+
         return currentFicha.copy(
-            pontuacaoMemorizacao = binding.actvMemorizacaoNota.text.toString().toIntOrNull() ?: 0,
-            linguagemNomearObjetos = binding.actvLinguagemObjetosNota.text.toString().toIntOrNull() ?: 0,
-            linguagemRepetirFrase = binding.actvLinguagemFraseNota.text.toString().toIntOrNull() ?: 0,
-            linguagemComandoEstagios = binding.actvLinguagemEstagiosNota.text.toString().toIntOrNull() ?: 0,
-            linguagemLerOrdem = binding.actvLinguagemLerOrdemNota.text.toString().toIntOrNull() ?: 0,
-            linguagemEscreverFrase = binding.actvLinguagemEscreverFraseNota.text.toString().toIntOrNull() ?: 0,
-            linguagemCopiarDesenho = binding.actvLinguagemCopiarDesenhoNota.text.toString().toIntOrNull() ?: 0,
+            pontuacaoMemorizacao = parse(binding.actvMemorizacaoNota),
+            linguagemNomearObjetos = parse(binding.actvLinguagemObjetosNota),
+            linguagemRepetirFrase = parse(binding.actvLinguagemFraseNota),
+            linguagemComandoEstagios = parse(binding.actvLinguagemEstagiosNota),
+            linguagemLerOrdem = parse(binding.actvLinguagemLerOrdemNota),
+            linguagemEscreverFrase = parse(binding.actvLinguagemEscreverFraseNota),
+            linguagemCopiarDesenho = parse(binding.actvLinguagemCopiarDesenhoNota),
             pontuacaoTotalEstadoMental = totalScore,
             diagnosticoEstadoMental = diagnostico
         )
+    }
+
+    private fun validateFields(): Boolean {
+        var isValid = true
+        for (dropdown in allDropdowns) {
+            if (dropdown.text.isNullOrEmpty()) {
+                dropdown.error = "Obrigatório"
+                isValid = false
+            } else {
+                dropdown.error = null
+            }
+        }
+        return isValid
     }
 
     private fun setupDropdownMenus() {
@@ -174,6 +184,7 @@ class Step5Fragment : Fragment(), FormStepFragment {
     }
 
     private fun calculateAndShowResult(): Pair<Int, String> {
+        // Para cálculo, vazio conta como 0
         val notaMemorizacao = binding.actvMemorizacaoNota.text.toString().toIntOrNull() ?: 0
         val notaObjetos = binding.actvLinguagemObjetosNota.text.toString().toIntOrNull() ?: 0
         val notaFrase = binding.actvLinguagemFraseNota.text.toString().toIntOrNull() ?: 0

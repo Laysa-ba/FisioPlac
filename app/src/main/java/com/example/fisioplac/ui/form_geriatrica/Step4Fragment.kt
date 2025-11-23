@@ -43,14 +43,13 @@ class Step4Fragment : Fragment(), FormStepFragment {
 
     /**
      * Valida se os campos obrigatórios foram preenchidos.
-     * Neste passo, a parte obrigatória é a seção de Cálculo e Atenção.
      */
     private fun validateFields(): Boolean {
         var isValid = true
 
         // 1. Valida RadioGroup (Sim/Não)
         if (binding.rgCalculo.checkedRadioButtonId == -1) {
-            // Exibe erro visual ou Toast específico se preferir
+            // Você pode adicionar uma mensagem de erro visual aqui se quiser
             isValid = false
         }
 
@@ -87,11 +86,12 @@ class Step4Fragment : Fragment(), FormStepFragment {
             binding.tvCalculoInstrucaoNao.isVisible = checkedId == R.id.rbCalculoNao
         }
 
-        // Removemos a limpeza de erro ao selecionar o dropdown
-        // binding.autoCompletePontuacaoCalculo.setOnItemClickListener { _, _, _, _ -> binding.autoCompletePontuacaoCalculo.error = null }
+        // Limpa o erro quando o usuário seleciona algo no dropdown
+        binding.autoCompletePontuacaoCalculo.setOnItemClickListener { _, _, _, _ ->
+            binding.autoCompletePontuacaoCalculo.error = null
+        }
 
         binding.botaoProximo.setOnClickListener {
-            // Validação ocorre APENAS no clique
             if (validateFields()) {
                 val data = collectDataFromUi()
                 viewModel.onStep4NextClicked(data)
@@ -125,8 +125,6 @@ class Step4Fragment : Fragment(), FormStepFragment {
 
         viewModel.uiState.observe(viewLifecycleOwner, Observer { state ->
             binding.progressBar.isVisible = state.isLoading
-
-            // Botão sempre habilitado, exceto durante loading
             binding.botaoProximo.isEnabled = !state.isLoading
             binding.botaoProximo.text = if (state.isLoading) "Salvando..." else "Avançar"
 
@@ -162,7 +160,12 @@ class Step4Fragment : Fragment(), FormStepFragment {
             "Não" -> binding.rgCalculo.check(R.id.rbCalculoNao)
             else -> binding.rgCalculo.clearCheck()
         }
-        binding.autoCompletePontuacaoCalculo.setText(ficha.pontuacaoCalculo.toString(), false)
+
+        // *** CORREÇÃO AQUI ***
+        // Se o campo 'calculoRealiza' for nulo (ficha nova), deixamos o texto vazio.
+        // Se não for nulo (já foi mexido), mostramos o valor, mesmo que seja 0.
+        val textoCalculo = if (ficha.calculoRealiza == null && ficha.pontuacaoCalculo == 0) "" else ficha.pontuacaoCalculo.toString()
+        binding.autoCompletePontuacaoCalculo.setText(textoCalculo, false)
 
         binding.tvCalculoInstrucaoSim.isVisible = ficha.calculoRealiza == "Sim"
         binding.tvCalculoInstrucaoNao.isVisible = ficha.calculoRealiza == "Não"
