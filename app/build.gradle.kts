@@ -41,20 +41,47 @@ android {
 }
 
 dependencies {
-    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
+    // Firebase BoM (Bill of Materials) gerencia as versões das bibliotecas do Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
+
+    // Dependências Core do AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.mediation.test.suite)
+
+    // Dependências de UI
     implementation("com.google.android.material:material:1.13.0")
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-database")
-    implementation("com.google.firebase:firebase-firestore")
-    implementation("com.google.android.gms:play-services-base:18.4.0")
     implementation("com.codesgood:justifiedtextview:1.1.0")
+
+    // Dependências do Firebase (CORRIGIDO)
+    // Usando as versões -ktx, que são otimizadas para Kotlin e Coroutines.
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx") // Apenas esta versão é necessária
+    // implementation("com.google.firebase:firebase-firestore") // A LINHA DUPLICADA E CONFLITANTE FOI REMOVIDA
+
+    // Outras dependências do Google Play Services
+    implementation("com.google.android.gms:play-services-base:18.4.0")
+
+    // Dependências de Teste
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Dependências do ViewModel e LiveData (Lifecycle)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.3")
+
+    // Facilitadores KTX para Activity e Fragment
+    implementation("androidx.activity:activity-ktx:1.9.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.1")
+
+    // Coroutines para integração com APIs do Google Play Services (incluindo Firebase)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+
+    implementation("androidx.core:core-splashscreen:1.0.1")
+// (ou a versão mais recente)
 }

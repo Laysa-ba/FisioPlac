@@ -13,66 +13,51 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FisioPlac"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:enableOnBackInvokedCallback="true">
 
+        <!-- Activity de Splash (Launcher) -->
         <activity
-            android:name=".SplashActivity"
+            android:name=".ui.splash.SplashActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Activities Refatoradas (com pacotes UI) -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.auth.LoginActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".ui.home.HomeActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".NewFileActivity"
+            android:name=".ui.newfile.NewFileActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".GeriatricaActivity"
+            android:name=".ui.form_geriatrica.GeriatricaActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
+
+        <!-- *** NOVA ACTIVITY "MÃE" DO FORMULÁRIO *** -->
         <activity
-            android:name=".Tela1FichaActivity"
+            android:name=".ui.form_geriatrica.GeriatricFormActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
-        <activity
-            android:name=".Tela2FichaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Tela5FichaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Tela6FichaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Tela7FichaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Tela8FichaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Tela9FichaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Tela10FichaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Tela11FichaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".FecheOlhosActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DesenhoActivity"
-            android:exported="false" />
+
+        <!-- Metadados do AdMob (para evitar crash) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
+
     </application>
 
 </manifest>

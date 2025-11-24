@@ -1,22 +1,22 @@
 <resources>
     <string name="app_name">FisioPlac</string>
 
-    <string-array name="opcoes_estado_civil">
-        <item>Solteiro(a)</item>
-        <item>Casado(a)</item>
-        <item>Divorciado(a)</item>
-        <item>Viúvo(a)</item>
-        <item>União Estável</item>
-    </string-array>
+        <string-array name="opcoes_estado_civil">
+            <item>Solteiro(a)</item>
+            <item>Casado(a)</item>
+            <item>Divorciado(a)</item>
+            <item>Viúvo(a)</item>
+            <item>União Estável</item>
+        </string-array>
 
-    <string-array name="opcoes_escolaridade">
-        <item>Fundamental Incompleto</item>
-        <item>Fundamental Completo</item>
-        <item>Médio Incompleto</item>
-        <item>Médio Completo</item>
-        <item>Superior Incompleto</item>
-        <item>Superior Completo</item>
-    </string-array>
+        <string-array name="opcoes_escolaridade">
+            <item>Fundamental Incompleto</item>
+            <item>Fundamental Completo</item>
+            <item>Médio Incompleto</item>
+            <item>Médio Completo</item>
+            <item>Superior Incompleto</item>
+            <item>Superior Completo</item>
+        </string-array>
 
     <string-array name="opcoes_local_residencia">
         <item>Urbano</item>
@@ -54,15 +54,6 @@
         <item>Cardiopatia</item>
         <item>Osteoporose</item>
         <item>Nenhuma</item>
-    </string-array>
-
-    <string-array name="opcoes_apoio">
-        <item>Sem apoios</item>
-        <item>Com 1 apoio</item>
-        <item>Com 2 apoios</item>
-        <item>Com 3 apoios</item>
-        <item>Com 4 apoios</item>
-        <item>Com mais de 4 apoios</item>
     </string-array>
 
     <string-array name="opcoes_nota_0_1">
@@ -115,5 +106,12 @@
     <string name="taf_table_row3_men">33,52</string>
     <string name="taf_table_row3_women">26,63</string>
 
-
+    <string-array name="opcoes_apoio">
+        <item>Sem apoios</item>
+        <item>Com 1 apoio</item>
+        <item>Com 2 apoios</item>
+        <item>Com 3 apoios</item>
+        <item>Com 4 apoios</item>
+        <item>Com mais de 4 apoios</item>
+    </string-array>
 </resources>
