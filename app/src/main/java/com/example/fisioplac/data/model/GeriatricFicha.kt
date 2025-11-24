@@ -162,6 +162,7 @@ data class GeriatricFicha(
     val equilibrioLevantarDesequilibrio: Boolean = false,
     val equilibrioLevantarNota: Double = 0.0,
 
+    // --- (Step 12 - texto) ---
     val diagnosticoFisioterapeutico: String = "",
     val objetivosTratamento: String = ""
 )

@@ -106,7 +106,7 @@ class Step2Fragment : Fragment() {
                 val tempoUso = binding.etTempoUso.text.toString().trim()
 
                 // 1. Envia o novo medicamento para o ViewModel
-                viewModel.addMedicamento(nome, comoUsar, tempoUso)
+                viewModel.addMedicamento(nome, tempoUso = tempoUso, comoUsar = comoUsar)
 
                 // 2. Limpa os campos e esconde o teclado (Lógica de UI)
                 binding.etNomeMedicamento.text?.clear()
