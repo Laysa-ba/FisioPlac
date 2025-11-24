@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".Tela1FichaActivity">
+
+    <ImageView
+        android:id="@+id/back_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/seta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/verde"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/BarraDeProgresso"
+        android:layout_width="0dp" android:layout_height="8dp"
+        android:layout_marginStart="16dp" android:layout_marginEnd="16dp"   android:src="@drawable/barra_progress_1"
+        app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@id/back_arrow" app:layout_constraintTop_toTopOf="@id/back_arrow"
+        app:layout_constraintBottom_toBottomOf="@id/back_arrow"
+        tools:ignore="ContentDescription" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp" app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/back_arrow">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cinza"
+            android:paddingStart="20dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Ficha de Avaliação de Fisioterapia\nGeriátrica"
+                android:textAlignment="center"
+                android:textColor="@color/verde"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_warning_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="@color/cinza_claro"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_title">
+
+                <TextView
+                    android:id="@+id/tv_warning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Aviso: Todos os dados da ficha são obrigatórios!"
+                    android:textAlignment="center"
+                    android:textColor="@color/vermelho_aviso"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText"/>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                android:id="@+id/tv_personal_data_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Dados pessoais"
+                android:textColor="@color/laranja"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_warning_container"
+                tools:ignore="HardcodedText"/>
+
+            <TextView
+                android:id="@+id/tv_data_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data:"
+                android:textColor="@color/preto_claro"
+                android:textSize="14sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/et_data"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/et_data"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                tools:ignore="HardcodedText"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
+                android:inputType="date"
+                android:padding="12dp"
+                android:textSize="14sp"
+                android:textColor="@color/preto_claro"
+                app:layout_constraintTop_toBottomOf="@+id/tv_personal_data_header"
+                app:layout_constraintStart_toEndOf="@id/tv_data_label"
+                app:layout_constraintEnd_toStartOf="@+id/tv_estagiario_label" />
+
+            <TextView
+                android:id="@+id/tv_estagiario_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Estagiário:"
+                android:textColor="@color/preto_claro"
+                android:textSize="14sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/et_estagiario"
+                app:layout_constraintStart_toEndOf="@id/et_data"
+                app:layout_constraintEnd_toStartOf="@+id/et_estagiario"
+                tools:ignore="HardcodedText"/>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_estagiario"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:inputType="textPersonName|textCapWords"
+                android:padding="12dp"
+                android:textSize="14sp"
+                android:textColor="@color/preto_claro"
+                app:layout_constraintTop_toTopOf="@id/et_data"
+                app:layout_constraintStart_toEndOf="@id/tv_estagiario_label"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_dados_pessoais_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:padding="8dp"
+                android:textColor="@color/preto_claro"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_data">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_nome"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Nome"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="HardcodedText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_nome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:cursorVisible="false"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_nascimento"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Nascimento"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:layout_constraintEnd_toStartOf="@+id/til_idade"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/til_nome"
+                    tools:ignore="HardcodedText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_nascimento"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="date"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:cursorVisible="false"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_idade"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Idade"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:layout_constraintBottom_toBottomOf="@id/til_nascimento"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/til_nascimento"
+                    tools:ignore="HardcodedText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_idade"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:gravity="center"
+                        android:inputType="phone"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tv_sexo_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Sexo:"
+                    android:textColor="@color/preto_claro"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/til_nascimento"
+                    tools:ignore="HardcodedText"/>
+
+                <RadioGroup
+                    android:id="@+id/rg_sexo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_sexo_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_sexo_label"
+                    app:layout_constraintTop_toTopOf="@id/tv_sexo_label">
+
+                    <RadioButton
+                        android:id="@+id/rb_masculino"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"  android:button="@drawable/radio_button_selector"
+                        android:paddingStart="8dp"
+                        android:text="Masculino"
+                        android:textColor="@color/preto_claro"
+                        android:textSize="15sp"
+                        app:buttonTint="@color/laranja"
+                        tools:ignore="RtlSymmetry,HardcodedText" />
+
+                    <RadioButton
+                        android:id="@+id/rb_feminino"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@drawable/radio_button_selector"
+                        android:paddingStart="8dp"
+                        android:text="Feminino"
+                        android:textColor="@color/preto_claro"
+                        android:textSize="14sp"
+                        app:buttonTint="@color/laranja"
+                        tools:ignore="RtlSymmetry,HardcodedText"/>
+                </RadioGroup>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_estado_civil"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Estado civil"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:endIconDrawable="@drawable/setadoselect"
+                    app:endIconTint="@color/cinza_escuro"
+                    app:layout_constraintEnd_toStartOf="@+id/til_telefone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_sexo_label"
+                    tools:ignore="HardcodedText">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actvEstadoCivil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="none"
+                        android:background="@null"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:popupBackground="@drawable/dropdown_item_background"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_telefone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Telefone"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:layout_constraintBottom_toBottomOf="@id/til_estado_civil"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/til_estado_civil"
+                    tools:ignore="HardcodedText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTelefone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="phone"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_escolaridade"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Escolaridade"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:endIconDrawable="@drawable/setadoselect"
+                    app:endIconTint="@color/cinza_escuro"
+                    app:layout_constraintEnd_toStartOf="@+id/til_renda"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/til_estado_civil"
+                    tools:ignore="HardcodedText">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actvEscolaridade"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="none"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:popupBackground="@drawable/dropdown_item_background"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_renda"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Renda"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:layout_constraintBottom_toBottomOf="@id/til_escolaridade"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/til_escolaridade"
+                    tools:ignore="HardcodedText">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etRenda"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_local_residencia"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="Local de residência"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:endIconDrawable="@drawable/setadoselect"
+                    app:endIconTint="@color/cinza_escuro"
+                    app:layout_constraintEnd_toStartOf="@+id/til_mora_com"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/til_escolaridade"
+                    tools:ignore="HardcodedText">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actvLocalResidencia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="none"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:popupBackground="@drawable/dropdown_item_background"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_mora_com"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Mora com"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:endIconDrawable="@drawable/setadoselect"
+                    app:endIconTint="@color/cinza_escuro"
+                    app:layout_constraintBottom_toBottomOf="@id/til_local_residencia"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/til_local_residencia"
+                    tools:ignore="HardcodedText">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actvMoraCom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="none"
+                        android:textSize="14sp"
+                        android:textColor="@color/preto_claro"
+                        android:popupBackground="@drawable/dropdown_item_background"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_physical_activities_header"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Atividades Físicas"
+                android:textColor="@color/laranja"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_dados_pessoais_container"
+                tools:ignore="HardcodedText"/>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/atividadefisica_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_physical_activities_header">
+
+                <TextView
+                    android:id="@+id/tv_atividades_fisicas_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Atividades Físicas:"
+                    android:textColor="@color/preto_claro"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="HardcodedText"/>
+
+                <RadioGroup
+                    android:id="@+id/rg_atividades_fisicas"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_atividades_fisicas_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_atividades_fisicas_label"
+                    app:layout_constraintTop_toTopOf="@id/tv_atividades_fisicas_label">
+
+                    <RadioButton
+                        android:id="@+id/rb_sim_atividade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/radio_button_selector"
+                        android:paddingStart="8dp"
+                        android:text="Sim"
+                        android:textColor="@color/preto_claro"
+                        android:textSize="16sp"
+                        app:buttonTint="@color/laranja"
+                        tools:ignore="HardcodedText,RtlSymmetry"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_nao_atividade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:button="@drawable/radio_button_selector"
+                        android:paddingStart="8dp"
+                        android:text="Não"
+                        android:textColor="@color/preto_claro"
+                        android:textSize="16sp"
+                        app:buttonTint="@color/laranja"
+                        android:checked="true"
+                        tools:ignore="HardcodedText,RtlSymmetry"/>
+                </RadioGroup>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dias_semana_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/atividadefisica_container">
+
+                <TextView
+                    android:id="@+id/tv_dias_semana_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Se sim, quantos dias na semana:"
+                    android:textColor="@color/preto_claro"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/til_dias_semana"
+                    tools:ignore="HardcodedText"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_dias_semana"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    app:boxStrokeColor="@color/cinza_escuro"
+                    app:boxStrokeWidth="1dp"
+                    app:endIconDrawable="@drawable/setadoselect"
+                    app:endIconTint="@color/cinza_escuro"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_dias_semana_label"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_dias_semana_label"
+                    app:layout_constraintTop_toTopOf="@id/tv_dias_semana_label">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actvDiasSemana"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:textColor="@color/preto_claro"
+                        android:textSize="14sp"
+                        android:popupBackground="@drawable/dropdown_item_background" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tv_frequencia_sair_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Frequência para sair de casa:"
+                android:textColor="@color/preto_claro"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dias_semana_container"
+                tools:ignore="HardcodedText"/>
+
+            <RadioGroup
+                android:id="@+id/rg_frequencia_sair"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_frequencia_sair_label">
+
+                <RadioButton
+                    android:id="@+id/rb_diariamente"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/radio_button_selector"
+                    android:paddingStart="8dp"
+                    android:text="Diariamente"
+                    android:textColor="@color/preto_claro"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/laranja"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+
+                <RadioButton
+                    android:id="@+id/rb_pouca_frequencia"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/radio_button_selector"
+                    android:paddingStart="8dp"
+                    android:text="Pouca frequência"
+                    android:textColor="@color/preto_claro"
+                    android:textSize="14sp"
+                    app:buttonTint="@color/laranja"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
+            </RadioGroup>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_atividade_social"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:hint="Atividade social"
+                android:textColorHint="@color/white"
+                app:boxBackgroundColor="@color/verde"
+                app:endIconDrawable="@drawable/setadoselect"
+                app:endIconTint="@color/white"
+                app:layout_constraintEnd_toStartOf="@+id/til_doencas"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rg_frequencia_sair"
+                tools:ignore="HardcodedText">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvAtividadeSocial"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:popupBackground="@drawable/dropdown_item_background"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_doencas"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Doenças"
+                android:textColorHint="@color/white"
+                app:boxBackgroundColor="@color/verde"
+                app:endIconDrawable="@drawable/setadoselect"
+                app:endIconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/til_atividade_social"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/til_atividade_social"
+                tools:ignore="HardcodedText">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvDoencas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:popupBackground="@drawable/dropdown_item_background"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_outras_doencas_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Outras doenças:"
+                android:textColor="@color/preto_claro"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/til_atividade_social"
+                tools:ignore="HardcodedText"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_outras_doencas"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:boxStrokeColor="@color/cinza_escuro"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_outras_doencas_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_outras_doencas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:minLines="3"
+                    android:textSize="14sp"
+                    android:textColor="@color/preto_claro"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_queixa_principal_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Queixa principal/HMP-"
+                android:textColor="@color/preto_claro"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/til_outras_doencas"
+                tools:ignore="HardcodedText"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_queixa_principal"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:boxStrokeColor="@color/cinza_escuro"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_queixa_principal_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_queixa_principal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:minLines="3"
+                    android:textSize="14sp"
+                    android:textColor="@color/preto_claro"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_avancar"
+                android:layout_width="144dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="@color/verde"
+                android:paddingVertical="12dp"
+                android:text="Avançar"
+                android:textColor="@color/white"
+                app:cornerRadius="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/til_queixa_principal" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

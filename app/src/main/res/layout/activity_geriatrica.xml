@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.form_geriatrica.GeriatricaActivity">
+    tools:context=".GeriatricaActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_bar"
@@ -23,13 +23,13 @@
             android:id="@+id/btn_back"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:paddingTop="181dp"
             android:src="@drawable/seta"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Voltar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:tint="@color/verde" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -180,21 +180,9 @@
             app:layout_constraintStart_toStartOf="@id/card_patient_info"
             app:layout_constraintTop_toBottomOf="@id/card_patient_info" />
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:visibility="visible"/>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- *** CORREÇÃO APLICADA AQUI *** -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_bar"
         android:layout_width="match_parent"
@@ -203,8 +191,8 @@
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconSize="32dp"
         app:itemIconTint="@color/bottom_nav_colors"
-        app:itemTextColor="@color/bottom_nav_colors" />
+        app:itemTextColor="@color/bottom_nav_colors"
+        app:itemIconSize="32dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

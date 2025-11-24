@@ -11,25 +11,17 @@ Uma análise criteriosa do fluxo de atendimentos de fisioterapia no Centro de Pr
 
 O projeto está sendo desenvolvido por uma equipe de 5 pessoas, seguindo a metodologia ágil Scrum. Os papéis e contribuições dos integrantes são:
 
-* **Laysa Bittencourt Assunção** - Scrum Master, Design UX/UI e Desenvolvedora Full Stack:
+* **Laysa Bittencourt Assunção** - Scrum Master, Design e Desenvolvedora Full Stack:
 Atua como facilitador do processo Scrum, responsável por projetar a interface visual do sistema e contribui no desenvolvimento tanto no front-end quanto no back-end.  
 
 *	**Kennedy Leandro Amaral Marques** – Desenvolvedor Full Stack, Product Owner e Administrador de Banco de Dados:
 Colabora no desenvolvimento das funcionalidades no front-end e back-end, prioriza o backlog do produto e administra toda a criação e implementação do banco.
 
-*	**Carlos Eduardo Mota Moura** - Desenvolvedor Front-end:
-Contribui na criação e integração das funcionalidades do sistema, trabalhando tanto no front-end.
+*	**Carlos Eduardo Mota Moura** - Desenvolvedor Full Stack:
+Contribui na criação e integração das funcionalidades do sistema, trabalhando tanto no front-end quanto no back-end.
 
-*	**Luís Gustavo Pereira De Sá** – Desenvolvedor Front-end:
-Contribui na criação e integração das funcionalidades do sistema, trabalhando tanto no front-end.
+*	**Luís Gustavo Pereira De Sá** – Desenvolvedor Full Stack:
+Contribui na criação e integração das funcionalidades do sistema, trabalhando tanto no front-end quanto no back-end.
 
-*	**André Luiz Araújo Silva** – Desenvolvedor:
-Contribui na criação e integração das funcionalidades do sistema.
-
-## Instruções para a instalação e funcionamento do app
-
-Depois de rodar o app no android studio e passar o apk para o celular, alguns pontos importantes:
-
-* **Banco de dados** - O banco utilizado no projeto é o firebase, por isso não é preciso importar o banco.
-* **Dados de login do doutor, para testes** - O login é realizado com cpf e senha. Utilize 00987654321 como cpf e 123456 como senha.
-* **Dados do paciente para iniciar a ficha, para testes** - Depois de entrar como doutor, quando pesquisar um paciente, use o cpf 11122233344.
+*	**André** – Desenvolvedor Full Stack:
+Contribui na criação e integração das funcionalidades do sistema, trabalhando tanto no front-end quanto no back-end.
